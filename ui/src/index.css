@@ -1,0 +1,177 @@
+
+
+
+#TopNavBar {
+  z-index: 9996 !important;
+}
+
+.Toastify,
+.Toastify__toast
+  .Toastify__toast-theme--light
+  .Toastify__toast--error
+  .Toastify__toast--close-on-click {
+  z-index: 999999 !important;
+}
+
+.DiplomaData table td {
+  padding: 0.2rem !important;
+}
+
+#watermark {
+  position: relative;
+}
+
+#watermark::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+#watermark {
+  background: url("/images/vender/watermark.jpg");
+  background-size: 100% 80%;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.studentpic {
+  display: flex !important;
+  align-items: start !important;
+  padding: 5px !important;
+  justify-content: center !important;
+} 
+.certificate-wrapper {
+  width: 1322px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch; /* iOS smooth scroll */
+}
+
+/* Prevent the certificate from squishing on small screens */
+#printResult {
+  min-width: 768px;
+}
+
+/* Optional: Padding on mobile */
+@media (max-width: 767px) {
+  .certificate-wrapper {
+    padding: 0 10px;
+  }
+}
+
+.custom-heading {
+  letter-spacing: 2px;
+  word-spacing: 18px;
+}
+
+.fahkwang-bold {
+  font-family: "Fahkwang", sans-serif !important;
+  font-weight: 600 !important;
+}
+
+.bi-sun,
+.bi-moon {
+  border: 0;
+  outline: none;
+}
+
+.goog-te-gadget-simple {
+  display: none !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+.goog-te-banner-frame {
+  display: none !important;
+}
+
+body {
+  top: 0 !important;
+}
+
+.VIpgJd-ZVi9od-ORHb-OEVmcd,
+.VIpgJd-ZVi9od-l4eHX-hSRGPd,
+.VIpgJd-ZVi9od-l4eHX-hSRGPd:link,
+.VIpgJd-ZVi9od-l4eHX-hSRGPd:visited,
+.VIpgJd-ZVi9od-l4eHX-hSRGPd:hover,
+.VIpgJd-ZVi9od-l4eHX-hSRGPd:active,
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
+.VIpgJd-yAWNEb-hvhgNd-IuizWc {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0px !important;
+  height: 0px !important;
+}
+
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf {
+  position: absolute;
+  bottom: 0 !important;
+}
+
+@keyframes Toastify__slideInRight {
+  from {
+    /* transform: translate3d(110%, 0, 0); */
+    visibility: visible !important;
+    width: 0px !important;
+    height: 0px !important;
+    display: none !important;
+  }
+
+  to {
+    /* transform: translate3d(0, 0, 0); */
+    visibility: hidden !important;
+    width: 0px !important;
+    height: 0px !important;
+    display: none !important;
+  }
+}
+
+.VIpgJd-ZVi9od-l4eHX-hSRGPd {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.VIpgJd-ZVi9od-l4eHX-hSRGPd img {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.VIpgJd-ZVi9od-l4eHX-hSRGPd {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.goog-te-gadget {
+  height: 1rem !important;
+  color: transparent !important;
+}
+
+.goog-te-combo {
+  margin: 0 !important;
+  display: flex;
+  align-items: center !important;
+  width: 60px;
+  font-size: 0.7rem !important;
+}
+
+/* Certificate */
+.rubik-mono-one-regular {
+  font-family: "Rubik Mono One", monospace;
+  font-weight: 400;
+  font-style: normal;
+}
+.panchang {
+  font-family: "Panchang", sans-serif;
+  font-weight: 700;
+}
+
+.edu-qld-beginner-unique {
+  font-family: "Edu QLD Beginner", cursive !important;
+  font-optical-sizing: auto !important;
+  font-weight: 400 !important; /* or 700 */
+  font-style: normal !important;
+}

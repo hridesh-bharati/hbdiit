@@ -1,0 +1,40 @@
+.language-selector-wrapper {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 14px;
+    color: #fff;
+  }
+  
+  .language-selector-trigger {
+    padding: 6px 12px;
+    background-color: transparent;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .language-selector-list {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    background: #fff;
+    color: #000;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    z-index: 999;
+    width: max-content;
+    padding: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  
+  .language-option {
+    padding: 4px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .language-option:hover,
+  .language-option.active {
+    background-color: #f0f0f0;
+  }
+  
