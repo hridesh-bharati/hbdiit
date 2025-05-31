@@ -38,7 +38,7 @@ body::-webkit-scrollbar {
     --course-bg: #f9d5b0 !important;
     --computerBgCard: linear-gradient(0deg, #3a4792c2, #232d6b97), url("/images/thumbnails/book.png") center;
     --BooksBgCard: linear-gradient(0deg, #3a4792c2, #232d6b97), url("/images/thumbnails/pc.jpg") center;
-    --EstablishmentBgCard: linear-gradient(0deg, #3a4792c2, #232d6b97), url("/images/vender/contactBg.png") center;
+    --EstablishmentBgCard: linear-gradient(0deg, #3a4792c2, #232d6b97), url("/images/vender/contactbg.png") center;
     --fbbg: linear-gradient(to right, #efe0f1 2%, #d2ddf7 100%, #e0f1e4 1%);
     --teamCardBg: rgb(209, 255, 209);
     --whitesmoke: whitesmoke;
@@ -64,7 +64,6 @@ body::-webkit-scrollbar {
 #liveC,
 #liveD,
 #contact,
-#HomeOffer,
 #aboutBg,
 #MissionLeft1,
 #MissionLeft2,
@@ -90,6 +89,20 @@ body::-webkit-scrollbar {
 #branchChild {
     background: var(--cardHeadColorDark);
 }
+.arial-black {
+  font-family: 'Arial Black', Gadget, sans-serif;
+}
+.custom-heading {
+  letter-spacing: 2px;
+  word-spacing: 18px;
+}
+
+
+.bi-sun,
+.bi-moon {
+  border: 0;
+  outline: none;
+}
 
 /* --------------classes-------------- */
 .Xsmall {
@@ -111,4 +124,8 @@ body::-webkit-scrollbar {
 
 #absirfdiitBg {
     background: var(--topNavBgColor)
+}
+
+.DiplomaData table td {
+  padding: 0.2rem !important;
 }

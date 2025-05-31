@@ -2,7 +2,6 @@ import { Link } from "react-router-dom"
 import { useState } from "react";
 import WebCard from "./WebCard";
 import WebDesignCard from "./WebDesignCard";
-import Footer from "../Footer/Footer";
 export default function WebDevelopment() {
     const [DiplomaData, setDiplomaData] = useState('var(--mainBgcolor)')
     const [DiplomaText, setDiplomaText] = useState('#212329')
@@ -236,7 +235,6 @@ export default function WebDevelopment() {
                 </div >
             </div>
         </div >
-      <Footer/>
-      </>
+          </>
     )
 }

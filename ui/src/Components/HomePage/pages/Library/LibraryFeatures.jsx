@@ -57,7 +57,7 @@ const LibraryFeatures = () => {
   ];
 
   return (
-    <div className="container-fluid py-5 bg-light">
+    <div className="container-fluid py-5">
       {/* Facilities Section */}
       <div className="container py-5">
         <div className="mb-5 text-center" data-aos="fade-down">

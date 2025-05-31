@@ -8,6 +8,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "react-toastify/dist/ReactToastify.css";
 import '@fortawesome/fontawesome-free/css/all.min.css';
+
 import "./index.css";
 import "./App.css";
 import "./MediaQuery.css";
@@ -15,16 +16,21 @@ import "./utilities.css";
 import { store } from "./store/reduxStore/store";
 import App from "./App";
 import ExamPortal from "./Components/StudentComponent/ExamPortal";
+import UserSelectNone from "./Components/HomePage/LockWeb/UserSelectNone";
 const root = ReactDOM.createRoot(document.getElementById("root"));
-
+import { HelmetProvider } from "react-helmet-async";
 root.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/*" element={<App />} />
-        <Route path="/Exam-Portal" element={<ExamPortal />} />
-      </Routes>
-    </BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter>
+        <UserSelectNone>
+          <Routes>
+            <Route path="/*" element={<App />} />
+            <Route path="/Exam-Portal" element={<ExamPortal />} />
+          </Routes>
+        </UserSelectNone>
+      </BrowserRouter>
+    </HelmetProvider>
     <ToastContainer />
   </Provider>
 );

@@ -92,6 +92,7 @@ const Verification = () => {
                html2canvas: { scale: 3, useCORS: true },
                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
             };
+
             html2pdf().from(clonedPrintResult).set(options).save();
          } catch (error) {
             console.error('Error generating PDF:', error);
@@ -254,17 +255,19 @@ const Verification = () => {
                               <p className='HindiFont'>[4]. {d} <span className='text-black bg-warning p-1'>DIIT124/कोर्स का नाम/रजिस्ट्रेशन नंबर</span>`</p>
                            </Marquee>
                         </div>
-                     </div>            
+                     </div>
                   </div>
                </div>
                <div className='mt-4 fs-5'>
                   {stdData.photo && (
                      <>
                         <div className="certificate-wrapper m-auto">
-                           <div id="printResult" className='bg-white p-2' style={{ color: '#00062B', overflowX: 'auto' }}>
+                           <div id="printResult" className='bg-white p-1' style={{ color: '#00062B', overflowX: 'auto' }}>
                               <div className="m-0 bg-white certificate" id="watermark" style={{ border: "10px solid #00062B" }}>
                                  {/* Header */}
-                                 <div className="header row bgwhite pt-2 d-flex align-items-center justify-content-between mx-1">
+                                 <div className="header row bgwhite pt-2 d-flex align-items-center justify-content-between mx-1"
+                                    style={{ height: "120px" }}
+                                 >
                                     <div className="col-2 HeaderLeft m-0 align-self-start">
                                        <img
                                           src="images/vender/logo.png"
@@ -279,7 +282,7 @@ const Verification = () => {
 
                                     <div className="col-7 text-center HeaderCenter m-0 p-0 align-self-start">
                                        <div className="row d-flex justify-content-end p-0 m-0">
-                                          <div className="col-8 title p-0 m-0 pt-3">
+                                          <div className="col-8 title p-0 m-0 pt-2">
                                              <h1
                                                 className='fw-bolder custom-heading'
                                                 style={{ fontFamily: "'Rubik', sans-serif" }}
@@ -320,18 +323,17 @@ const Verification = () => {
                                        <h4 className='m-0 py-1 d-inline scrtspace edu-qld-beginner-uniquex'>
                                           This Certificate is awarded to Mr/Miss
                                        </h4>
-                                       <h3
+                                       <h4
                                           className='ps-1 d-inline customdata fw-bolder'
                                           style={{
                                              color: "red",
                                              textDecoration: 'underline',
                                              textUnderlineOffset: '6px',
-                                             letterSpacing: '3px',
-                                             fontFamily: 'Merriweather, serif'
+                                             fontFamily: "'Arial Black', Gadget, sans-serif"
                                           }}
                                        >
                                           {stdData.name} S/O {stdData.fatherName}
-                                       </h3>
+                                       </h4>
 
                                        {/* Course Details */}
                                        <p className='mt-2'>
@@ -344,10 +346,9 @@ const Verification = () => {
                                           className='fw-bolder p-0 m-0'
                                           style={{
                                              color: "red",
-                                             letterSpacing: '3px',
                                              textDecoration: 'underline',
                                              textUnderlineOffset: '6px',
-                                             fontFamily: 'Poppins, sans-serif'
+                                             fontFamily: "'Arial Black', Gadget, sans-serif"
                                           }}
                                        >
                                           {stdData.description}
@@ -363,21 +364,22 @@ const Verification = () => {
                                        </p>
                                        {/* Modules */}
                                        <div className="AllCoursseContent m-0 pt-3">
-                                          <div className="row">
-                                             <div className="col-3">
-                                                <p className='m-0 p-0 ps-lg-5 small customdata d-flex justify-content-end'>
-                                                   <b style={{ color: "black" }}>Modules Covered:</b>
+                                          <div className="course-grid">
+                                             <div className="course-label">
+                                                <p className="label-text">
+                                                   <b>Modules Covered:</b>
                                                 </p>
                                              </div>
-                                             <div className="col-9 d-flex">
-                                                <ul className='px-lg-3 list-group-numbered d-flex flex-wrap fw-medium'>
+                                             <div className="course-list">
+                                                <ul className="module-items list-group-numbered">
                                                    {stdData.subjects?.flat().map((subject) => (
-                                                      <li key={subject._id} className='mx-1 px-1 list-group-item DarkBlueText'>{subject.name}</li>
+                                                      <li key={subject._id} className="module-item list-group-item">
+                                                         {subject.name}
+                                                      </li>
                                                    ))}
                                                 </ul>
                                              </div>
                                           </div>
-
                                           {/* Signature and Date */}
                                           <table className='w-100 table-responsive m-0 p-0 mt-2 small'>
                                              <tbody>
@@ -401,14 +403,12 @@ const Verification = () => {
                                              </tbody>
                                           </table>
                                        </div>
-
                                        {/* Grade Scale */}
                                        <div className="col text-center mt-2 m-0 p-0">
                                           <p className='border border-1 small border-warning-subtle Gradetext bg-warning-subtle d-inline-block'>
                                              Grade Mark: Excellent (81% - 100%), Very Good (71% - 80), Good (61% - 70%), Satisfactory (50% - 60%)
                                           </p>
                                        </div>
-
                                        {/* Footer */}
                                        <div className="col fw-normal text-center crsfooter customdata">
                                           <h5 style={{ color: 'maroon', fontWeight: 'bold' }}>
@@ -424,7 +424,6 @@ const Verification = () => {
                               </div>
                            </div>
                         </div>
-
                         {/* Download Button */}
                         <div className="row">
                            <div className="col-12 text-end px-4">
@@ -437,8 +436,6 @@ const Verification = () => {
                      </>
                   )}
                </div>
-
-
             </div>
             <Footer />
          </div >

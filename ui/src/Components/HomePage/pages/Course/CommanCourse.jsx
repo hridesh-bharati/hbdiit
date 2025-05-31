@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Footer from "../../../Footer/Footer";                                                                                                        
+import Footer from "../../../Footer/Footer";
 import { useSelector } from 'react-redux';
 import CourseNav from "./CourseNav";
 
-function CommanCourse({ targetCourses, CTitle }) { // Accept targetCourses as a prop
+function CommanCourse({ targetCourses, CTitle }) {  
     const [courses, setCourses] = useState([]);
-    const [searchQuery, setSearchQuery] = useState(""); // Search query state
+    const [searchQuery, setSearchQuery] = useState("");  
     const crs = useSelector(state => state.courses);
 
     useEffect(() => {
@@ -16,9 +16,8 @@ function CommanCourse({ targetCourses, CTitle }) { // Accept targetCourses as a 
     }, [crs]);
 
     const trimmedQuery = searchQuery.trim().toLowerCase();
-
     const filteredCourses = courses.filter(course =>
-        targetCourses.includes(course.name) &&
+        targetCourses.some(tc => tc.toLowerCase() === course.name.toLowerCase()) &&
         (trimmedQuery ? course.name.toLowerCase().includes(trimmedQuery) : true)
     );
 
@@ -35,7 +34,7 @@ function CommanCourse({ targetCourses, CTitle }) { // Accept targetCourses as a 
                         <div key={index} className="my-2 p-2 bg-transparent">
                             <table className="table table-bordered bg-transparent">
                                 <thead className="bg-dark table-danger">
-                                    <tr className="text-center h4">
+                                    <tr className="text-center h4 text-uppercase">
                                         <th colSpan={4}>{course.name} ({course.description})</th>
                                     </tr>
                                     <tr className="text-start">

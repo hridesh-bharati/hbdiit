@@ -4,6 +4,7 @@ import { setExamData, setExmQstns } from '../../store/reduxStore/student/student
 import { useNavigate } from 'react-router-dom';
 import { getExams, fillExamForm, startExam } from '../../api/studentApi/api';
 import { toast } from 'react-toastify';
+import StudentFooter from './StudentFooter';
 export default function Exam() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -120,28 +121,29 @@ export default function Exam() {
                     </div>
                 </>
             </div>
+            <StudentFooter />
             <style>
                 {`
                 .scroll-container {
-  height: 150px;
-  overflow: hidden;
-  position: relative;
-}
+                height: 150px;
+                overflow: hidden;
+                position: relative;
+                }
 
-.scroll-container ul {
-  position: absolute;
-  animation: scroll-up 10s linear infinite;
-  padding-left: 10px;
-}
+                .scroll-container ul {
+                position: absolute;
+                animation: scroll-up 10s linear infinite;
+                padding-left: 10px;
+                }
 
-@keyframes scroll-up {
-  0% {
-    top: 100%;
-  }
-  100% {
-    top: -100%;
-  }
-}
+                @keyframes scroll-up {
+                0% {
+                    top: 100%;
+                }
+                100% {
+                    top: -100%;
+                }
+                }
 
                 `}
             </style>

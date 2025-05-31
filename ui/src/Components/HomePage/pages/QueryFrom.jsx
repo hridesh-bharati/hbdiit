@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { sendQuery } from "../../../api/studentApi/api";
+
 function QueryForm() {
     const [fullName, setFullName] = useState('');
     const [mobile, setMobile] = useState('');
@@ -9,17 +10,19 @@ function QueryForm() {
     const [title, setTitle] = useState('');
     const [query, setQuery] = useState('');
     const navigate = useNavigate();
+
     const clrqury = () => {
         setFullName('');
         setMobile('');
         setEmail('');
         setTitle('');
         setQuery('');
-    }
+    };
+
     const pushMyQuery = async () => {
         if (fullName && mobile && email && title && query) {
             const rspns = await sendQuery({ fullName, mobile, email, title, query });
-            if (rspns.ackbool == 1) {
+            if (rspns.ackbool === 1) {
                 toast.success(rspns.message);
                 const audio = new Audio("/audio/ring.mp3");
                 audio.play();
@@ -27,17 +30,52 @@ function QueryForm() {
             }
         }
         else {
-            toast.error("Please fill All Details")
+            toast.error("Please fill All Details");
         }
-    }
+    };
+
     useEffect(() => {
         const aToken = localStorage.getItem('aJwt');
         if (aToken) {
             navigate('/Admin');
         }
-    }, [])
+    }, [navigate]);
+
     return (
-        <div className="container my-5 p-3 shadow" id="signUpNow" >
+        <div className="container my-5 p-3 shadow" id="signUpNow">
+            <style>{`
+                /* Dark mode styles for QueryForm */
+                .dark-mode #signUpNow {
+                    background: #273043 !important;
+                    color: #f1f1f1;
+                    border-radius: 1rem;
+                    transition: background 0.3s;
+                }
+                .dark-mode #signUpNow h1 {
+                    background: #23293a !important;
+                    color: #ffe066 !important;
+                }
+                .dark-mode #signUpNow .form-control {
+                    background: #23293a !important;
+                    color: #f1f1f1 !important;
+                    border: 1px solid #444 !important;
+                }
+                .dark-mode #signUpNow .form-control::placeholder {
+                    color: #bdbdbd !important;
+                }
+                .dark-mode #signUpNow .btn-primary {
+                    background: #ffe066 !important;
+                    color: #23293a !important;
+                    border: none !important;
+                }
+                .dark-mode #signUpNow .btn-primary:hover {
+                    background: #fff !important;
+                    color: #23293a !important;
+                }
+                .dark-mode #signUpNow .btn {
+                    color: #23293a !important;
+                }
+            `}</style>
             <h1 className="p-3 text-center text-uppercase text-white" style={{ background: 'var(--topNavBgColor)' }}>
                 Enquiry Now
             </h1>
@@ -107,12 +145,12 @@ function QueryForm() {
             </div>
             <div className="row">
                 <div className="col-12 my-1 text-center py-2 mx-0 px-0 d-flex justify-content-between">
-                    <button className="btn btn-primary fw-medium text-white mx-2 px-5 w-100" onClick={() => clrqury()}> Reset </button>
-                    <button className="btn fw-medium text-white mx-2 px-5 w-100" style={{ background: 'green' }} onClick={pushMyQuery}> Send </button>
+                    <button type="button" className="btn btn-primary fw-medium text-white mx-2 px-5 w-100" onClick={clrqury}> Reset </button>
+                    <button type="button" className="btn fw-medium text-white mx-2 px-5 w-100" style={{ background: 'green' }} onClick={pushMyQuery}> Send </button>
                 </div>
             </div>
         </div>
-
     );
 }
+
 export default QueryForm;

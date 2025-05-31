@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import '../../App.css';
-// Helper function to generate a random CAPTCHA string
 const generateRandomCaptcha = () => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let captcha = '';

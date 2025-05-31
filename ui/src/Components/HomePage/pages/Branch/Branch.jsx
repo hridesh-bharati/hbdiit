@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
 import Typed from 'typed.js';
 import { Link } from 'react-router-dom';
-import SwiperDemo from './Slider';
 import Footer from '../../../Footer/Footer';
 import QueryForm from '../QueryFrom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import Slider from './Slider';
+import Counter from './Counter';
 
 function Branch() {
     useEffect(() => {
@@ -15,7 +14,6 @@ function Branch() {
             typeSpeed: 50,
             loop: true,
         });
-
         return () => typed.destroy();
     }, []);
 
@@ -74,27 +72,6 @@ function Branch() {
         },
     ];
 
-    const whydiit = [
-        {
-            icon: 'bi-lightbulb-fill',
-            title: 'Innovative Learning',
-            description: 'We use cutting-edge teaching methods and modern technologies to ensure that you stay ahead in your field.',
-            iconColor: 'text-primary',
-        },
-        {
-            icon: 'bi-check-circle-fill',
-            title: 'Proven Success',
-            description: 'Our graduates have successfully entered the workforce at top companies, thanks to our comprehensive training and career services.',
-            iconColor: 'text-success',
-        },
-        {
-            icon: 'bi-person-fill',
-            title: 'Personalized Support',
-            description: 'We believe in offering individual attention to each student, ensuring your needs are met throughout your educational journey.',
-            iconColor: 'text-info',
-        },
-    ];
-
     const sections = [
         {
             title: 'Our Vision',
@@ -115,6 +92,11 @@ function Branch() {
         { src: './images/vender/teacher.jpg', alt: 'DIIT' },
     ];
 
+    const carouselItemsDIIT = [
+        { src: './images/vender/d2.jpg', alt: 'DIIT' },
+        { src: './images/vender/d1.jpg', alt: 'DIIT' },
+    ];
+
     const faqs = [
         {
             question: 'What are the admission requirements?',
@@ -133,15 +115,10 @@ function Branch() {
             answer: 'We maintain small batch sizes (15-20 students) to ensure personalized attention for each learner.'
         }
     ];
-    const statsData = [
-        { value: "500+", label: "Students Trained", color: "text-primary", delay: 100 },
-        { value: "95%", label: "Placement Rate", color: "text-success", delay: 200 },
-        { value: "20+", label: "Industry Partners", color: "text-warning", delay: 300 },
-        { value: "15+", label: "Certified Courses", color: "text-danger", delay: 400 },
-        { value: "10+", label: "Experienced Faculties", color: "text-info", delay: 500 },
-        { value: "4.9★", label: "Student Rating", color: "text-secondary", delay: 600 }
-    ];
+
+
     const images = [1, 2, 3];
+
     const methodologyPoints = [
         {
             title: "Project-Based Learning",
@@ -159,26 +136,12 @@ function Branch() {
                 "Regular coding challenges, quizzes, and project reviews ensure students stay on track and master each concept before moving forward.",
         },
     ];
+
     return (
         <div>
             <div className="mx-sm-0 px-sm-0 pt-4">
-                {/* Bootstrap Carousel */}
-
+                {/* Carousel */}
                 <div id="carouselExampleIndicators" className="carousel slide mb-5" data-bs-ride="carousel">
-                    <div className="carousel-indicators">
-                        {images.map((_, i) => (
-                            <button
-                                key={i}
-                                type="button"
-                                data-bs-target="#carouselExampleIndicators"
-                                data-bs-slide-to={i}
-                                className={i === 0 ? "active" : ""}
-                                aria-current={i === 0 ? "true" : undefined}
-                                aria-label={`Slide ${i + 1}`}
-                            />
-                        ))}
-                    </div>
-
                     <div className="carousel-inner">
                         {images.map((n, i) => (
                             <div key={i} className={`carousel-item ${i === 0 ? "active" : ""}`}>
@@ -186,7 +149,6 @@ function Branch() {
                             </div>
                         ))}
                     </div>
-
                     {["prev", "next"].map(dir => (
                         <button
                             key={dir}
@@ -201,7 +163,6 @@ function Branch() {
                     ))}
                 </div>
 
-
                 {/* Typed Text */}
                 <div className="container text-center fs-4 fw-bold">
                     <div className="row">
@@ -213,10 +174,12 @@ function Branch() {
                         </div>
                     </div>
                 </div>
+
+                {/* Hero Section */}
                 <div className="container-fluid py-5 bg-light">
                     <div className="container">
                         <div className="row align-items-center">
-                            {/* Text Content */}
+                            {/* Text */}
                             <div className="col-lg-6 mb-4 mb-lg-0">
                                 <div className="col-md-12 pt-4"
                                     data-aos="fade-right"
@@ -227,11 +190,10 @@ function Branch() {
                                     <h3 className="fw-bold mb-3" style={{ color: "#00268f", fontSize: "2rem" }}>
                                         WELCOME TO <span style={{ color: "#ff6b00" }}>DRISHTEE COMPUTER CENTER</span>
                                     </h3>
-                                    <span className='text-muted d-block mb-3small' style={{ fontWeight: 500 }}>
+                                    <span className='text-muted d-block mb-3 small' style={{ fontWeight: 500 }}>
                                         📍 Branch: Main Market road, in front of Rauniyar Chitra Mandir, Thoothibari, Maharajganj
                                     </span>
                                 </div>
-
                                 <p className="text-dark"
                                     data-aos="fade-up"
                                     data-aos-duration="1000"
@@ -240,7 +202,6 @@ function Branch() {
                                 >
                                     Drishtee Institute of Technology, founded in 2018, is recognized as one of the top technical computer institutes in the region. Our mission is to empower students with practical, job-ready skills through innovative teaching and an industry-aligned curriculum.
                                 </p>
-
                                 <p className="text-dark"
                                     data-aos="fade-up"
                                     data-aos-duration="1000"
@@ -250,41 +211,48 @@ function Branch() {
                                     Located in the heart of Maharajganj, our center boasts modern computer labs, experienced faculty, and a nurturing learning environment that fosters talent and supports professional growth.
                                 </p>
                             </div>
-
-                            {/* Image/Slider Section */}
+                            {/* Image/Slider */}
                             <div className="col-lg-6">
                                 <div data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="300">
-                                    <Slider />
+                                    <div id="carouselExampleAutoplaying" className="carousel slide carousel-fade" data-bs-ride="carousel">
+                                        <div className="carousel-inner">
+                                            {carouselItemsDIIT.map((item, index) => (
+                                                <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`} data-bs-interval="1000">
+                                                    <img src={item.src} className="d-block w-100 img-fluid h-100" alt={item.alt} />
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <button
+                                            className="carousel-control-prev"
+                                            type="button"
+                                            data-bs-target="#carouselExampleAutoplaying"
+                                            data-bs-slide="prev"
+                                        >
+                                            <span className="carousel-control-prev-icon" aria-hidden="true" />
+                                        </button>
+                                        <button
+                                            className="carousel-control-next"
+                                            type="button"
+                                            data-bs-target="#carouselExampleAutoplaying"
+                                            data-bs-slide="next"
+                                        >
+                                            <span className="carousel-control-next-icon" aria-hidden="true" />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-
                             {/* Statistics Row */}
-                            <div className="d-flex align-items-center justify-content-start flex-wrap mt-4">
-                                {statsData.map((stat, index) => (
-                                    <div
-                                        className={`me-5 mb-3 ${index === statsData.length - 1 ? "" : ""}`}
-                                        key={index}
-                                        data-aos="fade-up"
-                                        data-aos-delay={stat.delay}
-                                        data-aos-duration="800"
-                                    >
-                                        <h3 className={`${stat.color} mb-0 fw-bold`}>{stat.value}</h3>
-                                        <p className="mb-0 text-muted">{stat.label}</p>
-                                    </div>
-                                ))}
-                            </div>
+                            <Counter />
                         </div>
                     </div>
                 </div>
 
-
-
                 {/* Additional Features */}
                 <div className="container py-5">
-                    <h2 className="fw-bold text-center mb-5" style={{ color: "#00268f" }}>Why Choose Our Institute?</h2>
+                    <h2 className="fw-bold text-center mb-5" data-aos="fade-up" style={{ color: "#00268f" }}>Why Choose Our Institute?</h2>
                     <div className="row text-center">
                         {features.map((feature, index) => (
-                            <div className="col-md-4 my-3" key={index}>
+                            <div className="col-md-4 my-3" key={index} data-aos="fade-up">
                                 <div className="card shadow-sm hover-shadow-lg transition-all h-100">
                                     <div className="card-body" style={{ textAlign: 'justify' }}>
                                         <i className={`bi ${feature.icon} fs-1 ${feature.iconColor} hover-text-success`}></i>
@@ -297,34 +265,15 @@ function Branch() {
                     </div>
                 </div>
 
-
-                {/* Why DiiT */}
-                {/* <div className="container my-5">
-                    <h3 className="text-center fw-bold text-primary mb-5">Our Key Differentiators</h3>
-                    <div className="row text-center mt-4">
-                        {whydiit.map((feature, index) => (
-                            <div className="col-md-4 my-2" key={index}>
-                                <div className="card shadow-sm h-100">
-                                    <div className="card-body">
-                                        <i className={`bi ${feature.icon} fs-1 ${feature.iconColor}`}></i>
-                                        <h5 className="card-title mt-3 text-primary">{feature.title}</h5>
-                                        <p className="card-text">{feature.description}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div> */}
-
                 {/* Featured Programs */}
                 <div className="container py-5">
-                    <div className="text-center mb-5">
+                    <div className="text-center mb-5" data-aos="fade-down">
                         <h2 className="fw-bold" style={{ color: "#00268f" }}>Our Comprehensive Programs</h2>
                         <p className="lead">Choose from our industry-relevant courses designed to launch your tech career</p>
                     </div>
                     <div className="row">
                         {programs.map((program, index) => (
-                            <div className="col-md-4 my-3" key={index}>
+                            <div className="col-md-4 my-3" key={index} data-aos="fade-up">
                                 <div className="card shadow-sm hover-shadow-lg transition-all h-100">
                                     <div className="card-body">
                                         <i className={`bi ${program.icon} fs-1 ${program.iconColor} hover-text-success`}></i>
@@ -349,37 +298,56 @@ function Branch() {
                     </div>
                 </div>
 
-                {/* Learning Methodology Section */}
                 <div className="container-fluid bg-light py-5">
                     <div className="container">
                         <div className="row align-items-center">
-                            <div className="col-lg-6 mb-4 mb-lg-0">
-                                <h2 className="fw-bold mb-4">Our Unique Learning Approach</h2>
+                            <div
+                                className="col-lg-6 mb-4 mb-lg-0"
+                                data-aos="fade-right"
+                                data-aos-delay="100"
+                            >
+                                <h2 className="fw-bold mb-4" data-aos="zoom-in" data-aos-delay="200">
+                                    Our Unique Learning Approach
+                                </h2>
                                 {methodologyPoints.map((point, index) => (
-                                    <div className="methodology-point mb-3" key={index}>
+                                    <div
+                                        className="methodology-point mb-3"
+                                        key={index}
+                                        data-aos={index % 2 === 0 ? "fade-up" : "fade-down"}
+                                        data-aos-delay={300 + index * 100}
+                                    >
                                         <h5 className="text-primary">{point.title}</h5>
                                         <p>{point.description}</p>
                                     </div>
                                 ))}
                             </div>
-                            <div className="col-lg-6">
-                                {/* <img
-                                    src="./images/vender/tdiit.jpg"
-                                    className="img-fluid rounded shadow"
-                                    alt="Learning Methodology"
-                                /> */}
+                            <div
+                                className="col-lg-6"
+                                data-aos="flip-left"
+                                data-aos-delay="350"
+                            >
                                 <div className="carousel-inner">
                                     {carouselItems.map((item, index) => (
-                                        <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`} data-bs-interval="1000">
-                                            <img src={item.src} className="d-block w-100 img-fluid h-100" alt={item.alt} />
+                                        <div
+                                            key={index}
+                                            className={`carousel-item ${index === 0 ? 'active' : ''}`}
+                                            data-bs-interval="1000"
+                                            data-aos="zoom-in-up"
+                                            data-aos-delay={400 + index * 150}
+                                        >
+                                            <img
+                                                src={item.src}
+                                                className="d-block w-100 img-fluid h-100"
+                                                alt={item.alt}
+                                            />
                                         </div>
                                     ))}
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
+
                 {/* Gallery Section */}
                 <div className="container py-5" data-aos="fade-up">
                     <h2 className="text-center fw-bold text-primary mb-4">Our Campus Life</h2>
@@ -399,7 +367,8 @@ function Branch() {
                         ))}
                     </div>
                 </div>
-                {/* Simple Sections Layout */}
+
+                {/* Simple Sections */}
                 <div className="container mb-5">
                     {sections.map((section, index) => (
                         <div key={index} className="mb-4">
@@ -426,7 +395,7 @@ function Branch() {
                     </div>
                 </div>
 
-                {/* Contact and Hours Section - Redesigned */}
+                {/* Contact and Hours */}
                 <div className="container my-5 px-3">
                     <div className="row g-4">
                         {/* Contact Info */}
@@ -435,7 +404,7 @@ function Branch() {
                                 <h4 className="text-primary mb-3">Contact Details</h4>
                                 <p className="mb-2">
                                     <i className="bi bi-telephone-fill me-2 text-secondary"></i>
-                                    +91 9876543210
+                                    +91 7398889347
                                 </p>
                                 <p className="mb-2">
                                     <i className="bi bi-envelope-fill me-2 text-secondary"></i>
@@ -443,7 +412,7 @@ function Branch() {
                                 </p>
                                 <p>
                                     <i className="bi bi-geo-alt-fill me-2 text-secondary"></i>
-                                    Thoothibari, Maharajganj District<br />
+                                    Thoothibari,District Maharajganj <br />
                                     Uttar Pradesh, India
                                 </p>
                                 <div className="mt-4">
@@ -468,7 +437,6 @@ function Branch() {
                                 </p>
                                 <p className="mb-2">6:00 AM - 7:00 PM</p>
                                 <p className="text-danger fw-semibold">Closed on Sundays</p>
-
                                 <div className="mt-4">
                                     <h6 className="text-dark">Upcoming Events:</h6>
                                     <ul className="list-unstyled mt-2">
@@ -486,12 +454,26 @@ function Branch() {
                         </div>
                     </div>
                 </div>
-
-                {/* Map and Query Form Section */}
-                <div className="container-fluid my-5">
-                    <h2 className="text-center mb-4">Locate-Us</h2>
+                {/* Call to Action */}
+                <div className="container-fluid text-white py-5" style={{ background: "linear-gradient(135deg, #0052D4, #4364F7,rgb(84, 164, 255))" }}>
+                    <div className="container text-center">
+                        <h2 className="mb-4 fw-bold">Ready to Start Your Tech Journey?</h2>
+                        <p className="lead mb-4">Join hundreds of successful students who launched their careers with <strong>Drishtee</strong></p>
+                        <div className="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="tel:+917398889347" className="btn btn-warning btn-lg px-4 text-dark fw-semibold shadow">
+                                <i className="bi bi-telephone-fill me-2"></i> Call Now
+                            </a>
+                            <a href="https://wa.me/917398889347" target="_blank" rel="noopener noreferrer" className="btn btn-success btn-lg px-4 fw-semibold shadow">
+                                <i className="bi bi-whatsapp me-2"></i> WhatsApp Us
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {/* Map and Query Form */}
+                <div className="container-fluid">
+                    <h2 className="text-center mt-4">Locate-us</h2>
                     <div className="row align-items-center">
-                        <div className="col-md-6 mb-4 mb-md-0">
+                        <div className="col-md-6 mb-md-0">
                             <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3541.3484879661028!2d83.69061145032624!3d27.427248144117375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39942392249c9073%3A0x6b62ef81415149dd!2sDrishtee%20Institute%20of%20Information%20Technology!5e0!3m2!1sen!2sin!4v1696133570458!5m2!1sen!2sin"
                                 width="100%" height="450" style={{ border: '0' }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade">
@@ -499,22 +481,6 @@ function Branch() {
                         </div>
                         <div className="col-md-6">
                             <QueryForm />
-                        </div>
-                    </div>
-                </div>
-
-                {/* Call to Action */}
-                <div className="container-fluid bg-primary text-white py-5">
-                    <div className="container text-center">
-                        <h2 className="mb-4">Ready to Start Your Tech Journey?</h2>
-                        <p className="lead mb-4">Join hundreds of successful students who launched their careers with Drishtee</p>
-                        <div className="d-flex justify-content-center gap-3">
-                            <button className="btn btn-light btn-lg px-4">
-                                <i className="bi bi-telephone me-2"></i> Call Now
-                            </button>
-                            <button className="btn btn-outline-light btn-lg px-4">
-                                <i className="bi bi-whatsapp me-2"></i> WhatsApp Us
-                            </button>
                         </div>
                     </div>
                 </div>

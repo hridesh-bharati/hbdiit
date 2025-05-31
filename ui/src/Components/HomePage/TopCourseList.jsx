@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 const images = [
-  { id: 1, src: "images/course/oLevel.png",desc: "O-Level Computer Course" },
-  { id: 2, src: "images/course/ccc.png",  desc: "CCC Certification Course" },
+  { id: 1, src: "images/course/oLevel.png", desc: "O-Level Computer Course" },
+  { id: 2, src: "images/course/ccc.png", desc: "CCC Certification Course" },
   { id: 3, src: "images/course/software.png", desc: "Software Development Fundamentals" },
   { id: 4, src: "images/course/reactJs.png", title: "Course 4", desc: "React.js for Frontend Development" },
   { id: 5, src: "images/course/python.png", desc: "Python Programming Essentials" },
@@ -24,15 +24,15 @@ export default function TopCourseList() {
                 <img
                   src={image.src}
                   alt={image.title}
-                  className="card-img-top img-fluid"
+                  className="img-fluid"
                   style={{ objectFit: "contain", maxHeight: "100%" }}
                 />
               </div>
               <div className="card-body text-center bg-light pb-2">
                 <p className="card-text text-muted small">{image.desc}</p>
-                {/* <button className="btn btn-primary btn-sm">
+                <button className="btn btn-primary btn-sm">
                   <i className="bi bi-play-circle me-1"></i> Start Course
-                </button> */}
+                </button>
               </div>
             </div>
           </div>

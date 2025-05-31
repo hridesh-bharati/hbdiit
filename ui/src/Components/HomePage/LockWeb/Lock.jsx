@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 const Lock = () => {
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -20,7 +19,6 @@ const Lock = () => {
         showToast('LOL');
       }
     };
-
     const handleContextMenu = (event) => {
       event.preventDefault();
       showToast(' LOL');
@@ -28,8 +26,7 @@ const Lock = () => {
     const showToast = (message) => {
       toast.info(message, {
         position: 'top-right',
-        autoClose: 100,
-        // hideProgressBar: true,
+        autoClose: 500,
         style: { fontSize: '20px', fontWeight: 'bold', color: 'black' },
       });
     };
@@ -40,7 +37,6 @@ const Lock = () => {
       document.removeEventListener('contextmenu', handleContextMenu);
     };
   }, []);
-
   return (
     <div>
       <ToastContainer />

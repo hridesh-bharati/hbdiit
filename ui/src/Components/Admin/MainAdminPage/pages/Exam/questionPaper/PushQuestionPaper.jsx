@@ -21,7 +21,6 @@ export default function PushQuestionPaper(props) {
                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div className="modal-body">
-
                     <input type="number" placeholder="maximum mark" value={maxMarks} onChange={(e)=>{setMaxMarks(parseInt(e.target.value))}}/>
                     <input type="number" placeholder="Total questions" value={totalQuestions} onChange={(e)=>{seTotalQuestions(parseInt(e.target.value))}}/>
                 </div>

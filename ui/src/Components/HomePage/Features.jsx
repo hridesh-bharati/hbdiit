@@ -51,6 +51,36 @@ const descriptions = [
 export default function LiveCards() {
     return (
         <div className="card-group py-3 mx-3 fixed-position" id="liveCards">
+            <style>{`
+                /* Dark mode styles for LiveCards */
+                .dark-mode #liveCards {
+                    background: #23293a !important;
+                    color: #f1f1f1;
+                    border-radius: 1rem;
+                    transition: background 0.3s;
+                    margin:1rem;
+                }
+                .dark-mode #liveCards .card,
+                .dark-mode #liveCards .myshadow {
+                    background: #273043 !important;
+                    color: #f1f1f1;
+                    border: none;
+                }
+                .dark-mode #liveCards .card-title {
+                    color: #ffe066 !important;
+                }
+                .dark-mode #liveCards .card-text {
+                    color: #bdbdbd !important;
+                }
+                .dark-mode #liveCards .text-primary,
+                .dark-mode #liveCards .textColorOne {
+                    color: #ffe066 !important;
+                }
+                .dark-mode #liveCards hr {
+                    border-color: #ffe066 !important;
+                    color: #ffe066 !important;
+                }
+            `}</style>
             <span className="w-100 d-block text-center h2 fw-bolder">
                 <p id="LiveWork" className='textColorOne text-primary' data-aos="fade-right" data-aos-duration="1000"> WHY CHOOSE DRISHTEE </p>
                 <center data-aos="fade-left" data-aos-duration="1000">
@@ -85,7 +115,7 @@ export default function LiveCards() {
             <div className="row justify-content-center">
                 {descriptions.map((data, index) => (
                     <div key={index} className="col-sm-6 col-md-3 mb-4">
-                        <div className="card shadow-sm p-2 p-lg-4 h-100 text-center">
+                        <div className="card shadow-sm p-2 p-lg-4 h-100 text-center myshadow">
                             <div className="card-body">
                                 <div className="d-flex align-items-center justify-content-center mb-3">
                                     {data.icon}

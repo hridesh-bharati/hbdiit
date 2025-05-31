@@ -13,12 +13,12 @@ export default function AdmissionStatus() {
   const [issueDate, setIssueDate] = useState(new Date());
   const [allStudent, setAllStudent] = useState([]);
   const [fullName, setFullName] = useState('');
-  const [isRegNumUnique, setIsRegNumUnique] = useState(true); // Track uniqueness
-
+  const [isRegNumUnique, setIsRegNumUnique] = useState(true);
   const getStudentListHandler = async () => {
     try {
       const rspns = await getStudentList({ name: fullName });
-      setAllStudent(rspns.message);
+      // setAllStudent(rspns.message);
+      setAllStudent(Array.isArray(rspns.message) ? rspns.message : []);
     } catch (error) {
       toast.error("Failed to fetch students.");
     }
@@ -93,44 +93,48 @@ export default function AdmissionStatus() {
     setIsRegNumUnique(true);
   };
 
-const isValidDate = (date) => {
-  const parsedDate = new Date(date);
-  return !isNaN(parsedDate.getTime()); // Checks if the parsed date is valid
-};
+  const isValidDate = (date) => {
+    const parsedDate = new Date(date);
+    return !isNaN(parsedDate.getTime()); // Checks if the parsed date is valid
+  };
 
   return (
     <div className="StudentList">
       <div className="row border-bottom m-0 px-0 bg-primary myshadow w-100">
         <div className="col-12 py-2 mx-0 px-0 d-flex justify-content-around align-items-center">
           <div className="h2 fw-bold text-white text-uppercase px-2">All Students</div>
-          <div className="myFlex2">
+          <div className="myFlex2 d-flex gap-2">
             <button className="btn btn-primary rounded-0 d-flex align-items-center">
               <i className="fa fa-plus-circle" aria-hidden="true"></i>
               <Link to="/AdmissionForm" className="nav-link">&nbsp; Add New</Link>
             </button>
+            <button className="btn btn-warning rounded-0 d-flex align-items-center" onClick={getStudentListHandler}>
+              <i className="bi bi-arrow-clockwise"></i>&nbsp; Reload
+            </button>
           </div>
+
         </div>
       </div>
 
       <div className="row mx-0 px-0 bg-white text-primary pb-5">
         <div className="col-12 m-0 py-2 fw-medium d-flex justify-content-between align-items-center bg-primary bg-gradient">
           <div className="w-100 d-flex align-items-center mx-0 px-0">
-            <input 
-              type="text" 
-              className="form-control rounded-0 w-50" 
-              placeholder="Full name" 
-              onChange={(e) => setFullName(e.target.value)} 
-              value={fullName} 
+            <input
+              type="text"
+              className="form-control rounded-0 w-50"
+              placeholder="Full name"
+              onChange={(e) => setFullName(e.target.value)}
+              value={fullName}
             />
-            <input 
-              type="text" 
-              className="form-control rounded-0 w-50" 
-              placeholder="Reg No." 
-              onChange={(e) => setIndexNum(e.target.value)} 
-              value={indexNum} 
+            <input
+              type="text"
+              className="form-control rounded-0 w-50"
+              placeholder="Reg No."
+              onChange={(e) => setIndexNum(e.target.value)}
+              value={indexNum}
             />
-            <button 
-              className='w-25 my-1 btn btn-light rounded-0 text-dark searchStudent fw-bolder' 
+            <button
+              className='w-25 my-1 btn btn-light rounded-0 text-dark searchStudent fw-bolder'
               onClick={getStudentListHandler}
             >
               <i className="bi bi-search text-dark"></i>
@@ -145,7 +149,7 @@ const isValidDate = (date) => {
                 <th className='text-center'>Photo</th>
                 <th className='text-center'>Reg. No</th>
                 <th className='text-center'>Name</th>
-                <th className='text-center'>Address</th>
+                <th className='text-center d-none d-md-table-cell'>Address</th>
                 <th className='text-center'>Mobile</th>
                 <th className='text-center'>Admission Date</th>
                 <th className='text-center'>Action</th>
@@ -155,18 +159,18 @@ const isValidDate = (date) => {
               {allStudent.map(student => (
                 <tr key={student._id}>
                   <td className="text-center databsimg">
-                    <img 
-                      className={`rounded-circle m-auto ${student.gnCertificate ? 'rounded' : ''}`} 
-                      src={student.photo} 
-                      width="30" 
-                      alt="Pic" 
+                    <img
+                      className={`rounded-circle m-auto ${student.gnCertificate ? 'rounded' : ''}`}
+                      src={student.photo}
+                      width="30"
+                      alt="Pic"
                     />
                   </td>
                   <td className="fw-medium small text-uppercase text-center">
                     {student.regNum ? student.regNum.split('/').slice(1).join('/') : <span className="text-warning">Pending</span>}
                   </td>
                   <td>{student.name}</td>
-                  <td className='stdAddress'>{student.address}</td>
+                  <td className='stdAddress d-none d-md-table-cell'>{student.address}</td>
                   <td>{student.mobileNumber}</td>
                   <td>{new Date(student.dob).toLocaleDateString()}</td>
                   <td>
@@ -189,29 +193,29 @@ const isValidDate = (date) => {
           <Modal.Footer>
             {modalType === 'delete' && <Button variant="danger" onClick={handleAction}>Delete</Button>}
             {modalType === 'admission' && <>
-              <input 
-                type="text" 
-                className='form-control' 
-                placeholder="Give unique registration Number" 
-                onChange={(e) => { setIndexNum(e.target.value); setIsRegNumUnique(checkRegNumUnique(e.target.value)); }} 
-                required 
+              <input
+                type="text"
+                className='form-control'
+                placeholder="Give unique registration Number"
+                onChange={(e) => { setIndexNum(e.target.value); setIsRegNumUnique(checkRegNumUnique(e.target.value)); }}
+                required
               />
               {!isRegNumUnique && <span className="text-danger">Registration number must be unique.</span>}
               <Button variant='primary' onClick={handleAction} disabled={!indexNum || !isRegNumUnique}><i className="bi bi-check2-circle"></i> Done</Button>
             </>}
             {modalType === 'certificate' && <>
-              <input 
-                type="number" 
-                className='form-control' 
-                placeholder='Enter Percentage' 
-                onChange={(e) => setPercentage(e.target.value)} 
-                required 
+              <input
+                type="number"
+                className='form-control'
+                placeholder='Enter Percentage'
+                onChange={(e) => setPercentage(e.target.value)}
+                required
               />
-              <input 
-                type="date" 
-                className='form-control' 
-                onChange={(e) => setIssueDate(e.target.value)} 
-                required 
+              <input
+                type="date"
+                className='form-control'
+                onChange={(e) => setIssueDate(e.target.value)}
+                required
               />
               <Button variant="secondary" onClick={closeModal}><i className="bi bi-trash"></i></Button>
               <Button variant='primary' onClick={handleAction}><i className="fa fa-paper-plane"></i></Button>

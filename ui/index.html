@@ -5,62 +5,84 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Drishtee Computer Center</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- <link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap" rel="stylesheet"> -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Edu+QLD+Beginner:wght@400..700&display=swap" rel="stylesheet">
-  <!-- Preconnect for Performance -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Preload Fonts -->
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Merriweather&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Font Optimization -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Edu+QLD+Beginner:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;900&display=swap" as="style"
+    crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Merriweather&family=Poppins:wght@400;600&display=swap"
+    rel="stylesheet" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="icon" type="image/png" href="images/icon/logo.png" />
 
-  <!-- Meta Tags -->
-  <meta name="description" content="Drishtee Computer Center - Advanced IT Training and Computer Education.">
-  <meta name="keywords" content="computer training, IT courses, web development, programming">
-  <meta name="author" content="Ajay Tiwari, Santosh Singh Chauhan, Hridesh Bharati">
+  <!-- Meta Tags for SEO -->
+  <meta name="description" content="Drishtee Computer Center - Advanced IT Training and Computer Education." />
+  <meta name="keywords" content="computer training, IT courses, web development, programming" />
+  <meta name="author" content="Ajay Tiwari, Santosh Singh Chauhan, Hridesh Bharati" />
 
   <!-- Open Graph / Social Media Meta Tags -->
-  <meta property="og:title" content="Drishtee Computer Center - Computer Education & IT Training">
-  <meta property="og:description" content="Learn programming, networking, and IT skills with expert guidance.">
-  <meta property="og:image" content="/images/icon/icon.webp">
-  <meta property="og:url" content="https://www.drishteeindai.com">
-  <meta name="twitter:card" content="summary_large_image">
-
+  <meta property="og:title" content="Drishtee Computer Center - Computer Education & IT Training" />
+  <meta property="og:description" content="Learn programming, networking, and IT skills with expert guidance." />
+  <meta property="og:image" content="https://www.drishteeindia.com/images/icon/icon.webp" />
+  <meta property="og:url" content="https://www.drishteeindia.com" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Drishtee Computer Center - Computer Education & IT Training" />
+  <meta name="twitter:description" content="Learn programming, networking, and IT skills with expert guidance." />
+  <meta name="twitter:image" content="https://www.drishteeindia.com/images/icon/icon.webp" />
   <!-- AOS (Animate on Scroll) Library -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
   <!-- Additional Meta Tags for SEO -->
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#007bff" />
-
+  <!-- ✅ JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": "Drishtee Computer Center",
+    "url": "https://www.drishteeindia.com",
+    "logo": "https://www.drishteeindia.com/images/icon/logo.png",
+    "description": "Advanced IT Training and Computer Education.",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Main Road",
+      "addressLocality": "Paragpur Road, near Ramharsha Inter College, Nichaul, Maharajganj",
+      "addressRegion": "Uttar Pradesh",
+      "postalCode": "273304",
+      "addressCountry": "IN"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+91-9918151032",
+      "contactType": "Customer Service",
+      "areaServed": "IN"
+    },
+    "sameAs": [
+      "https://facebook.com/youractualpage"
+    ]
+  }
+  </script>
 </head>
 
 <body>
   <div id="root"></div>
-
-  <!-- JavaScript Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" defer></script>
   <script src="https://code.responsivevoice.org/responsivevoice.js?key=nJKV9NhB" defer></script>
-
-  <!-- Initialize AOS -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      AOS.init({
-        offset: 120,
-        duration: 400,
-      });
+      if (window.AOS) {
+        AOS.init({
+          offset: 120,
+          duration: 400,
+        });
+      }
     });
   </script>
-
-  <!-- Vite React App -->
-  <script type="module" src="./src/index.jsx "></script>
+  <script type="module" src="./src/index.jsx" defer></script>
 </body>
 
 </html>

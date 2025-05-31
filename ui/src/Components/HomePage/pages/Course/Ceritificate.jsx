@@ -6,7 +6,7 @@ import CourseNav from "./CourseNav";
 
 function Certificate() {
     const [courses, setCourses] = useState([]);
-    const [searchQuery, setSearchQuery] = useState(""); // Search query state
+    const [searchQuery, setSearchQuery] = useState("");
     const crs = useSelector(state => state.courses);
 
     useEffect(() => {
@@ -14,13 +14,15 @@ function Certificate() {
             setCourses(crs);
         }
     }, [crs]);
-    const targetCourses = ["CCA", "CAC"];
+    const targetCourses = ["cca", "cac"];
+
     const trimmedQuery = searchQuery.trim().toLowerCase();
 
     const filteredCourses = courses.filter(course =>
-        targetCourses.includes(course.name) &&
+        targetCourses.includes(course.name.toLowerCase()) &&
         (trimmedQuery ? course.name.toLowerCase().includes(trimmedQuery) : true)
     );
+
 
     return (
         <>

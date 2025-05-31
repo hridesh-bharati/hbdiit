@@ -6,26 +6,30 @@ import "swiper/css/pagination";
 export default function CardSlider() {
     const x = `images/thumbnails`
     const slides = [
-        `${x}/dtp.png`,
-        `${x}/bootstrap.png`,
-        `${x}/c2-lang.png`,
-        `${x}/funda.png`,
-        `${x}/ms_office.png`,
-        `${x}/dtp.png`,
-        `${x}/bootstrap.png`,
-        `${x}/c2-lang.png`,
-        `${x}/funda.png`,
+        `${x}/android.jpg`,
+        `${x}/ehack.jpg`,
+        `${x}/cpp.webp`,
+        `${x}/office.webp`,
+        `${x}/js.jpg`,
+        `${x}/coding.jpg`,
+        `${x}/ai.jpg`,
+        `${x}/tail.jpg`,
+        `${x}/ppt.jpg`,
+        `${x}/python.jpg`,
+        `${x}/ai1.webp`,
+        `${x}/tallyp.jpg`,
+        `${x}/ps1.png`,
     ];
 
     return (
-        <div style={{ width: "100%", overflow: "hidden" }}>
+        <div style={{ width: "100%", overflow: "hidden" }} className="about-section">
             <Swiper
-                className="py-5"
+                className="pb-5 about-card"
                 style={{ height: "100%", width: "100%" }}
                 modules={[Pagination, Autoplay]}
                 pagination={{ clickable: true }}
                 loop={true}
-                slidesPerView={7}
+                slidesPerView={9}
                 slidesPerGroup={1}
                 autoplay={{ delay: 2000, disableOnInteraction: false }}
                 spaceBetween={10}
@@ -34,8 +38,8 @@ export default function CardSlider() {
                 grabCursor={true}
             >
                 {slides.map((src, index) => (
-                    <SwiperSlide key={index} className="swiper-slide-custom p-3">
-                        <img src={src} alt={`Slide ${index + 1}`} className="slide-image img-fluid" />
+                    <SwiperSlide key={index} className="swiper-slide-custom">
+                        <img src={src} loading="lazy"  alt={`Slide ${index + 1}`} className="slide-image img-fluid" />
                     </SwiperSlide>
                 ))}
             </Swiper>

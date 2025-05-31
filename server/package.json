@@ -4,7 +4,7 @@
   "description": "Drishtee Computer Center Application Developed By Sushil Kandu",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "start": "node index.js"
   },
   "author": "sushil kandu",
   "license": "ISC",

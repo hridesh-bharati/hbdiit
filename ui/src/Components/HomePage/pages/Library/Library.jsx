@@ -28,9 +28,8 @@ export default function Library() {
                 text: "Spacious collaborative zones and discussion rooms for group studies and academic interactions."
             }
         ],
-       
         [
-             {
+            {
                 icon: "bi bi-calendar-check",
                 title: "24/7 Access",
                 text: "Round-the-clock access to digital resources and extended hours during examination periods."
@@ -72,8 +71,8 @@ export default function Library() {
     ];
 
     return (
-        <div className="mx-0 px-0 pt-4">
-            <div className="container-fluid mx-0 px-0">
+        <div className="mx-0 px-0 pt-4 about-section">
+            <div className="container-fluid mx-0 px-0 about-section">
                 {/* Hero Section */}
                 <div className="position-relative mb-5">
                     <div id="libraryCarousel" className="carousel slide" data-bs-ride="carousel">
@@ -116,8 +115,8 @@ export default function Library() {
                             <span className="visually-hidden">Next</span>
                         </button>
                     </div>
-                    <div className="position-absolute top-50 start-50 translate-middle text-center d-none d-lg-block diitLibrary">
-                        <div className="card bg-white border-0">
+                    <div className="position-absolute top-50 start-50 translate-middle text-center d-none d-lg-block diitLibrary about-card">
+                        <div className="card bg-white border-0 about-card">
                             <div className="card-body">
                                 <h1 className="display-3 fw-bold text-primary bg-white mb-3">
                                     DRISHTEE LIBRARY
@@ -149,13 +148,13 @@ export default function Library() {
                                         data-aos="fade-up"
                                         data-aos-delay={100 * (rowIndex * 4 + index + 1)}
                                     >
-                                        <div className="card h-100 shadow-sm hover-shadow transition-all lbCardBg">
+                                        <div className="card h-100 shadow-sm hover-shadow transition-all about-card">
                                             <div className="card-body text-center p-4">
                                                 <div className="feature-icon bg-light border border-primary shadow shadow-sm bg-opacity-10 rounded-circle p-3 px-4 mb-4 mx-auto" style={{ width: "fit-content" }}>
                                                     <i className={`bi ${feature.icon} fs-2 text-primary`}></i>
                                                 </div>
                                                 <h5 className="card-title text-primary mb-3">{feature.title}</h5>
-                                                <p className="card-text text-muted">{feature.text}</p>
+                                                <p className="card-text about-card">{feature.text}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -175,7 +174,7 @@ export default function Library() {
                     <div className="row g-4">
                         {/* General Rules */}
                         <div className="col-md-6" data-aos="fade-right">
-                            <div className="card h-100 shadow-sm border-0">
+                            <div className="card h-100 shadow-sm border-0 about-card">
                                 <div className="card-body">
                                     <h5 className="card-title text-primary mb-3">
                                         <i className="bi bi-info-circle-fill me-2"></i>General Rules
@@ -193,7 +192,7 @@ export default function Library() {
                         </div>
                         {/* Borrowing Guidelines */}
                         <div className="col-md-6" data-aos="fade-left">
-                            <div className="card h-100 shadow-sm border-0">
+                            <div className="card h-100 shadow-sm border-0 about-card">
                                 <div className="card-body">
                                     <h5 className="card-title text-primary mb-3">
                                         <i className="bi bi-book-fill me-2"></i>Borrowing Guidelines

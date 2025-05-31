@@ -35,7 +35,7 @@
   #printResult ul li {
     font-size: 0.7em;
   }
- 
+
   /*Start  Cerificate  */
   #navbarNav ul li a i {
     display: inline-block;
@@ -46,15 +46,26 @@
     text-align: center;
   }
 }
+
 #navbarNav .MobileNav {
   box-shadow: 0 -2px 5px rgba(50, 50, 93, 0.25),
     0 1px 3px -1px rgba(0, 0, 0, 0.3);
   background: var(--topNavBgColor);
 }
+
 @media screen and (max-width: 768px) {
   #ToperNav {
     background: var(--topNavBgColor);
   }
+
+  .certificate-wrapper .custom-heading {
+    font-size: 2rem;
+  }
+
+  /* *@media (max-width: 767px) {
+  .certificate-wrapper {
+    padding: 0 10px;
+  } */
 
   #CourseListNav {
     background: transparent;
@@ -109,13 +120,17 @@
       0 1px 3px -1px rgba(0, 0, 0, 0.3);
     background: var(--topNavBgColor);
   }
+
   #printResult {
-    width: 297mm !important; /* A4 width */
-    height: 210mm !important; /* A4 height in landscape */
-    transform: scale(1); /* Ensure no unwanted scaling */
+    width: 297mm !important;
+    /* A4 width */
+    height: 210mm !important;
+    /* A4 height in landscape */
+    transform: scale(1);
+    /* Ensure no unwanted scaling */
     transform-origin: top left;
   }
-  
+
   #printResult .HeaderCenter .custom-heading {
     padding: 0 0 !important;
     margin: 0 !important;
@@ -226,7 +241,7 @@
     padding-bottom: 1rem;
   }
 
-  #navbarNav > ul > li > a {
+  #navbarNav>ul>li>a {
     font-size: 0.9rem !important;
   }
 
@@ -255,6 +270,15 @@
 
   footer {
     margin-bottom: 2.8rem !important;
+  }
+
+  tbody,
+  td,
+  tfoot,
+  th,
+  thead,
+  tr {
+    font-size: 0.7rem;
   }
 
   .diplomaTable th,
@@ -321,7 +345,8 @@
   .admission-form .col-md-5 {
     font-size: 0.8rem;
   }
-  .my_offCanvas_Header{
+
+  .my_offCanvas_Header {
     height: 100vh !important;
   }
 }
@@ -370,23 +395,24 @@
 }
 
 @media print {
-    body {
-      -webkit-print-color-adjust: exact; /* Ensures colors are printed correctly */
-      print-color-adjust: exact;
-    }
-    #printResult {
-        width: 100%;
-        max-width: 297mm;  
-        height: 210mm;  
-        overflow: hidden; 
-        transform: scale(1); 
-        transform-origin: top left;
-      }
-      
-  
-    @page {
-      size: A4 landscape;
-      margin: 0; 
-    }
+  body {
+    -webkit-print-color-adjust: exact;
+    /* Ensures colors are printed correctly */
+    print-color-adjust: exact;
   }
-  
+
+  #printResult {
+    width: 100%;
+    max-width: 297mm;
+    height: 210mm;
+    overflow: hidden;
+    transform: scale(1);
+    transform-origin: top left;
+  }
+
+
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+}

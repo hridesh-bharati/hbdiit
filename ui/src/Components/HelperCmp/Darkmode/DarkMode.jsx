@@ -1,217 +1,91 @@
-// darkModeUtils.js
 const DarkMode = (isDarkMode, setIsDarkMode) => {
     setIsDarkMode(prevMode => {
         const newMode = !prevMode;
 
-        // Define colors
+        // Toggle global dark-mode class on root (or body)
+        const root = document.getElementById("root");
+        if (root) {
+            if (newMode) {
+                root.classList.add("dark-mode");
+                // Redundancy for team section
+                const team = document.getElementById("team");
+                if (team) team.classList.add("dark-mode");
+            } else {
+                root.classList.remove("dark-mode");
+                const team = document.getElementById("team");
+                if (team) team.classList.remove("dark-mode");
+            }
+        }
+
+        // Direct style manipulation for legacy/inline dark mode
         const white = 'var(--whiteBg)';
         const black = 'var(--mainBgcolorDark)';
         const midBlack = 'var(--MyDarkGrayBg)';
         const lightBlack = 'var(--lightGrayColor)';
         const lightwhite = 'var(--lightWhite)';
-        const navRed = 'var(--topNavBgColor)'
-        const darkBlue = 'var(--cardHeadColorDark)'
-        const darkBlue2 = 'var(--d-blue)'
+        const navRed = 'var(--topNavBgColor)';
+        const darkBlue = 'var(--cardHeadColorDark)';
+        const darkBlue2 = 'var(--d-blue)';
 
-        // Apply styles based on dark mode
-        const root = document.getElementById("root");
-        const navbg = document.getElementById("ToperNav");
-        const homeA = document.getElementById("homeA");
-        const homeB = document.getElementById("homeB");
-        const team = document.getElementById("team");
-        const timeTable = document.getElementById("timeTable");
-        const noticeBg = document.getElementById("noticeBg");
-        const TestimonialParent = document.getElementById("TestimonialParent");
-        const liveCards = document.getElementById("liveCards");
-        const liveA = document.getElementById("liveA");
-        const liveB = document.getElementById("liveB");
-        const liveC = document.getElementById("liveC");
-        const liveD = document.getElementById("liveD");
-        const TestimonialChild = document.getElementById("TestimonialChild");
-        const HomeOffer = document.getElementById("HomeOffer");
-        const signUpNow = document.getElementById("signUpNow");
-        const aboutBg = document.getElementById("aboutBg");
-        const MissionLeft1 = document.getElementById("MissionLeft1");
-        const MissionLeft2 = document.getElementById("MissionLeft2");
-        const MissionRight = document.getElementById("MissionRight");
-        const Accordion1 = document.getElementById("Accordion1");
-        const MyCardBg = document.getElementById("MyCardBg");
-        const counter1 = document.getElementById("counter1");
-        const counter2 = document.getElementById("counter2");
-        const counter3 = document.getElementById("counter3");
-        const counter4 = document.getElementById("counter4");
-        const CourseListNav = document.getElementById("CourseListNav");
-        const studentZoneNav = document.getElementById("studentZoneNav");
-        const branchBgA = document.getElementById("branchBgCard");
-        const branchBgB = document.getElementById("branchChild");
-        const branchBgC = document.getElementById("shortContact");
-        const shortContactA = document.getElementById("shortContactA");
-        const MobileNav = document.getElementById("MobileNav");
-        const mainCourseEle = document.getElementById("mainCourseEle");
-        const CourseEleChild = document.getElementById("CourseEleChild");
-        const cerEle = document.getElementById("cerEle");
-        const MyFooterColor = document.getElementById("MyFooterColor");
-        const thumblain = document.getElementById("thumblain");
-        const BAddress = document.getElementById("BAddress");
-        const dText = document.getElementById("dText");
-        const absirfdiitBg = document.getElementById("absirfdiitBg");
+        // All relevant elements (with updated selectors)
+        const elements = [
+            { el: document.getElementById("ToperNav"), styles: { background: newMode ? black : navRed } },
+            { el: document.getElementById("MobileNav"), styles: { background: newMode ? black : navRed } },
+            { el: document.getElementById("homeA"), styles: { background: newMode ? midBlack : white, color: newMode ? white : midBlack } },
+            { el: document.getElementById("homeB"), styles: { background: newMode ? midBlack : white, color: newMode ? white : midBlack } },
+            { el: document.getElementById("dText"), styles: { color: newMode ? white : midBlack } },
+            { el: document.getElementById("team"), styles: { background: newMode ? midBlack : white } },
+            { el: document.getElementById("timeTable"), styles: { background: newMode ? midBlack : white } },
+            { el: document.getElementById("noticeBg"), styles: { background: newMode ? midBlack : white } },
+            { el: document.getElementById("TestimonialChild"), styles: { background: newMode ? midBlack : white } },
+            { el: document.getElementById("TestimonialParent"), styles: { background: newMode ? midBlack : white } },
+            { el: document.getElementById("liveCards"), styles: { background: newMode ? midBlack : white, color: newMode ? white : midBlack } },
+            { el: document.getElementById("liveA"), styles: { background: newMode ? lightBlack : white, color: newMode ? white : midBlack } },
+            { el: document.getElementById("liveB"), styles: { background: newMode ? lightBlack : white, color: newMode ? white : midBlack } },
+            { el: document.getElementById("liveC"), styles: { background: newMode ? lightBlack : white, color: newMode ? white : midBlack } },
+            { el: document.getElementById("liveD"), styles: { background: newMode ? lightBlack : white, color: newMode ? white : midBlack } },
+            { el: document.getElementById("HomeOffer"), styles: { background: newMode ? lightBlack : white } },
+            { el: document.getElementById("signUpNow"), styles: { background: newMode ? lightBlack : white } },
+            { el: document.getElementById("CourseListNav"), styles: { background: newMode ? black : navRed } },
+            { el: document.getElementById("studentZoneNav"), styles: { background: newMode ? black : navRed } },
+            // About sections: switch to class for multiple elements
+            ...Array.from(document.querySelectorAll(".about-section")).map(el => ({
+                el,
+                styles: { background: newMode ? lightBlack : white, color: newMode ? white : midBlack }
+            })),
+            { el: document.getElementById("MissionLeft1"), styles: { background: newMode ? lightBlack : white, color: newMode ? white : midBlack } },
+            { el: document.getElementById("MissionLeft2"), styles: { background: newMode ? lightBlack : white, color: newMode ? white : midBlack } },
+            { el: document.getElementById("MissionRight"), styles: { background: newMode ? lightBlack : white, color: newMode ? white : midBlack } },
+            { el: document.getElementById("MyCardBg"), styles: { background: newMode ? lightBlack : white, color: newMode ? white : midBlack } },
+            { el: document.getElementById("Accordion1"), styles: { background: newMode ? lightBlack : white, color: newMode ? white : midBlack } },
+            { el: document.getElementById("counter1"), styles: { background: newMode ? lightBlack : white, color: newMode ? white : midBlack } },
+            { el: document.getElementById("counter2"), styles: { background: newMode ? lightBlack : white, color: newMode ? white : midBlack } },
+            { el: document.getElementById("counter3"), styles: { background: newMode ? lightBlack : white, color: newMode ? white : midBlack } },
+            { el: document.getElementById("counter4"), styles: { background: newMode ? lightBlack : white, color: newMode ? white : midBlack } },
+            // { el: document.getElementById("mainCourseEle"), styles: { background: newMode ? lightBlack : white, color: newMode ? white : midBlack } },
+            { el: document.getElementById("CourseEleChild"), styles: { background: newMode ? lightBlack : white, color: newMode ? white : midBlack } },
+            { el: document.getElementById("cerEle"), styles: { background: newMode ? lightBlack : white, color: newMode ? white : midBlack } },
+            { el: document.getElementById("MyFooterColor"), styles: { background: newMode ? lightBlack : darkBlue, color: newMode ? white : midBlack } },
+            { el: document.getElementById("thumblain"), styles: { background: newMode ? lightBlack : darkBlue, color: newMode ? white : midBlack } },
+            { el: document.getElementById("BAddress"), styles: { background: newMode ? lightBlack : darkBlue2, color: newMode ? white : midBlack } },
+            { el: document.getElementById("branchBgCard"), styles: { background: newMode ? midBlack : darkBlue } },
+            { el: document.getElementById("branchChild"), styles: { background: newMode ? midBlack : darkBlue } },
+            { el: document.getElementById("shortContact"), styles: { background: newMode ? midBlack : darkBlue } },
+            { el: document.getElementById("shortContactA"), styles: { background: newMode ? midBlack : darkBlue } },
+            { el: document.getElementById("absirfdiitBg"), styles: { background: newMode ? midBlack : navRed } },
+        ];
 
+        elements.forEach(({ el, styles }) => {
+            if (el && styles) {
+                Object.entries(styles).forEach(([prop, value]) => {
+                    el.style[prop] = value;
+                });
+            }
+        });
+
+        // Also update root background for legacy support
         if (root) {
             root.style.background = newMode ? black : lightwhite;
-        } if (navbg) {
-            navbg.style.background = newMode ? black : navRed;
-        }
-        if (MobileNav) {
-            MobileNav.style.background = newMode ? black : navRed;
-        }
-        if (homeA) {
-            homeA.style.background = newMode ? midBlack : white;
-            homeA.style.color = newMode ? white : midBlack;
-
-        } if (homeB) {
-            homeB.style.background = newMode ? midBlack : white;
-            homeB.style.color = newMode ? white : midBlack;
-        }
-        if (dText) {
-            dText.style.color = newMode ? white : midBlack;
-        }
-        if (team) {
-            team.style.background = newMode ? midBlack : white;
-        }
-
-        if (timeTable) {
-            timeTable.style.background = newMode ? midBlack : white;
-        }
-        if (noticeBg) {
-            noticeBg.style.background = newMode ? midBlack : white;
-        }
-        if (TestimonialChild) {
-            TestimonialChild.style.background = newMode ? midBlack : white;
-        }
-        if (TestimonialParent) {
-            TestimonialParent.style.background = newMode ? midBlack : white;
-        }
-        if (liveCards) {
-            liveCards.style.background = newMode ? midBlack : white;
-            liveCards.style.color = newMode ? white : midBlack;
-        }
-
-        if (liveA) {
-            liveA.style.background = newMode ? lightBlack : white;
-            liveA.style.color = newMode ? white : midBlack;
-        }
-        if (liveB) {
-            liveB.style.background = newMode ? lightBlack : white;
-            liveB.style.color = newMode ? white : midBlack;
-        }
-        if (liveC) {
-            liveC.style.background = newMode ? lightBlack : white;
-            liveC.style.color = newMode ? white : midBlack;
-        }
-        if (liveD) {
-            liveD.style.background = newMode ? lightBlack : white;
-            liveD.style.color = newMode ? white : midBlack;
-        }
-        if (HomeOffer) {
-            HomeOffer.style.background = newMode ? lightBlack : white;
-        }
-        if (signUpNow) {
-            signUpNow.style.background = newMode ? lightBlack : white;
-        }
-        if (CourseListNav) {
-            CourseListNav.style.background = newMode ? black : navRed;
-        }
-        if (studentZoneNav) {
-            studentZoneNav.style.background = newMode ? black : navRed;
-        }
-
-        if (aboutBg) {
-            aboutBg.style.background = newMode ? lightBlack : white;
-            aboutBg.style.color = newMode ? white : midBlack;
-
-        }
-        if (MissionLeft1) {
-            MissionLeft1.style.background = newMode ? lightBlack : white;
-            MissionLeft1.style.color = newMode ? white : midBlack;
-
-        }
-        if (MissionLeft2) {
-            MissionLeft2.style.background = newMode ? lightBlack : white;
-            MissionLeft2.style.color = newMode ? white : midBlack;
-
-        }
-        if (MissionRight) {
-            MissionRight.style.background = newMode ? lightBlack : white;
-            MissionRight.style.color = newMode ? white : midBlack;
-
-        }
-        if (MyCardBg) {
-            MyCardBg.style.background = newMode ? lightBlack : white;
-            MyCardBg.style.color = newMode ? white : midBlack;
-
-        }
-        if (Accordion1) {
-            Accordion1.style.background = newMode ? lightBlack : white;
-            Accordion1.style.color = newMode ? white : midBlack;
-
-        }
-        if (counter1) {
-            counter1.style.background = newMode ? lightBlack : white;
-            counter1.style.color = newMode ? white : midBlack;
-        }
-
-        if (counter2) {
-            counter2.style.background = newMode ? lightBlack : white;
-            counter2.style.color = newMode ? white : midBlack;
-        }
-
-        if (counter3) {
-            counter3.style.background = newMode ? lightBlack : white;
-            counter3.style.color = newMode ? white : midBlack;
-        }
-
-        if (counter4) {
-            counter4.style.background = newMode ? lightBlack : white;
-            counter4.style.color = newMode ? white : midBlack;
-        }
-        if (mainCourseEle) {
-            mainCourseEle.style.background = newMode ? lightBlack : white;
-            mainCourseEle.style.color = newMode ? white : midBlack;
-        }
-
-        if (CourseEleChild) {
-            CourseEleChild.style.background = newMode ? lightBlack : white;
-            CourseEleChild.style.color = newMode ? white : midBlack;
-        }
-        if (cerEle) {
-            cerEle.style.background = newMode ? lightBlack : white;
-            cerEle.style.color = newMode ? white : midBlack;
-        } if (MyFooterColor) {
-            MyFooterColor.style.background = newMode ? lightBlack : darkBlue;
-            MyFooterColor.style.color = newMode ? white : midBlack;
-        }
-        if (thumblain) {
-            thumblain.style.background = newMode ? lightBlack : darkBlue;
-            thumblain.style.color = newMode ? white : midBlack;
-        } if (BAddress) {
-            BAddress.style.background = newMode ? lightBlack : darkBlue2;
-            BAddress.style.color = newMode ? white : midBlack;
-        }
-
-        if (branchBgA) {
-            branchBgA.style.background = newMode ? midBlack : darkBlue;
-        }
-        if (branchBgB) {
-            branchBgB.style.background = newMode ? midBlack : darkBlue;
-        }
-
-        if (branchBgC) {
-            branchBgC.style.background = newMode ? midBlack : darkBlue;
-        }
-        if (shortContactA) {
-            shortContactA.style.background = newMode ? midBlack : darkBlue;
-        } if (absirfdiitBg) {
-            absirfdiitBg.style.background = newMode ? midBlack : navRed;
         }
 
         return newMode;
