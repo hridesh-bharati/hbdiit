@@ -6,7 +6,7 @@ import './Desc.css';
 
 const FeaturedCourse = () => {
   return (
-    <div className="row my-3 mx-auto py-5" id="featuredCourseBg">
+    <div className="row my-1 mx-auto py-5" id="featuredCourseBg">
       {/* Text Content */}
       <div className="col-lg-6 mb-4 mb-lg-0" data-aos="fade-right">
         <div className="p-4 bg-white shadow-sm rounded h-100 d-flex flex-column justify-content-between featured-course-card">
@@ -77,58 +77,7 @@ const Desc = () => {
 
   return (
     <section className="courses-area section-gap bg-light" id="descCoursesBg">
-      <style>{`
-        /* Dark mode for FeaturedCourse */
-        .dark-mode #featuredCourseBg {
-          background: #23293a !important;
-          transition: background 0.3s;
-        }
-        .dark-mode #featuredCourseBg .featured-course-card {
-          background: #273043 !important;
-          color: #f1f1f1;
-          border: none;
-        }
-        .dark-mode #featuredCourseBg .text-primary {
-          color: #ffe066 !important;
-        }
-        .dark-mode #featuredCourseBg .text-dark,
-        .dark-mode #featuredCourseBg .text-secondary,
-        .dark-mode #featuredCourseBg .text-muted {
-          color: #f1f1f1 !important;
-        }
-        .dark-mode #featuredCourseBg .featured-course-img {
-          box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-        }
 
-        /* Dark mode for Desc (courses list) */
-        .dark-mode #descCoursesBg {
-          background: #23293a !important;
-          color: #f1f1f1;
-        }
-        .dark-mode #descCoursesBg .courses-right {
-          background: #273043 !important;
-          color: #f1f1f1;
-          border: none;
-        }
-        .dark-mode #descCoursesBg .section-title {
-          color: #ffe066 !important;
-        }
-        .dark-mode #descCoursesBg .section-description {
-          color: #bdbdbd !important;
-        }
-        .dark-mode #descCoursesBg .courses-list li span {
-          color:rgb(87, 87, 87) !important;
-        }
-        .dark-mode #descCoursesBg .primary-btn.white {
-          background: #ffe066 !important;
-          color: #23293a !important;
-          border: none;
-        }
-        .dark-mode #descCoursesBg .primary-btn.white:hover {
-          background: #fff !important;
-          color: #23293a !important;
-        }
-      `}</style>
       <div className="container">
         <div className="row align-items-center">
           <div className="col-lg-5 mb-4 mb-lg-0" data-aos="fade-up">

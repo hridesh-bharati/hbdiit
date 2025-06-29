@@ -1,4 +1,5 @@
-const baseUrl = "http://localhost:3000/admin";
+// const baseUrl = "http://localhost:3000/admin";;
+const baseUrl = "http://192.168.28.196:3000/admin";;
 import { toast } from "react-toastify";
 import { postData, putData, getData, deleteData } from "../tools/apiTools";
 let aToken = localStorage.getItem("aToken");

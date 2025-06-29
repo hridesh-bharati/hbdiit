@@ -15,8 +15,9 @@ export default function ExamForms() {
   const fetchAllExamHandler = async () => {
     try {
       const rspns = await getAllExams(completed, locked);
-      if (rspns.ackbool === 1) setExams(rspns.message);
-      else toast.error("Failed to fetch exams");
+      if (rspns.ackbool === 1) {
+        setExams(rspns.message);
+      } else toast.error("Failed to fetch exams");
     } catch {
       toast.error("Error fetching exams");
     }
@@ -39,105 +40,98 @@ export default function ExamForms() {
   }, [completed, locked]);
 
   return (
-    <section className="container my-4 p-3 bg-white shadow-sm rounded">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="h5 mb-0">Exam Forms</h2>
+    <section className="container mt-4 px-2">
+      <div className="d-flex justify-content-between align-items-center bg-primary text-white px-3 py-2 rounded shadow-sm mb-3">
+        <h5 className="mb-0 fw-bold d-flex align-items-center gap-2">
+          <i className="bi bi-journal-text fs-5"></i> Exam Forms
+        </h5>
         <button
-          className="btn btn-outline-primary btn-sm"
+          className="btn btn-light btn-sm rounded-circle d-flex align-items-center justify-content-center shadow-sm"
           onClick={fetchAllExamHandler}
-          aria-label="Reload exams"
+          style={{ width: "32px", height: "32px" }}
         >
-          <i className="bi bi-arrow-clockwise"></i> Reload
+          <i className="bi bi-arrow-clockwise text-primary"></i>
         </button>
       </div>
 
-      <div className="table-responsive">
-        <table className="table table-striped table-hover align-middle text-center">
-          <thead className="table-dark">
-            <tr>
-              <th>Course</th>
-              <th>Exam Date</th>
-              <th>Duration</th>
-              <th>Locked</th>
-              <th>Completed</th>
-              <th>Students</th>
-              <th>Question Paper</th>
-            </tr>
-          </thead>
-          <tbody>
-            {exams.length === 0 ? (
-              <tr>
-                <td colSpan="7" className="text-muted fst-italic">
-                  No exams found.
-                </td>
-              </tr>
-            ) : (
-              exams.map((e) => (
-                <tr key={e._id}>
-                  <td className="fw-semibold">{e.courseName}</td>
-                  <td>{new Date(e.examDate).toLocaleDateString()}</td>
-                  <td>{e.duration}</td>
-                  <td>
-                    <span className={`badge ${e.locked ? "bg-danger" : "bg-success"}`}>
-                      {e.locked ? "Locked" : "Unlocked"}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`badge ${e.completed ? "bg-success" : "bg-warning text-dark"}`}>
-                      {e.completed ? "Completed" : "Pending"}
-                    </span>
-                  </td>
-                  <td>{e.students.length}</td>
-                  <td>
-                    {e.paper ? (
+      {exams.length === 0 ? (
+        <div className="text-center text-muted fst-italic py-5">No exams found.</div>
+      ) : (
+        <div className="row g-3">
+          {exams.map((exam) => (
+            <div className="col-12 col-md-6" key={exam._id}>
+              <div className="card shadow-sm rounded-4 h-100">
+                <div className="card-body">
+                  <h6 className="text-primary fw-semibold">{exam.courseName}</h6>
+
+                  <div className="row g-2 mt-2 small text-secondary">
+                    <div className="col-6">
+                      <i className="bi bi-calendar-check me-1"></i><strong>Exam Date:</strong>
+                      <div>{new Date(exam.examDate).toLocaleDateString()}</div>
+                    </div>
+                    <div className="col-6">
+                      <i className="bi bi-clock me-1"></i><strong>Duration:</strong>
+                      <div>{exam.duration}</div>
+                    </div>
+                    <div className="col-6">
+                      <i className={`bi ${exam.locked ? "bi-lock-fill" : "bi-unlock"} me-1`}></i><strong>Lock:</strong>
+                      <span className={`badge ${exam.locked ? "bg-danger" : "bg-success"} ms-1`}>
+                        {exam.locked ? "Locked" : "Unlocked"}
+                      </span>
+                    </div>
+                    <div className="col-6">
+                      <i className="bi bi-check2-circle me-1"></i><strong>Status:</strong>
+                      <span className={`badge ${exam.completed ? "bg-success" : "bg-warning text-dark"} ms-1`}>
+                        {exam.completed ? "Completed" : "Pending"}
+                      </span>
+                    </div>
+                    <div className="col-12">
+                      <i className="bi bi-people me-1"></i><strong>Students:</strong> {exam.students?.length}
+                    </div>
+                  </div>
+
+                  <div className="d-grid mt-3">
+                    {exam.paper ? (
                       <button
-                        type="button"
                         className="btn btn-outline-primary btn-sm"
                         data-bs-toggle="modal"
                         data-bs-target="#sendqstModel"
-                        onClick={() => setQpId(e.paper)}
+                        onClick={() => setQpId(exam.paper)}
                       >
-                        Upload Questions
+                        <i className="bi bi-upload me-1"></i> Upload Questions
                       </button>
                     ) : (
                       <button
-                        type="button"
                         className="btn btn-primary btn-sm"
                         data-bs-toggle="modal"
-                        data-bs-target="#exampleModal"
-                        onClick={() => setExamId(e._id)}
+                        data-bs-target="#setPaperModal"
+                        onClick={() => setExamId(exam._id)}
                       >
-                        Set Paper
+                        <i className="bi bi-pencil-square me-1"></i> Set Paper
                       </button>
                     )}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
-      <div className="modal fade modal-fullscreen" id="sendqstModel" tabIndex="-1" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-scrollable">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Upload Questions</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-            </div>
-            <div className="modal-body">
-              <SendQuestions paperId={qPId} />
-            </div>
-          </div>
+      {/* Upload Questions Modal */}
+      <div className="modal fade m-0 p-0 mt-4 " id="sendqstModel" tabIndex="-1" aria-hidden="true">
+        <div className="modal-dialog modal-fullscreen-sm-down modal-dialog-scrollable">
+          <SendQuestions paperId={qPId} />
         </div>
       </div>
 
-      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered">
+      {/* Set Paper Modal */}
+      <div className="modal fade" id="setPaperModal" tabIndex="-1" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered modal-sm">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Set Question Paper</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+              <button type="button" className="btn-close" data-bs-dismiss="modal" />
             </div>
             <div className="modal-body">
               <PushQuestionPaper examId={examId} />

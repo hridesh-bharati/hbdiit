@@ -1,54 +1,75 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setExamData, setExmQstns } from '../../store/reduxStore/student/studentSlice';
 import { useNavigate } from 'react-router-dom';
-import { getExams, fillExamForm, startExam } from '../../api/studentApi/api';
 import { toast } from 'react-toastify';
+import {
+    setExamData,
+    setExmQstns
+} from '../../store/reduxStore/student/studentSlice';
+import {
+    getExams,
+    fillExamForm,
+    startExam
+} from '../../api/studentApi/api';
 import StudentFooter from './StudentFooter';
+import Marquee from '../HomePage/Marquee';
+
 export default function Exam() {
-    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const fetchExamHandler = async (completed, locked) => {
-        try {
-            const data = await getExams(completed, locked);
-            dispatch(setExamData(data.message))
-        } catch (error) {
-            console.log('exam fetching error', error);
-        }
-    };
-    const applyForm = async (applied, examId) => {
-        const response = await fillExamForm(applied, examId);
-        toast.success(response.message);
-    }
-    const startExamination = async (start) => {
-        const rspns = await startExam(start);
-        if (rspns.ackbool == 1) {
-            navigate('/Exam-Portal');
-            dispatch(setExmQstns(rspns.message));
-            toast.success("Exam Has Been Started");
-        }
-    }
-    useEffect(() => {
-        fetchExamHandler(false, false);
-    }, [])
+    const navigate = useNavigate();
+
     const examData = useSelector(state => state.examDetails);
     const { name, photo } = useSelector(state => state.studentProfileDetails);
+
+    useEffect(() => {
+        const fetchExamHandler = async () => {
+            try {
+                const data = await getExams(false, false);
+                dispatch(setExamData(data.message));
+            } catch (error) {
+                console.error('Exam fetching error:', error);
+            }
+        };
+        fetchExamHandler();
+    }, [dispatch]);
+
+    const handleApplyForm = async () => {
+        if (!examData?._id) return;
+        const response = await fillExamForm(true, examData._id);
+        toast.success(response.message);
+    };
+
+    const handleStartExam = async () => {
+        const response = await startExam(true);
+        if (response.ackbool === 1) {
+            dispatch(setExmQstns(response.message));
+            toast.success('Exam Has Been Started');
+            navigate('/Exam-Portal');
+        }
+    };
+
+    const renderDate = (date) => date ? new Date(date).toLocaleDateString() : '';
+    const renderTime = (time) => time ? new Date(time).toLocaleTimeString() : '';
+
     return (
         <>
-            <div className="container-fluid row w-100 m-auto  mb-5 bg-white shadow  py-5 ">
-                <h2 className="text-center fw-bolder text-white dblue shadow py-3 my-0 ">
-                    <i className="bi bi-card-list fs-2 text-warning fw-bolder"></i> Apply Examination
+            <div className="container-fluid row w-100 m-auto mb-5 mt-35  bg-white shadow py-5">
+                <h2 className="text-center fw-bolder text-primary dblue shadow py-3 my-0">
+                    <i className="bi bi-card-list fs-2 text-primary fw-bolder"></i> Apply Examination
                 </h2>
-                <h3 className="text-center p-2 fw-bolder" style={{ color: 'maroon' }}>Welcome to examinition dashboard</h3>
+                <h3 className="text-center p-2 fw-bolder" style={{ color: 'maroon' }}>
+                    Welcome to examination dashboard
+                </h3>
 
+                {/* Student Photo */}
                 <div className="col-md-6 shadow text-center py-3">
-                    <img src={photo} width={200} />
-                    {/* <p className='small pt-2'>Registration No: </p> */}
+                    <img src={photo} alt="Student" width={200} />
                 </div>
+
+                {/* Exam Info Table */}
                 <div className="col-md-6 shadow py-3">
-                    <div
-                        className="table-responsive small" >
-                        <table className="table table-responsive table-sm">
+                    <div className="table-responsive small">
+                        <table className="table table-sm">
                             <thead>
                                 <tr>
                                     <th scope="col">Name</th>
@@ -56,97 +77,92 @@ export default function Exam() {
                                 </tr>
                             </thead>
                             {examData && (
-                                <tbody >
-                                    <tr>
-                                        <th>Course</th>
-                                        <td>{examData.courseName}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Date</th>
-                                        <td>{new Date(examData.examDate).toDateString()}</td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>Duration</th>
-                                        <td>{examData.duration} hours</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Reporting time</th>
-                                        <td>{new Date(examData.reportingTime).toLocaleTimeString()}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Start from</th>
-                                        <td>{new Date(examData.from).toLocaleTimeString()}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>End at</th>
-                                        <td>{new Date(examData.to).toLocaleTimeString()}</td>
-                                    </tr>
+                                <tbody>
+                                    <tr><th>Course</th><td>{examData.courseName}</td></tr>
+                                    <tr><th>Date</th><td>{renderDate(examData.examDate)}</td></tr>
+                                    <tr><th>Duration</th><td>{examData.duration} hours</td></tr>
+                                    <tr><th>Reporting Time</th><td>{renderTime(examData.reportingTime)}</td></tr>
+                                    <tr><th>Start From</th><td>{renderTime(examData.from)}</td></tr>
+                                    <tr><th>End At</th><td>{renderTime(examData.to)}</td></tr>
                                 </tbody>
                             )}
                         </table>
                     </div>
+                </div>
 
-                </div>
+                {/* Guidelines */}
                 <div className="col-12 my-2">
-                    <h3 className="text-center w-100 maroon py-2 text-white HindiFont2">छात्रों के लिए निर्देश</h3>
-                    <ol>
-                        <li className='my-2 small HindiFont2'>परीक्षा की तारीख, समय और महत्वपूर्ण जानकारी के लिए कृपा संस्थान की शैक्षिक वेबसाइट से संबंधित अध्ययन अधिसूचना को अवसर देखें।</li>
-                        <li className='my-2 small HindiFont2'>"छात्रों को सलाह दी जाती है कि वे परीक्षा की अद्यतन जानकारी के लिए संस्थान की आधिकारिक वेबसाइट को नियमित रूप से देखते रहें।"</li>
-                    </ol>
+                    <h3 className="text-center text-white py-2 HindiFont2" style={{ background: 'maroon' }}>छात्रों के लिए निर्देश</h3>
+                    <ul className="ps-3 HindiFont2 small">
+                        <li className="my-2">
+                            परीक्षा की तारीख, समय और अन्य महत्वपूर्ण जानकारी के लिए कृपया संस्थान की शैक्षिक वेबसाइट पर उपलब्ध अध्ययन-अधिसूचना को समय-समय पर देखें।
+                        </li>
+                        <li className="my-2">
+                            छात्रों को सलाह दी जाती है कि वे परीक्षा से जुड़ी नवीनतम जानकारी के लिए संस्थान की
+                            <strong> आधिकारिक वेबसाइट </strong> को नियमित रूप से चेक करते रहें।
+                        </li>
+                    </ul>
                 </div>
-                <div className="col-md-6 shadow HindiFont2 small ">
-                    <p><b className='text-danger '>Note:</b> अगर छात्र/छात्रा को किसी भी तरह की पूछताछ करनी या किसी भी तरह की जानकारी लेनी हो तो  संस्था Number पर कॉल या ईमेल कर सकते हैं</p>
+
+                {/* Notice + Scrolling Instructions */}
+                <div className="col-md-6 shadow HindiFont2 small">
+                    <p className="mt-3">
+                        <strong className="text-danger">Note:</strong> अगर छात्र/छात्रा को किसी भी तरह की पूछताछ करनी हो या जानकारी लेनी हो,
+                        तो संस्था के नंबर पर कॉल करें या ईमेल के माध्यम से संपर्क करें।
+                    </p>
                 </div>
+
                 <div className="col-md-6 shadow">
-                    <h5 className="text-center w-100 maroon py-1 text-white HindiFont2">महत्वपूर्ण निर्देश</h5>
+                    <h5 className="text-center w-100 py-1 text-white py-2 HindiFont2" style={{ background: 'maroon' }}>महत्वपूर्ण निर्देश</h5>
                     <div className="scroll-container">
-                        <ul>
-                            <li>सभी छात्रों का कोर्से नोट्स हस्तलिखित पूरा होना जरूरी है।</li>
-                            <li>सभी छात्रों की उपस्थिति 80% होना अनिवार्य है।</li>
-                            <li>"परीक्षा के दौरान किसी भी इलेक्ट्रॉनिक उपकरण का उपयोग सख्त रूप से निषेध है।"</li>
+                        <ul className="ps-3 HindiFont2 small">
+                            <li className="my-2">सभी छात्रों के लिए कोर्स नोट्स का हस्तलिखित रूप से पूरा होना अनिवार्य है।</li>
+                            <li className="my-2">सभी छात्रों की <strong>उपस्थिति कम से कम 80%</strong> होना आवश्यक है।</li>
+                            <li className="my-2">परीक्षा के दौरान किसी भी <strong>इलेक्ट्रॉनिक उपकरण</strong> का उपयोग <span className="text-danger fw-semibold">सख्त रूप से निषेध</span> है।</li>
                         </ul>
                     </div>
-
                 </div>
-                <>
 
-                    <div className="d-flex align-items-center justify-content-center">
-                        <div className="text-center m-4" onClick={() => { applyForm(true, examData._id) }}>
-                            <button className="btn btn-primary">Apply for Examination</button>
-                        </div>
-                        <div className="nav flex-column nav-pills m-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <button className="nav-link bg-primary-subtle text-dark" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" onClick={() => { startExamination(true) }}>Start  Examination</button>
-                        </div>
+                {/* Action Buttons */}
+                <div className="d-flex flex-column flex-md-row align-items-center justify-content-center gap-3 py-4">
+                    <div className="text-center">
+                        <button
+                            className="btn btn-lg btn-outline-primary rounded-pill px-4 shadow-sm"
+                            onClick={handleApplyForm}
+                        >
+                            <i className="bi bi-pencil-square me-2"></i> Apply for Examination
+                        </button>
                     </div>
-                </>
+                    <div className="text-center">
+                        <button
+                            className="btn btn-lg btn-primary rounded-pill px-4 shadow-sm"
+                            onClick={handleStartExam}
+                        >
+                            <i className="bi bi-play-circle me-2"></i> Start Examination
+                        </button>
+                    </div>
+                </div>
+
             </div>
+
             <StudentFooter />
-            <style>
-                {`
-                .scroll-container {
-                height: 150px;
-                overflow: hidden;
-                position: relative;
-                }
 
-                .scroll-container ul {
-                position: absolute;
-                animation: scroll-up 10s linear infinite;
-                padding-left: 10px;
-                }
-
-                @keyframes scroll-up {
-                0% {
-                    top: 100%;
-                }
-                100% {
-                    top: -100%;
-                }
-                }
-
-                `}
-            </style>
+            {/* Scrolling Style */}
+            <style>{`
+        .scroll-container {
+          height: 150px;
+          overflow: hidden;
+          position: relative;
+        }
+        .scroll-container ul {
+          position: absolute;
+          animation: scroll-up 10s linear infinite;
+        }
+        @keyframes scroll-up {
+          0% { top: 100%; }
+          100% { top: -100%; }
+        }
+      `}</style>
         </>
-    )
+    );
 }

@@ -9,20 +9,20 @@ const testimonials = [
     text: "Drishtee Computer Center transformed my understanding of technology—top-notch training and hands-on support every step of the way."
   },
   {
-    name: "Priya Singh",
-    img: "http://themes.audemedia.com/html/goodgrowth/images/testimonial2.jpg",
+    name: "Abhay Gautam",
+    img: "images/testimonial/testimonial2.jpg",
     text: "The expert guidance and practical approach here gave me the confidence to tackle complex computer problems with ease."
   },
   {
-    name: "Neha Patel",
-    img: "http://themes.audemedia.com/html/goodgrowth/images/testimonial3.jpg",
+    name: "The jugnoo",
+    img: "images/testimonial/testimonial3.png",
     text: "I appreciated the personalized coaching and up-to-date resources. Drishtee truly prepares you for the real world of technology."
   },
   {
-    name: "Amit Verma",
+    name: "Aditi Verma",
     img: "http://themes.audemedia.com/html/goodgrowth/images/testimonial4.jpg",
     text: "From basic skills to advanced concepts, the team at Drishtee helped me grow my knowledge and problem-solving skills exponentially."
-  } 
+  }
 ];
 
 const getSlidesToShow = () => {
@@ -30,6 +30,45 @@ const getSlidesToShow = () => {
   if (window.innerWidth < 992) return 2;
   return 3;
 };
+
+// Reusable Nav Button
+const NavButton = ({ direction, onClick }) => (
+  <button
+    className="btn btn-outline-primary rounded-circle mx-2"
+    style={{ width: 44, height: 44, zIndex: 2 }}
+    onClick={onClick}
+    aria-label={`${direction === "left" ? "Previous" : "Next"} testimonial`}
+  >
+    <i className={`bi bi-chevron-${direction}`} />
+  </button>
+);
+
+// Reusable Testimonial Card
+const TestimonialCard = ({ testimonial, isCenter, width }) => (
+  <div
+    className="testimonial-item text-center px-3"
+    style={{
+      flex: `0 0 ${width}%`,
+      maxWidth: `${width}%`,
+      transform: `scale(${isCenter ? 1 : 0.85})`,
+      opacity: isCenter ? 1 : 0.4,
+      transition: "transform 0.6s ease, opacity 0.6s ease"
+    }}
+  >
+    <div className="shadow-effect bg-white p-4 rounded shadow-sm">
+      <img
+        src={testimonial.img}
+        alt={testimonial.name}
+        className="img-fluid rounded-circle mb-3"
+        style={{ width: 80, height: 80, objectFit: "cover" }}
+      />
+      <p className="mb-2">{testimonial.text}</p>
+      <div className="testimonial-name bg-primary text-white rounded-pill py-1 px-3 d-inline-block mt-2">
+        {testimonial.name}
+      </div>
+    </div>
+  </div>
+);
 
 const Testimonials = () => {
   const [centerIdx, setCenterIdx] = useState(0);
@@ -48,7 +87,7 @@ const Testimonials = () => {
     return () => clearInterval(intervalRef.current);
     // eslint-disable-next-line
   }, [centerIdx, slidesToShow]);
-  
+
   const handlePrev = () => {
     setCarouselDirection("prev");
     setCenterIdx((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
@@ -64,6 +103,7 @@ const Testimonials = () => {
     setCenterIdx(idx);
   };
 
+  // Calculate visible testimonials based on center index and slides to show
   const getVisibleTestimonials = () => {
     const slides = [];
     let start =
@@ -78,8 +118,7 @@ const Testimonials = () => {
 
   const visibleTestimonials = getVisibleTestimonials();
 
-  // Bootstrap carousel animation classes
-  // We'll animate the whole testimonial row container
+  // Animation class based on direction
   const animationClass =
     carouselDirection === "next"
       ? "carousel slide carousel-fade animate-next"
@@ -92,59 +131,27 @@ const Testimonials = () => {
           <h2 className="fw-bold">Testimonials</h2>
         </div>
         <div className="d-flex justify-content-center align-items-center position-relative" id="TestimonialChild">
-          <button
-            className="btn btn-outline-primary rounded-circle me-2"
-            style={{ width: 44, height: 44, zIndex: 2 }}
-            onClick={handlePrev}
-            aria-label="Previous testimonial"
-          >
-            <i className="bi bi-chevron-left" />
-          </button>
+          <NavButton direction="left" onClick={handlePrev} />
 
           <div
             className={`d-flex overflow-hidden flex-grow-1 py-1 justify-content-center align-items-center ${animationClass}`}
             style={{ maxWidth: "100%", minHeight: 320 }}
-            key={centerIdx + "-" + slidesToShow} 
+            key={centerIdx + "-" + slidesToShow}
           >
             {visibleTestimonials.map((testimonial, idx) => {
               const isCenter = idx === Math.floor(slidesToShow / 2);
               return (
-                <div
+                <TestimonialCard
                   key={testimonial.name + idx}
-                  className={`testimonial-item text-center px-3`}
-                  style={{
-                    flex: `0 0 ${100 / slidesToShow}%`,
-                    maxWidth: `${100 / slidesToShow}%`,
-                    transform: `scale(${isCenter ? 1 : 0.85})`,
-                    opacity: isCenter ? 1 : 0.4,
-                    transition: "transform 0.6s ease, opacity 0.6s ease"
-                  }}
-                >
-                  <div className="shadow-effect bg-white p-4 rounded shadow-sm">
-                    <img
-                      src={testimonial.img}
-                      alt={testimonial.name}
-                      className="img-fluid rounded-circle mb-3"
-                      style={{ width: 80, height: 80, objectFit: "cover" }}
-                    />
-                    <p className="mb-2">{testimonial.text}</p>
-                    <div className="testimonial-name bg-primary text-white rounded-pill py-1 px-3 d-inline-block mt-2">
-                      {testimonial.name}
-                    </div>
-                  </div>
-                </div>
+                  testimonial={testimonial}
+                  isCenter={isCenter}
+                  width={100 / slidesToShow}
+                />
               );
             })}
           </div>
 
-          <button
-            className="btn btn-outline-primary rounded-circle ms-2"
-            style={{ width: 44, height: 44, zIndex: 2 }}
-            onClick={handleNext}
-            aria-label="Next testimonial"
-          >
-            <i className="bi bi-chevron-right" />
-          </button>
+          <NavButton direction="right" onClick={handleNext} />
         </div>
 
         {/* Dots */}
@@ -152,9 +159,8 @@ const Testimonials = () => {
           {testimonials.map((_, idx) => (
             <button
               key={idx}
-              className={`rounded-circle border-0 mx-1 ${
-                centerIdx === idx ? "bg-primary" : "bg-secondary"
-              }`}
+              className={`rounded-circle border-0 mx-1 ${centerIdx === idx ? "bg-primary" : "bg-secondary"
+                }`}
               style={{
                 width: 14,
                 height: 14,
@@ -166,6 +172,8 @@ const Testimonials = () => {
           ))}
         </div>
       </div>
+
+      {/* Inline styles for animation and dark mode */}
       <style>{`
         .animate-next {
           animation: carouselNext 0.6s;

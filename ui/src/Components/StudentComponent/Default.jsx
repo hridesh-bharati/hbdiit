@@ -25,7 +25,7 @@ export default function Default() {
     return (
         <div>
             {details && (
-                <div className="row student d-flex bg-white justify-content-center mt-0 pt-0 py-4 m-auto">
+                <div className="row student d-flex bg-white justify-content-center mt-35 pt-0 py-4 m-auto">
                     <div className="col-12 mb-5 pb-5 text-center">
                         <div className="shadow-sm p-2 shadow container m-auto my-2 bg-white">
                             <h5 className="fw-bolder mt-4 text-danger">{details.name}</h5>
@@ -36,14 +36,14 @@ export default function Default() {
                             <div className="p-2 m-0 d-flex flex-fill justify-content-evenly border border-warning m-1">
                                 <div>
                                     <p className="m-0 p-0 small text-primary fw-bolder">Attendance</p>
-                                    <h5 className="m-0 p-0 mdanger fw-bolder">-----</h5>
+                                    <h5 className="m-0 p-0 mdanger fw-bolder fs-6">Coming soon...</h5>
                                 </div>
                             </div>
 
                             <div className="p-2 m-0 d-flex flex-fill justify-content-evenly border border-warning m-1">
                                 <div>
                                     <p className="m-0 p-0 small text-primary fw-bolder">Course</p>
-                                    <h5 className="m-0 p-0 mdanger fw-bolder">{details.course}</h5>
+                                    <h5 className="m-0 p-0 mdanger fw-bolder fs-6">{details.course}</h5>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +58,7 @@ export default function Default() {
                                         <img src={details.photo} width={140} alt="Student" />
                                     </div>
                                     <div className="col-md-8 mx-0 px-0 text-start small d-flex justify-content-start">
-                                        <table className="m-0 p-0 fw-bolder">
+                                        <table className="m-0 p-0 fw-bolder ms-2">
                                             <tbody>
                                                 <tr>
                                                     <th className="textMaroon">Student Name:</th>
@@ -79,11 +79,10 @@ export default function Default() {
                             </div>
 
                             <div className="small text-start" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabIndex="0">
-                                <h4 className="fw-bolder text-danger p-2 ms-2">About {details.name}</h4>
+                                <h4 className="fw-bolder text-danger p-2 ms-2">About: {details.name}</h4>
                                 <p className="text-lowercase">
                                     {details.name} is a student at DRISHTEE INSTITUTE OF INFORMATION TECHNOLOGY, Nichlaul Maharajganj, Uttar-Pradesh 273304.
-                                </p>
-                                <p className="text-lowercase">
+                                    <br />
                                     His father's name is {details.fatherName}. He resides at {details.address}. He has completed the {details.course} course from Drishtee Computer Center.
                                 </p>
                             </div>

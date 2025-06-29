@@ -3,9 +3,10 @@ import CommanCourse from './CommanCourse';
 
 export default function Banking() {
     const targetCourses = ['dbi'];
-    const CTitle = 'Banking'
+    const CTitle = 'Banking';
+
     return (
-        <div className='MT3'>
+        <div className="MT3">
             <CommanCourse targetCourses={targetCourses} CTitle={CTitle} />
         </div>
     );

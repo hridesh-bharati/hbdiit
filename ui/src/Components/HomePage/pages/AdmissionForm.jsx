@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { registrateStudent, uploadPhoto } from "../../../api/studentApi/api";
-import { getCourseList } from '../../../api/adminApi/api';
-import Time from './Time';
+import { getCourseList } from "../../../api/adminApi/api";
+import Time from "./Time";
+import Marquee from "../Marquee";
 
 const AdmissionForm = () => {
   const initialFormData = {
@@ -43,25 +44,45 @@ const AdmissionForm = () => {
   }, []);
 
   useEffect(() => {
-    const { name, fatherName, motherName, gender, aadhaar, email, address, mobileNumber, dob, course, category, checkboxChecked } = formData;
+    const {
+      name,
+      fatherName,
+      motherName,
+      gender,
+      aadhaar,
+      email,
+      address,
+      mobileNumber,
+      dob,
+      course,
+      category,
+      checkboxChecked,
+    } = formData;
     const isAadhaarValid = aadhaar.length === 12 && /^[0-9]{12}$/.test(aadhaar);
     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     const isMobileValid = /^[0-9]\d{9}$/.test(mobileNumber);
 
     setSubmitEnabled(
-      name && fatherName && motherName && gender &&
+      name &&
+      fatherName &&
+      motherName &&
+      gender &&
       isAadhaarValid &&
       isEmailValid &&
       isMobileValid &&
-      address && dob && course && category && checkboxChecked
+      address &&
+      dob &&
+      course &&
+      category &&
+      checkboxChecked
     );
   }, [formData]);
 
   const handleChange = (e) => {
     const { name, type, value, checked } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -116,137 +137,437 @@ const AdmissionForm = () => {
   };
 
   return (
-    <div className="shadow pt-2 mt-4 rounded">
-      <form onSubmit={handleSubmit} className='container-fluid mx-0 px-3 admission-form'>
-        <h3 className="text-center pt-3"><b style={{ color: "maroon" }}>CANDIDATE REGISTRATION FORM FOR NEW ADMISSION</b></h3>
-        <p className="p-0 m-0 d-flex ">
-          <Time />
-          <marquee behavior="alternate" className='smallText' style={{ color: "maroon" }}>ऑनलाइन पंजीकरण करने हेतु पंजीकरण फॉर्म</marquee>
-        </p>
-        <div className="row AdmRow">
-          <label className="small mt-1">A. Student's Personal Details</label>
-          <div className="row">
-            <div className="col-md-5">1: Student's Name/ छात्र का नाम *</div>
-            <div className="col-md-7">
-              <input type="text" name="name" value={formData.name} onChange={handleChange} className="form-control" placeholder="Name" required />
+    <>
+      <style>{`
+  .section-header {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    color: white;
+    background-color: #3949ab; /* Indigo Blue */
+    border-bottom: 3px solid #3949ab;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+  }
+
+  label {
+    font-weight: 600;
+    color: #1a237e; /* dark blue */
+  }
+
+  input.form-control,
+  select.form-select,
+  textarea.form-control {
+    border-radius: 0;
+  }
+
+  input.form-control:focus,
+  select.form-select:focus,
+  textarea.form-control:focus {
+    border-color: #3949ab;
+    box-shadow: none;
+  }
+
+  .btn-custom {
+    background: #1a237e;
+    color: white;
+    border: none;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    padding: 8px 24px;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-custom:hover:not(:disabled) {
+    background: #3949ab;
+    color: #e3eafc;
+  }
+
+  .btn-custom:disabled {
+    background: #8a99d6;
+    cursor: not-allowed;
+  }
+
+  .error-text {
+    color: #d32f2f;
+    font-weight: 600;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .photo-preview {
+    max-width: 100px;
+    max-height: 110px;
+    border: 1.5px solid #1a237e;
+    margin-top: 8px;
+    object-fit: contain;
+    display: block;
+    border-radius: 3px;
+  }
+
+  .checkbox-label {
+    font-weight: 600;
+    color: #1a237e;
+  }
+
+
+    .admission-header {
+  background-color: #e8eaf6;
+  padding: 1rem;
+  border-radius: 5px;
+  border-left: 5px solid #1a237e;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.main-heading {
+  color: #1a237e;
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-bottom: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sub-heading {
+  color: #3949ab;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.announcement-box {
+  background-color: #c5cae9;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+.marquee-text {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #1a237e;
+  white-space: nowrap;
+  overflow: hidden;
+}
+  @media (max-width: 576px) {
+    .form-label {
+      font-size: 14px;
+    }
+  }
+  @media (max-width: 768px) {
+    .main-heading {
+  font-size: 1.8rem;
+}
+
+.sub-heading {
+  font-size: 0.9rem;
+}
+  .section-A, .section-B,.section-C, .section-D,.section-E{
+  font-size:0.9rem;
+  }
+  }
+
+`}</style>
+
+
+      <div className="container my-4 p-4 border rounded shadow-sm bg-white">
+        <form onSubmit={handleSubmit} noValidate>
+          <div className="admission-header text-center mt-35 mb-4">
+            <h2 className="main-heading mb-1">Admission Form</h2>
+            <p className="sub-heading">Session 2025–26 / सत्र 2025–26</p>
+            <div className="announcement-box mt-3 d-flex align-items-center justify-content-center">
+              <Time />
+              <Marquee className="marquee-text ms-3">
+                Apply online now and start your IT journey.
+              </Marquee>
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-5">2: Father's Name/पिता का नाम *</div>
-            <div className="col-md-7">
-              <input type="text" name="fatherName" value={formData.fatherName} onChange={handleChange} className="form-control" placeholder="Father's Name" required />
+
+
+
+          {/* Section A */}
+          <h5 className="section-header section-A">A. Student's Personal Details</h5>
+
+          <div className="row mb-3">
+            <label htmlFor="name" className="col-md-4 col-form-label form-label">
+              1: Student's Name / छात्र का नाम *
+            </label>
+            <div className="col-md-8">
+              <input
+                id="name"
+                type="text"
+                className="form-control"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-5">3: Mother's Name/माता का नाम *</div>
-            <div className="col-md-7">
-              <input type="text" name="motherName" value={formData.motherName} onChange={handleChange} className="form-control" placeholder="Mother's Name" required />
+
+          <div className="row mb-3">
+            <label htmlFor="fatherName" className="col-md-4 col-form-label form-label">
+              2: Father's Name / पिता का नाम *
+            </label>
+            <div className="col-md-8">
+              <input
+                id="fatherName"
+                type="text"
+                className="form-control"
+                name="fatherName"
+                value={formData.fatherName}
+                onChange={handleChange}
+                required
+              />
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-5">4: Date of Birth/जन्म तिथि *</div>
-            <div className="col-md-7">
-              <input type="date" name="dob" value={formData.dob} onChange={handleChange} className="form-control" required />
+
+          <div className="row mb-3">
+            <label htmlFor="motherName" className="col-md-4 col-form-label form-label">
+              3: Mother's Name / माता का नाम *
+            </label>
+            <div className="col-md-8">
+              <input
+                id="motherName"
+                type="text"
+                className="form-control"
+                name="motherName"
+                value={formData.motherName}
+                onChange={handleChange}
+                required
+              />
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-5">5: Gender / लिंग *</div>
-            <div className="col-md-7">
-              <select name="gender" value={formData.gender} onChange={handleChange} className="form-select" required>
+
+          <div className="row mb-3">
+            <label htmlFor="dob" className="col-md-4 col-form-label form-label">
+              4: Date of Birth / जन्म तिथि *
+            </label>
+            <div className="col-md-8">
+              <input
+                id="dob"
+                type="date"
+                className="form-control"
+                name="dob"
+                value={formData.dob}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="row mb-3">
+            <label htmlFor="gender" className="col-md-4 col-form-label form-label">
+              5: Gender / लिंग *
+            </label>
+            <div className="col-md-8">
+              <select
+                id="gender"
+                className="form-select"
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                required
+              >
                 <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
+                <option value="male">Male / पुरुष</option>
+                <option value="female">Female / महिला</option>
+                <option value="other">Other / अन्य</option>
               </select>
             </div>
           </div>
-          <label className="small mt-4">B. Contact Details</label>
-          <div className="row">
-            <div className="col-md-5">1: Mobile Number/मोबाइल नंबर *</div>
-            <div className="col-md-7">
-              <input type="text" name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} className="form-control" placeholder="Mobile Number (10 digits)" required />
+
+          {/* Section B */}
+          <h4 className="section-header section-B">B. Contact Details</h4>
+
+          <div className="row mb-3">
+            <label htmlFor="mobileNumber" className="col-md-4 col-form-label form-label">
+              1: Mobile Number / मोबाइल नंबर *
+            </label>
+            <div className="col-md-8">
+              <input
+                id="mobileNumber"
+                type="text"
+                className="form-control"
+                name="mobileNumber"
+                value={formData.mobileNumber}
+                onChange={handleChange}
+                maxLength={10}
+                required
+              />
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-5">2: Email / ईमेल *</div>
-            <div className="col-md-7">
-              <input type="email" name="email" value={formData.email} onChange={handleChange} className="form-control" placeholder="Email" required />
+
+          <div className="row mb-3">
+            <label htmlFor="email" className="col-md-4 col-form-label form-label">
+              2: Email / ईमेल *
+            </label>
+            <div className="col-md-8">
+              <input
+                id="email"
+                type="email"
+                className="form-control"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
             </div>
           </div>
-          <div className="row">
-            <label className="small mt-4 mb-1">C. Course for Student's</label>
-            <div className="col-md-5">1: Course / कोर्स *</div>
-            <div className="col-md-7">
-              <select name="course" value={formData.course} onChange={handleChange} className="form-select" required>
+
+          {/* Section C */}
+          <h4 className="section-header section-C">C. Course for Student's</h4>
+
+          <div className="row mb-3">
+            <label htmlFor="course" className="col-md-4 col-form-label form-label">
+              1: Course / कोर्स *
+            </label>
+            <div className="col-md-8">
+              <select
+                id="course"
+                className="form-select"
+                name="course"
+                value={formData.course}
+                onChange={handleChange}
+                required
+              >
                 <option value="">Select Course</option>
-                {courseList.map(course => (
-                  <option key={course._id} value={course.name}>{course.name}</option>
+                {courseList.map((course) => (
+                  <option key={course._id} value={course.name}>
+                    {course.name}
+                  </option>
                 ))}
               </select>
             </div>
           </div>
 
-          <div className="row">
-            <label className="small mb-1">D. Identification Details / पहचान विवरण *</label>
-            <div className="row">
-              <div className="col-md-5">1: Aadhar Card Number/आधार कार्ड संख्या *</div>
-              <div className="col-md-7">
-                <input type="text" name="aadhaar" minLength={12} maxLength={12} value={formData.aadhaar} onChange={handleChange} className="form-control" placeholder="Aadhaar Number (12 digits)" required />
-              </div>
+          {/* Section D */}
+          <h4 className="section-header section-D">D. Identification Details</h4>
+
+          <div className="row mb-3">
+            <label htmlFor="aadhaar" className="col-md-4 col-form-label form-label">
+              1: Aadhar Card Number / आधार कार्ड संख्या *
+            </label>
+            <div className="col-md-8">
+              <input
+                id="aadhaar"
+                type="text"
+                className="form-control"
+                name="aadhaar"
+                maxLength={12}
+                value={formData.aadhaar}
+                onChange={handleChange}
+                required
+              />
             </div>
-            <div className="row">
-              <div className="col-md-5">2: Category / वर्ग *</div>
-              <div className="col-md-7">
-                <select name="category" value={formData.category} onChange={handleChange} className="form-select" required>
-                  <option value="">Select Category</option>
-                  <option value="General">General</option>
-                  <option value="OBC">OBC</option>
-                  <option value="SC/ST">SC/ST</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
+          </div>
+
+          <div className="row mb-3">
+            <label htmlFor="category" className="col-md-4 col-form-label form-label">
+              2: Category / वर्ग *
+            </label>
+            <div className="col-md-8">
+              <select
+                id="category"
+                className="form-select"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Category</option>
+                <option value="General">General</option>
+                <option value="OBC">OBC</option>
+                <option value="SC/ST">SC/ST</option>
+                <option value="Other">Other</option>
+              </select>
             </div>
-            <div className="row">
-              <div className="col-md-5">3: Address / पता *</div>
-              <div className="col-md-7">
-                <textarea name="address" value={formData.address} onChange={handleChange} className="form-control" placeholder="Address" required />
-              </div>
+          </div>
+
+          <div className="row mb-3">
+            <label htmlFor="address" className="col-md-4 col-form-label form-label">
+              3: Address / पता *
+            </label>
+            <div className="col-md-8">
+              <textarea
+                id="address"
+                name="address"
+                rows={3}
+                className="form-control"
+                value={formData.address}
+                onChange={handleChange}
+                required
+              />
             </div>
-            <div className="col-md-5">4: Upload Photo / फोटो अपलोड करें *
-              <input type="file" accept="image/*" className='border-0' onChange={handlePhotoChange} required />
-              <p className='small'>Only JPEG/JPG images are allowed. <br /> The maximum photo size is 50 KB.</p>            </div>
-            <div className="col-md-7">
+          </div>
+
+          <div className="row align-items-start mb-3">
+            <label className="col-md-4 form-label form-label">
+              4: Upload Photo / फोटो अपलोड करें * <br />
+              <small className="text-muted">Only JPEG/JPG, Max 50KB</small>
+              <input
+                type="file"
+                accept=".jpeg,.jpg"
+                onChange={handlePhotoChange}
+                className="form-control mt-2"
+                required={!photoUploaded}
+              />
+            </label>
+            <div className="col-md-8">
               {photoUploaded ? (
-                <>
-                  <img src={photoPreview} alt="Preview" className="img-fluid mt-2" width="80" />
-                  <small className="text-success d-block">
-                    Uploaded <i className="bi bi-check-lg"></i>
-                  </small>
-                </>
+                <img
+                  src={photoPreview}
+                  alt="Uploaded"
+                  className="photo-preview"
+                />
               ) : (
-                <img src="" alt="Photo" />
+                <small className="text-muted">No photo uploaded yet</small>
               )}
             </div>
+          </div>
 
+          {/* Section E */}
+          <h4 className="section-header section-E">E. Declaration</h4>
+
+          <div className="form-check mb-3">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id="declaration"
+              name="checkboxChecked"
+              checked={formData.checkboxChecked}
+              onChange={handleChange}
+              required
+            />
+            <label className="form-check-label checkbox-label" htmlFor="declaration">
+              I hereby declare that all the above information provided by me is true and
+              correct to the best of my knowledge.
+            </label>
           </div>
-          <div className="row ">
-            <label className="small mt-2">E. Declaration / घोषणा</label>
-            <div className="p-1 m-0 w-100">
-              <p className="my-2 smallText">
-                <input type="checkbox" name="checkboxChecked" checked={formData.checkboxChecked} onChange={handleChange} className="form-check-input" required /> I declare that all the information provided by me in this form is correct to the best of my knowledge and belief.
-              </p>
-              {error && <p className="text-danger text-center mt-3">{error}</p>}
-            </div>
-            <div className="row container text-center ">
-              <div className="col-12 m-auto text-center py-2 d-flex justify-content-center">
-                <button type="button" className="btn btn-primary fw-medium text-white mx-2 px-5" onClick={resetForm}> Reset </button>
-                <button type="submit" disabled={!submitEnabled} className="btn fw-medium text-white mx-2 px-5" style={{ background: 'green' }}> Send </button>
-              </div>
-            </div>
+
+          {error && <div className="error-text">{error}</div>}
+
+          <div className="d-flex justify-content-center gap-3 flex-wrap">
+            <button
+              type="button"
+              className="btn btn-outline-primary btn-custom"
+              onClick={resetForm}
+            >
+              Reset
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary btn-custom"
+              disabled={!submitEnabled}
+            >
+              Send
+            </button>
           </div>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+    </>
   );
 };
 

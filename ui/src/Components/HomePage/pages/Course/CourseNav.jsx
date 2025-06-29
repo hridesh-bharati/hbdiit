@@ -1,38 +1,48 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-// SearchBox component
+// 🔍 SearchBox component
 const SearchBox = ({ searchQuery, setSearchQuery }) => (
-    <div className="p-2">
-        <div className="input-group border border-secondary">
-            <span className="input-group-text border-0">
-                <i className="bi bi-search"></i>
+    <div className="p-1">
+        <div className="input-group rounded-pill shadow-sm bg-white overflow-hidden">
+            <span className="input-group-text bg-white border-0">
+                <i className="bi bi-search text-primary"></i>
             </span>
             <input
-                className="form-control px-2"
+                className="form-control border-0 text-secondary"
                 type="text"
-                placeholder="Search..."
+                placeholder="Search courses..."
                 value={searchQuery}
                 onChange={({ target: { value } }) => setSearchQuery(value)}
-                style={{ border: 'none', outline: 'none', paddingLeft: '10px' }}
+                style={{ outline: 'none' }}
             />
         </div>
     </div>
 );
 
-// CourseNav component
+// 📚 CourseNav component
 const CourseNav = ({ data, searchQuery, setSearchQuery }) => (
-    <div className="container-fluid row text-center px-0 mx-0 my-3 py-2 border bg-white border-secondary-subtle myshadow" id="mainDiplomaContainer">
-        <h1 className="fw-bolder py-1">
-            {data} <font color="red"> Course </font>
-        </h1>
-        <div className="col-md-12 mx-0 px-0 d-flex justify-content-between">
-            <small className="d-flex px-2">
-                <Link to="/" className="nav-link">
-                    <i className="fa fa-home"></i> /
-                </Link>&nbsp; {data} Courses
-            </small>
-            <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+    <div className="container-fluid py-4 px-3 rounded-4 shadow-sm mb-4" style={{
+        background: 'linear-gradient(to right, #e0f7ff,rgb(212, 235, 255))',
+        border: '2px solid #cde5ff'
+    }}>
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-2">
+            <div>
+                <h2 className="fw-bold mb-1 text-primary">
+                    {data} <span className="text-danger">Courses</span>
+                </h2>
+                <small className="text-muted">
+                    <Link to="/" className="text-decoration-none text-primary fw-semibold">
+                        <i className="fa fa-home me-1"></i>Home
+                    </Link>
+                    <span className="mx-2">/</span>
+                    {data} Courses
+                </small>
+            </div>
+
+            <div className="mt-3 mt-md-0" style={{ minWidth: '250px' }}>
+                <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+            </div>
         </div>
     </div>
 );

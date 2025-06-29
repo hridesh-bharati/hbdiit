@@ -92,25 +92,25 @@ const adminSchema = new mongoose.Schema(
   { timestamps: true }
 );
 const OtpSchema = new mongoose.Schema({
- email:{
-  type:String,
-  trim:true,
-  required:true
- } ,
- otp:{
-  type:Number,
-  required:true
- },
- user:{
-  type:String,
-  enum:['student','admin'],
-  required:true
- },
- createdAt: {
-  type: Date,
-  default: Date.now,
-  expires: 10
-}
+  email: {
+    type: String,
+    trim: true,
+    required: true
+  },
+  otp: {
+    type: Number,
+    required: true
+  },
+  user: {
+    type: String,
+    enum: ['student', 'admin'],
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    expires: 10
+  }
 })
 const computerCourseSchema = new mongoose.Schema(
   {
@@ -182,9 +182,9 @@ const examSchema = new mongoose.Schema(
           type: ObjectId,
           required: true,
         },
-        regNum:{
-          type:String,
-          required:true,
+        regNum: {
+          type: String,
+          required: true,
         },
         name: {
           type: String,
@@ -204,10 +204,10 @@ const examSchema = new mongoose.Schema(
           required: true,
           default: false,
         },
-        tested:{
-          type:Boolean,
-          required:true,
-          default:false
+        tested: {
+          type: Boolean,
+          required: true,
+          default: false
         },
       },
     ],
@@ -259,15 +259,15 @@ const questionPaperSchema = new mongoose.Schema({
       },
     },
   ],
-  studentsRspns:[
+  studentsRspns: [
     {
-      regNum:{
-        type:String
+      regNum: {
+        type: String
       },
-      rspns:[{
-        rsAns:{
-          enum:['a','b','c','d'],
-          type:String
+      rspns: [{
+        rsAns: {
+          enum: ['a', 'b', 'c', 'd'],
+          type: String
         }
       }]
     }
@@ -283,22 +283,24 @@ const questionPaperSchema = new mongoose.Schema({
     },
   },
 });
-const gallerySchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const gallerySchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+    },
+    url: {
+      type: String,
+      required: true,
+      unique: true,
+    },
   },
-  category: {
-    type: String,
-    required: true,
-  },
-  url: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-});
-
+  { timestamps: true }
+);
 const notice = mongoose.model("notice", noticeSchema);
 const admin = mongoose.model("admin", adminSchema);
 const otp = mongoose.model("otp", OtpSchema);

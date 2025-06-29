@@ -6,6 +6,62 @@ import QueryForm from '../QueryFrom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Counter from './Counter';
+import ButtomToTop from '../../ButtomToTop';
+
+// Helper Components
+const SectionTitle = ({ children, subtitle }) => (
+    <div className="text-center mb-5">
+        <h2 className="fw-bold" style={{ color: "#00268f" }}>{children}</h2>
+        {subtitle && <p className="lead">{subtitle}</p>}
+    </div>
+);
+
+const FeatureCard = ({ icon, title, text, iconColor }) => (
+    <div className="col-md-4 my-3" data-aos="fade-up">
+        <div className="card border border-light shadow-sm h-100 hover-shadow-lg transition-all">
+            <div className="card-body text-center px-4 py-5">
+                <i className={`bi ${icon} fs-1 ${iconColor} mb-3`}></i>
+                <h5 className="card-title mt-2 text-primary">{title}</h5>
+                <p className="card-text">{text}</p>
+            </div>
+        </div>
+    </div>
+);
+
+const ProgramCard = ({ program, index }) => (
+    <div className="col-md-4 my-3" data-aos="fade-up">
+        <div className="card shadow-sm border-0 hover-shadow-lg transition-all h-100">
+            <div className="card-body px-4 py-5">
+                <i className={`bi ${program.icon} fs-1 ${program.iconColor} mb-3`}></i>
+                <h5 className="card-title mt-2 text-primary">{program.title}</h5>
+                <p className="card-text">{program.text}</p>
+                <div className="program-details mt-3">
+                    <p><strong>Duration:</strong> {program.duration}</p>
+                    <p><strong>Course Fee:</strong> {program.fee}</p>
+                    <button className="btn btn-sm btn-outline-primary mt-2" data-bs-toggle="collapse" data-bs-target={`#programDetails${index}`}>
+                        View Details
+                    </button>
+                    <div className="collapse mt-2" id={`programDetails${index}`}>
+                        <div className="card card-body bg-light">
+                            {program.details}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+);
+
+const MethodologyPoint = ({ point, index }) => (
+    <div
+        className="methodology-point mb-3"
+        data-aos={index % 2 === 0 ? "fade-up" : "fade-down"}
+        data-aos-delay={300 + index * 100}
+    >
+        <h5 className="text-primary">{point.title}</h5>
+        <p>{point.description}</p>
+    </div>
+);
 
 function Branch() {
     useEffect(() => {
@@ -18,9 +74,10 @@ function Branch() {
     }, []);
 
     useEffect(() => {
-        AOS.init({ duration: 1000 });
+        AOS.init({ duration: 900, once: true });
     }, []);
 
+    // Data
     const features = [
         {
             icon: 'bi-person-circle',
@@ -72,29 +129,22 @@ function Branch() {
         },
     ];
 
-    const sections = [
+    const methodologyPoints = [
         {
-            title: 'Our Vision',
-            content: 'Our vision is to be the leading institution that transforms the lives of students by providing them with the tools, knowledge, and networks needed to thrive in an ever-evolving tech industry. We aim to cultivate a generation of innovators, problem-solvers, and future leaders who will shape the digital landscape.',
+            title: "Project-Based Learning",
+            description:
+                "Students work on real-world projects throughout the course, building a professional portfolio that showcases their skills to potential employers.",
         },
         {
-            title: 'Student Support',
-            content: "At Drishtee, we understand that education extends beyond the classroom. That's why we offer a variety of student support services to help you succeed. From career counseling to mental wellness programs, we are dedicated to helping you balance your academic, professional, and personal life.",
+            title: "Industry Mentorship",
+            description:
+                "Our students receive guidance from industry professionals who provide insights into current trends and hiring expectations.",
         },
         {
-            title: 'Get Involved',
-            content: "Drishtee is not just a place to learn—it's a community. We encourage our students to participate in clubs, events, and industry collaborations. Join our network of like-minded individuals who are passionate about technology and innovation. Get involved in our coding clubs, attend our workshops, and connect with alumni who are making a difference in the world.",
+            title: "Continuous Assessment",
+            description:
+                "Regular coding challenges, quizzes, and project reviews ensure students stay on track and master each concept before moving forward.",
         },
-    ];
-
-    const carouselItems = [
-        { src: './images/vender/tdiit.jpg', alt: 'DIIT' },
-        { src: './images/vender/teacher.jpg', alt: 'DIIT' },
-    ];
-
-    const carouselItemsDIIT = [
-        { src: './images/vender/d2.jpg', alt: 'DIIT' },
-        { src: './images/vender/d1.jpg', alt: 'DIIT' },
     ];
 
     const faqs = [
@@ -116,36 +166,45 @@ function Branch() {
         }
     ];
 
+    const sections = [
+        {
+            title: 'Our Vision',
+            content: 'Our vision is to be the leading institution that transforms the lives of students by providing them with the tools, knowledge, and networks needed to thrive in an ever-evolving tech industry. We aim to cultivate a generation of innovators, problem-solvers, and future leaders who will shape the digital landscape.',
+        },
+        {
+            title: 'Student Support',
+            content: "At Drishtee, we understand that education extends beyond the classroom. That's why we offer a variety of student support services to help you succeed. From career counseling to mental wellness programs, we are dedicated to helping you balance your academic, professional, and personal life.",
+        },
+        {
+            title: 'Get Involved',
+            content: "Drishtee is not just a place to learn—it's a community. We encourage our students to participate in clubs, events, and industry collaborations. Join our network of like-minded individuals who are passionate about technology and innovation. Get involved in our coding clubs, attend our workshops, and connect with alumni who are making a difference in the world.",
+        },
+    ];
 
-    const images = [1, 2, 3];
-
-    const methodologyPoints = [
-        {
-            title: "Project-Based Learning",
-            description:
-                "Students work on real-world projects throughout the course, building a professional portfolio that showcases their skills to potential employers.",
-        },
-        {
-            title: "Industry Mentorship",
-            description:
-                "Our students receive guidance from industry professionals who provide insights into current trends and hiring expectations.",
-        },
-        {
-            title: "Continuous Assessment",
-            description:
-                "Regular coding challenges, quizzes, and project reviews ensure students stay on track and master each concept before moving forward.",
-        },
+    // Carousels
+    const galleryImages = ["d1", "d2", "d3", "d4", "d5", "d6"];
+    const heroCarousel = [
+        { src: './images/library/d1.jpg', alt: 'DIIT' },
+        { src: './images/library/d2.jpg', alt: 'DIIT' },
+    ];
+    const campusCarousel = [
+        { src: './images/library/tdiit.webp', alt: 'DIIT' },
+        { src: './images/library/teacher.webp', alt: 'DIIT' },
     ];
 
     return (
         <div>
             <div className="mx-sm-0 px-sm-0 pt-4">
-                {/* Carousel */}
-                <div id="carouselExampleIndicators" className="carousel slide mb-5" data-bs-ride="carousel">
-                    <div className="carousel-inner">
-                        {images.map((n, i) => (
+                {/* Hero Carousel */}
+                <div id="mainCarousel" className="carousel slide mb-5" data-bs-ride="carousel">
+                    <div className="carousel-inner shadow-sm overflow-hidden">
+                        {[1, 2].map((n, i) => (
                             <div key={i} className={`carousel-item ${i === 0 ? "active" : ""}`}>
-                                <img src={`images/vender/d${n}.jpg`} className="d-block w-100" alt={`Slide ${n}`} />
+                                <img
+                                    src={`images/library/d${n}.jpg`}
+                                    className="d-block w-100 object-fit-cover carousel-img-mobile"
+                                    alt={`Slide ${n}`}
+                                />
                             </div>
                         ))}
                     </div>
@@ -154,7 +213,7 @@ function Branch() {
                             key={dir}
                             className={`carousel-control-${dir}`}
                             type="button"
-                            data-bs-target="#carouselExampleIndicators"
+                            data-bs-target="#mainCarousel"
                             data-bs-slide={dir}
                         >
                             <span className={`carousel-control-${dir}-icon`} aria-hidden="true" />
@@ -164,9 +223,9 @@ function Branch() {
                 </div>
 
                 {/* Typed Text */}
-                <div className="container text-center fs-4 fw-bold">
+                <div className="container text-center fs-4 fw-bold mb-4">
                     <div className="row">
-                        <div className="col-12 my-3" id="BranchTypingText">
+                        <div className="col-12" id="BranchTypingText">
                             <small>
                                 Drishtee Computer Center is{' '}
                                 <span className="text-warning" id="typingAmt"></span>
@@ -175,216 +234,126 @@ function Branch() {
                     </div>
                 </div>
 
-                {/* Hero Section */}
-                <div className="container-fluid py-5 bg-light">
+                {/* Hero Section with Info and Image Carousel */}
+                <div className="container-fluid py-3 bg-light">
                     <div className="container">
                         <div className="row align-items-center">
-                            {/* Text */}
                             <div className="col-lg-6 mb-4 mb-lg-0">
-                                <div className="col-md-12 pt-4"
-                                    data-aos="fade-right"
-                                    data-aos-duration="1000"
-                                    data-aos-delay="200"
-                                    data-aos-easing="ease-out-cubic"
-                                >
+                                <div className="col-md-12 pt-4" data-aos="fade-right" data-aos-delay="200">
                                     <h3 className="fw-bold mb-3" style={{ color: "#00268f", fontSize: "2rem" }}>
                                         WELCOME TO <span style={{ color: "#ff6b00" }}>DRISHTEE COMPUTER CENTER</span>
                                     </h3>
-                                    <span className='text-muted d-block mb-3 small' style={{ fontWeight: 500 }}>
+                                    <span className='text-muted d-block mb-3 small fw-medium'>
                                         📍 Branch: Main Market road, in front of Rauniyar Chitra Mandir, Thoothibari, Maharajganj
                                     </span>
                                 </div>
-                                <p className="text-dark"
-                                    data-aos="fade-up"
-                                    data-aos-duration="1000"
-                                    data-aos-delay="400"
-                                    style={{ lineHeight: "1.8", fontSize: "1rem" }}
-                                >
+                                <p className="text-dark" data-aos="fade-up" data-aos-delay="400" style={{ lineHeight: "1.8", fontSize: "1rem" }}>
                                     Drishtee Institute of Technology, founded in 2018, is recognized as one of the top technical computer institutes in the region. Our mission is to empower students with practical, job-ready skills through innovative teaching and an industry-aligned curriculum.
                                 </p>
-                                <p className="text-dark"
-                                    data-aos="fade-up"
-                                    data-aos-duration="1000"
-                                    data-aos-delay="600"
-                                    style={{ lineHeight: "1.8", fontSize: "1rem" }}
-                                >
-                                    Located in the heart of Maharajganj, our center boasts modern computer labs, experienced faculty, and a nurturing learning environment that fosters talent and supports professional growth.
+                                <p className="text-dark" data-aos="fade-up" data-aos-delay="600" style={{ lineHeight: "1.8", fontSize: "1rem" }}>
+                                    Located in the heart of thoothibari, our center boasts modern computer labs, experienced faculty, and a nurturing learning environment that fosters talent and supports professional growth.
                                 </p>
                             </div>
-                            {/* Image/Slider */}
+                            {/* Carousel */}
                             <div className="col-lg-6">
-                                <div data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="300">
-                                    <div id="carouselExampleAutoplaying" className="carousel slide carousel-fade" data-bs-ride="carousel">
+                                <div data-aos="zoom-in" data-aos-delay="300">
+                                    <div id="heroCarousel" className="carousel slide carousel-fade rounded-4 overflow-hidden shadow" data-bs-ride="carousel">
                                         <div className="carousel-inner">
-                                            {carouselItemsDIIT.map((item, index) => (
-                                                <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`} data-bs-interval="1000">
-                                                    <img src={item.src} className="d-block w-100 img-fluid h-100" alt={item.alt} />
+                                            {heroCarousel.map((item, index) => (
+                                                <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`} data-bs-interval="2000">
+                                                    <img src={item.src} className="d-block w-100 img-fluid" alt={item.alt} style={{ height: 350, objectFit: "cover" }} />
                                                 </div>
                                             ))}
                                         </div>
-                                        <button
-                                            className="carousel-control-prev"
-                                            type="button"
-                                            data-bs-target="#carouselExampleAutoplaying"
-                                            data-bs-slide="prev"
-                                        >
+                                        <button className="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
                                             <span className="carousel-control-prev-icon" aria-hidden="true" />
                                         </button>
-                                        <button
-                                            className="carousel-control-next"
-                                            type="button"
-                                            data-bs-target="#carouselExampleAutoplaying"
-                                            data-bs-slide="next"
-                                        >
+                                        <button className="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
                                             <span className="carousel-control-next-icon" aria-hidden="true" />
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            {/* Statistics Row */}
                             <Counter />
                         </div>
                     </div>
                 </div>
 
-                {/* Additional Features */}
+                {/* Features Section */}
                 <div className="container py-5">
-                    <h2 className="fw-bold text-center mb-5" data-aos="fade-up" style={{ color: "#00268f" }}>Why Choose Our Institute?</h2>
+                    <SectionTitle>Why Choose Our Institute?</SectionTitle>
                     <div className="row text-center">
-                        {features.map((feature, index) => (
-                            <div className="col-md-4 my-3" key={index} data-aos="fade-up">
-                                <div className="card shadow-sm hover-shadow-lg transition-all h-100">
-                                    <div className="card-body" style={{ textAlign: 'justify' }}>
-                                        <i className={`bi ${feature.icon} fs-1 ${feature.iconColor} hover-text-success`}></i>
-                                        <h5 className="card-title mt-3 text-primary">{feature.title}</h5>
-                                        <p className="card-text">{feature.text}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+                        {features.map((feature, i) => <FeatureCard {...feature} key={i} />)}
                     </div>
                 </div>
 
-                {/* Featured Programs */}
+                {/* Programs */}
                 <div className="container py-5">
-                    <div className="text-center mb-5" data-aos="fade-down">
-                        <h2 className="fw-bold" style={{ color: "#00268f" }}>Our Comprehensive Programs</h2>
-                        <p className="lead">Choose from our industry-relevant courses designed to launch your tech career</p>
-                    </div>
+                    <SectionTitle subtitle="Choose from our industry-relevant courses designed to launch your tech career">
+                        Our Comprehensive Programs
+                    </SectionTitle>
                     <div className="row">
-                        {programs.map((program, index) => (
-                            <div className="col-md-4 my-3" key={index} data-aos="fade-up">
-                                <div className="card shadow-sm hover-shadow-lg transition-all h-100">
-                                    <div className="card-body">
-                                        <i className={`bi ${program.icon} fs-1 ${program.iconColor} hover-text-success`}></i>
-                                        <h5 className="card-title mt-3 text-primary">{program.title}</h5>
-                                        <p className="card-text">{program.text}</p>
-                                        <div className="program-details mt-3">
-                                            <p><strong>Duration:</strong> {program.duration}</p>
-                                            <p><strong>Course Fee:</strong> {program.fee}</p>
-                                            <button className="btn btn-sm btn-outline-primary mt-2" data-bs-toggle="collapse" data-bs-target={`#programDetails${index}`}>
-                                                View Details
-                                            </button>
-                                            <div className="collapse mt-2" id={`programDetails${index}`}>
-                                                <div className="card card-body bg-light">
-                                                    {program.details}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+                        {programs.map((program, i) => <ProgramCard program={program} index={i} key={i} />)}
                     </div>
                 </div>
 
+                {/* Methodology & Campus Carousel */}
                 <div className="container-fluid bg-light py-5">
                     <div className="container">
                         <div className="row align-items-center">
-                            <div
-                                className="col-lg-6 mb-4 mb-lg-0"
-                                data-aos="fade-right"
-                                data-aos-delay="100"
-                            >
-                                <h2 className="fw-bold mb-4" data-aos="zoom-in" data-aos-delay="200">
-                                    Our Unique Learning Approach
-                                </h2>
-                                {methodologyPoints.map((point, index) => (
-                                    <div
-                                        className="methodology-point mb-3"
-                                        key={index}
-                                        data-aos={index % 2 === 0 ? "fade-up" : "fade-down"}
-                                        data-aos-delay={300 + index * 100}
-                                    >
-                                        <h5 className="text-primary">{point.title}</h5>
-                                        <p>{point.description}</p>
-                                    </div>
-                                ))}
+                            {/* Methodology */}
+                            <div className="col-lg-6 mb-4 mb-lg-0" data-aos="fade-right" data-aos-delay="100">
+                                <h2 className="fw-bold mb-4" data-aos="zoom-in" data-aos-delay="200">Our Unique Learning Approach</h2>
+                                {methodologyPoints.map((point, i) => <MethodologyPoint point={point} index={i} key={i} />)}
                             </div>
-                            <div
-                                className="col-lg-6"
-                                data-aos="flip-left"
-                                data-aos-delay="350"
-                            >
-                                <div className="carousel-inner">
-                                    {carouselItems.map((item, index) => (
-                                        <div
-                                            key={index}
-                                            className={`carousel-item ${index === 0 ? 'active' : ''}`}
-                                            data-bs-interval="1000"
-                                            data-aos="zoom-in-up"
-                                            data-aos-delay={400 + index * 150}
-                                        >
-                                            <img
-                                                src={item.src}
-                                                className="d-block w-100 img-fluid h-100"
-                                                alt={item.alt}
-                                            />
-                                        </div>
-                                    ))}
+                            {/* Carousel */}
+                            <div className="col-lg-6" data-aos="flip-left" data-aos-delay="350">
+                                <div id="campusCarousel" className="carousel slide carousel-fade rounded-4 shadow overflow-hidden" data-bs-ride="carousel">
+                                    <div className="carousel-inner">
+                                        {campusCarousel.map((item, i) => (
+                                            <div key={i} className={`carousel-item ${i === 0 ? 'active' : ''}`} data-bs-interval="2000">
+                                                <img src={item.src} className="d-block w-100 img-fluid" alt={item.alt} style={{ height: 300, objectFit: "cover" }} />
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Gallery Section */}
+                {/* Gallery */}
                 <div className="container py-5" data-aos="fade-up">
-                    <h2 className="text-center fw-bold text-primary mb-4">Our Campus Life</h2>
+                    <SectionTitle>Our Campus Life</SectionTitle>
                     <p className="text-center mb-4">Explore moments from our vibrant learning community</p>
-                    <div className="row">
-                        {["d1", "d2", "d3", "d4", "d5", "d6"].map((num, index) => (
-                            <div className="col-md-4 mb-4" key={index}>
-                                <div className="card shadow-sm">
-                                    <img
-                                        src={`images/vender/${num}.jpg`}
-                                        className="card-img-top"
-                                        alt={`Gallery ${num}`}
-                                        loading="lazy"
-                                    />
+                    <div className="row g-4">
+                        {galleryImages.map((num, i) => (
+                            <div className="col-md-4 mb-4" key={i}>
+                                <div className="card shadow-sm border-0 rounded-4 overflow-hidden">
+                                    <img src={`images/library/${num}.jpg`} className="card-img-top object-fit-cover" alt={`Gallery ${num}`} style={{ height: 250, objectFit: "cover" }} loading="lazy" />
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                {/* Simple Sections */}
+                {/* Sections */}
                 <div className="container mb-5">
-                    {sections.map((section, index) => (
-                        <div key={index} className="mb-4">
+                    {sections.map((section, i) => (
+                        <div key={i} className="mb-4">
                             <h3 className="mb-2 text-primary">{section.title}</h3>
                             <div>{section.content}</div>
                         </div>
                     ))}
                 </div>
 
-                {/* FAQs Section */}
+                {/* FAQ */}
                 <div className="container py-5">
-                    <h2 className="fw-bold text-center mb-5 text-primary">Frequently Asked Questions</h2>
+                    <SectionTitle>Frequently Asked Questions</SectionTitle>
                     <div className="row">
-                        {faqs.map((faq, index) => (
-                            <div className="col-md-6 my-3" key={index}>
-                                <div className="card shadow-sm h-100">
+                        {faqs.map((faq, i) => (
+                            <div className="col-md-6 my-3" key={i}>
+                                <div className="card shadow-sm border-0 h-100 rounded-4">
                                     <div className="card-body">
                                         <h5 className="card-title text-primary">{faq.question}</h5>
                                         <p className="card-text">{faq.answer}</p>
@@ -400,21 +369,11 @@ function Branch() {
                     <div className="row g-4">
                         {/* Contact Info */}
                         <div className="col-md-6">
-                            <div className="p-4 border rounded-4 bg-light h-100">
+                            <div className="p-4 border rounded-4 bg-light h-100 shadow-sm">
                                 <h4 className="text-primary mb-3">Contact Details</h4>
-                                <p className="mb-2">
-                                    <i className="bi bi-telephone-fill me-2 text-secondary"></i>
-                                    +91 7398889347
-                                </p>
-                                <p className="mb-2">
-                                    <i className="bi bi-envelope-fill me-2 text-secondary"></i>
-                                    info@drishtee.com
-                                </p>
-                                <p>
-                                    <i className="bi bi-geo-alt-fill me-2 text-secondary"></i>
-                                    Thoothibari,District Maharajganj <br />
-                                    Uttar Pradesh, India
-                                </p>
+                                <p className="mb-2"><i className="bi bi-telephone-fill me-2 text-secondary"></i>+91 7398889347</p>
+                                <p className="mb-2"><i className="bi bi-envelope-fill me-2 text-secondary"></i>chauhansantosh045@gmail.com</p>
+                                <p><i className="bi bi-geo-alt-fill me-2 text-secondary"></i>Thoothibari, District Maharajganj<br />Uttar Pradesh, India</p>
                                 <div className="mt-4">
                                     <h6 className="text-dark">Connect With Us:</h6>
                                     <div className="d-flex gap-3 mt-2">
@@ -426,15 +385,11 @@ function Branch() {
                                 </div>
                             </div>
                         </div>
-
                         {/* Opening Hours */}
                         <div className="col-md-6">
-                            <div className="p-4 border rounded-4 bg-light h-100">
+                            <div className="p-4 border rounded-4 bg-light h-100 shadow-sm">
                                 <h4 className="text-primary mb-3">Opening Hours</h4>
-                                <p className="mb-2">
-                                    <i className="bi bi-clock-fill me-2 text-secondary"></i>
-                                    Monday - Saturday
-                                </p>
+                                <p className="mb-2"><i className="bi bi-clock-fill me-2 text-secondary"></i>Monday - Saturday</p>
                                 <p className="mb-2">6:00 AM - 7:00 PM</p>
                                 <p className="text-danger fw-semibold">Closed on Sundays</p>
                                 <div className="mt-4">
@@ -454,8 +409,9 @@ function Branch() {
                         </div>
                     </div>
                 </div>
-                {/* Call to Action */}
-                <div className="container-fluid text-white py-5" style={{ background: "linear-gradient(135deg, #0052D4, #4364F7,rgb(84, 164, 255))" }}>
+
+                {/* CTA */}
+                <div className="container-fluid text-white py-5" style={{ background: "linear-gradient(135deg, #0052D4, #4364F7, rgb(84, 164, 255))" }}>
                     <div className="container text-center">
                         <h2 className="mb-4 fw-bold">Ready to Start Your Tech Journey?</h2>
                         <p className="lead mb-4">Join hundreds of successful students who launched their careers with <strong>Drishtee</strong></p>
@@ -469,22 +425,33 @@ function Branch() {
                         </div>
                     </div>
                 </div>
-                {/* Map and Query Form */}
-                <div className="container-fluid">
-                    <h2 className="text-center mt-4">Locate-us</h2>
-                    <div className="row align-items-center">
+
+                {/* Map & Query Form */}
+                <div className="container-fluid bg-light">
+                    <h2 className="text-center mt-4 mb-4 fw-bold text-primary">Locate Us</h2>
+                    <div className="row align-items-center g-4">
                         <div className="col-md-6 mb-md-0">
-                            <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3541.3484879661028!2d83.69061145032624!3d27.427248144117375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39942392249c9073%3A0x6b62ef81415149dd!2sDrishtee%20Institute%20of%20Information%20Technology!5e0!3m2!1sen!2sin!4v1696133570458!5m2!1sen!2sin"
-                                width="100%" height="450" style={{ border: '0' }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade">
-                            </iframe>
+                            <div className="rounded-4 overflow-hidden shadow-sm">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3541.3484879661028!2d83.69061145032624!3d27.427248144117375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39942392249c9073%3A0x6b62ef81415149dd!2sDrishtee%20Institute%20of%20Information%20Technology!5e0!3m2!1sen!2sin!4v1696133570458!5m2!1sen!2sin"
+                                    width="100%"
+                                    height="350"
+                                    style={{ border: 0 }}
+                                    allowFullScreen=""
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                    title="Drishtee Map"
+                                ></iframe>
+                            </div>
                         </div>
                         <div className="col-md-6">
                             <QueryForm />
                         </div>
                     </div>
                 </div>
+
                 <Footer />
+                <ButtomToTop />
             </div>
         </div>
     );

@@ -8,7 +8,6 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "react-toastify/dist/ReactToastify.css";
 import '@fortawesome/fontawesome-free/css/all.min.css';
-
 import "./index.css";
 import "./App.css";
 import "./MediaQuery.css";
@@ -34,3 +33,11 @@ root.render(
     <ToastContainer />
   </Provider>
 );
+// Service worker registration
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log("✅ Service Worker Registered"))
+      .catch(err => console.error("❌ SW Error", err));
+  });
+}

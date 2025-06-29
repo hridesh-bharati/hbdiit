@@ -155,12 +155,21 @@ export default function StudentFooter() {
         </button>
       </nav>
 
-      <div className="offcanvas mt-4  offcanvas-end" tabIndex="-1" id="offcanvasRight"
+      <div className="offcanvas mt-35 offcanvas-end" tabIndex="-1" id="offcanvasRight"
         aria-labelledby="offcanvasRightLabel" style={{ width: "400px" }}>
         <div
-          className="offcanvas-header py-4"
-          style={{ backgroundColor: "#25D366"}}
+          className="offcanvas-header pt-4 pb-3 mt-4"
+          style={{ backgroundColor: "#25D366" }}
         >
+          <h5 className="offcanvas-title text-white" id="offcanvasRightLabel">
+            Menu
+          </h5>
+          <button
+            type="button"
+            className="btn-close btn-close-white"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+          ></button>
         </div>
         <div className="offcanvas-body p-0" style={{ overflowY: "auto", height: "calc(100vh - 56px)" }}>
           {offcanvasScreen === null && renderMenuList()}

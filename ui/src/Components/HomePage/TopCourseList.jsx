@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 const images = [
-  { id: 1, src: "images/course/oLevel.png", desc: "O-Level Computer Course" },
-  { id: 2, src: "images/course/ccc.png", desc: "CCC Certification Course" },
-  { id: 3, src: "images/course/software.png", desc: "Software Development Fundamentals" },
-  { id: 4, src: "images/course/reactJs.png", title: "Course 4", desc: "React.js for Frontend Development" },
-  { id: 5, src: "images/course/python.png", desc: "Python Programming Essentials" },
-  { id: 6, src: "images/course/mongo.png", desc: "MongoDB for Beginners" },
-  { id: 7, src: "images/course/iot.png", desc: "Introduction to IoT" },
-  { id: 8, src: "images/course/tally.png", desc: "Tally ERP Accounting" },
+  { id: 1, src: "images/course/oLevel.webp", desc: "O-Level Computer Course" },
+  { id: 2, src: "images/course/ccc.webp", desc: "CCC Certification Course" },
+  { id: 3, src: "images/course/software.webp", desc: "Software Development Fundamentals" },
+  { id: 4, src: "images/course/reactJs.webp", title: "Course 4", desc: "React.js for Frontend Development" },
+  { id: 5, src: "images/course/python.webp", desc: "Python Programming Essentials" },
+  { id: 6, src: "images/course/mongo.webp", desc: "MongoDB for Beginners" },
+  { id: 7, src: "images/course/iot.webp", desc: "Introduction to IoT" },
+  { id: 8, src: "images/course/tally.webp", desc: "Tally ERP Accounting" },
 ];
 
 export default function TopCourseList() {

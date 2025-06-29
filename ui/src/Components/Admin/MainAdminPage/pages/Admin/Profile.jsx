@@ -1,85 +1,62 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { adminProfile } from "../../../../../api/adminApi/api";
-
-export default function Profile() {
-  const [adminData, setAdminData] = useState(null);
-
-  useEffect(() => {
-    const fetchAdminProfile = async () => {
-      try {
-        const response = await adminProfile();
-        if (response.ackbool === 1) {
-          setAdminData(response.message);
-        }
-      } catch (error) {
-        console.error("Error fetching admin profile:", error);
-      }
-    };
-
-    fetchAdminProfile();
-  }, []);
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-
-    return `${day}-${month}-${year}`;
-  };
-
-  if (!adminData) {
-    return (
-      <div className="d-flex justify-content-center align-items-center">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      </div>
-    );
-  }
-
-  const profileDetails = [
-    { label: "Birthday", value: formatDate(adminData.dob) },
-    { label: "E-mail", value: adminData.email },
-    { label: "Adhar No.", value: adminData.aadhaarNumber },
-    { label: "Profession", value: adminData.profession },
-    { label: "Address", value: adminData.address },
-
-  ];
-
-  return (
-    <div className="rounded" id="AdminProfile">
-      <div className="container py-4">
-        <div className="row">
-          <div className="col-12 bg-white shadow-sm p-4 rounded">
-            <div className="row">
-              {/* Profile Details */}
-              <div className="col-md-8">
-                <h1 className="fw-bolder text-primary">{adminData.name}</h1>
-                <hr />
-                <div className="row">
-                  {profileDetails.map((detail, index) => (
-                    <div className="col-6 mb-3" key={index}>
-                      <label className="form-label fw-semibold">{detail.label}</label>
-                      <p>{detail.value}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              {/* Profile Picture */}
-              <div className="col-md-4 text-center">
-                <img
-                  src={adminData.profilePic}
-                  alt={adminData.name}
-                  className="img-fluid rounded-circle shadow-sm"
-                />
-              </div>
-            </div>
-            <div className="mt-2">
-              <h3 className="fw-bolder text-warning">About Me</h3>
-              <p className="text-muted">{adminData.about}</p>
-            </div>
+ const format = {
+  date: (val) => (isNaN(new Date(val)) ? "-" : new Date(val).toLocaleDateString("en-GB")),
+  text: (val) => val || "-",
+}; const InfoItem = ({ label, value }) => (
+  <div className="col-sm-6">
+    <div className="bg-light p-2 rounded small">
+      <strong>{label}</strong>
+      <div>{value}</div>
+    </div>
+  </div>
+); export default function Profile() {
+  const [admin, setAdmin] = useState(null); useEffect(() => {
+    adminProfile()
+      .then(({ ackbool, message }) => ackbool && setAdmin(message))
+      .catch(console.error);
+  }, []); if (!admin) return <p className="text-center my-5">Loading...</p>; const info = [
+    ["📧 Email", format.text(admin.email)],
+    ["📱 Mobile", format.text(admin.mobileNumber)],
+    ["🆔 Aadhaar", format.text(admin.aadhaarNumber)],
+    ["💼 Profession", format.text(admin.profession)],
+    ["🎂 Birthday", format.date(admin.dob)],
+    ["🏠 Address", format.text(admin.address)],
+  ]; return (
+    <div className="container my-4" id="AdminProfile">
+      <div className="card border-0 shadow-sm rounded-4 overflow-hidden">
+        {/* Cover Banner + Profile Image */}
+        <div className="position-relative" style={{ height: 100, background: "linear-gradient(45deg, #3b5998, #8b9dc3)" }}>
+          <div className="position-absolute top-100 start-50 translate-middle" style={{ width: 120, height: 120 }}>
+            <img
+              src={admin.profilePic || ""}
+              alt={admin.name}
+              className="rounded-circle border border-white shadow-sm"
+              style={{ width: "100%", height: "100%", objectFit: "cover", background: "#ccc" }}
+            />
           </div>
+        </div>         {/* Name & Role */}
+        <div className="text-center mt-5 pt-3 px-3">
+          <h5 className="fw-bold mb-1">
+            {format.text(admin.name)}
+            {admin.root && (
+              <span className="badge bg-warning text-dark ms-2" title="Superadmin">
+                🛡️ Superadmin
+              </span>
+            )}
+          </h5>
+          <p className="text-muted small">{format.text(admin.profession)}</p>
+        </div>         {/* Info Grid */}
+        <div className="px-4 pb-3">
+          <div className="row g-3">
+            {info.map(([label, value], i) => (
+              <InfoItem key={i} label={label} value={value} />
+            ))}
+          </div>
+        </div>         {/* About Me */}
+        <div className="px-4 py-3 border-top">
+          <h6 className="fw-bold text-primary mb-1">About Me</h6>
+          <p className="text-muted small mb-0">{format.text(admin.about)}</p>
         </div>
       </div>
     </div>

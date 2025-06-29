@@ -1,3 +1,4 @@
+/* Common styles for all smaller screens */
 @media screen and (max-width: 910px) {
   .TopWelcomeNavLeft {
     width: 30%;
@@ -8,8 +9,7 @@
     font-size: 0.9rem;
   }
 
-  /*Start  Cerificate  */
-
+  /* Certificate */
   .HeaderCenter img,
   .HeaderLeft img {
     width: 70px;
@@ -36,7 +36,6 @@
     font-size: 0.7em;
   }
 
-  /*Start  Cerificate  */
   #navbarNav ul li a i {
     display: inline-block;
     padding: 0;
@@ -47,13 +46,12 @@
   }
 }
 
-#navbarNav .MobileNav {
-  box-shadow: 0 -2px 5px rgba(50, 50, 93, 0.25),
-    0 1px 3px -1px rgba(0, 0, 0, 0.3);
-  background: var(--topNavBgColor);
-}
-
+/* Styles for tablets and smaller (max-width 768px) */
 @media screen and (max-width: 768px) {
+  #navbarNav ul li {
+    margin: 2px 0;
+  }
+
   #ToperNav {
     background: var(--topNavBgColor);
   }
@@ -62,18 +60,9 @@
     font-size: 2rem;
   }
 
-  /* *@media (max-width: 767px) {
-  .certificate-wrapper {
-    padding: 0 10px;
-  } */
-
   #CourseListNav {
     background: transparent;
   }
-
-  /* .MainCarousel {
-        margin-top: 0px !important;
-    } */
 
   .headerPic {
     display: none;
@@ -92,13 +81,20 @@
     padding: 0;
   }
 
-  #navbarNav {
-    width: 100%;
-    margin-left: auto;
+  .pc-only {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  .mobile-only {
+    display: block !important;
+    visibility: visible !important;
   }
 
   #navbarNav {
-    margin: 0px !important;
+    width: 100%;
+    margin-left: auto;
+    margin: 0 !important;
     position: absolute;
     top: 35px;
     right: 2px;
@@ -116,23 +112,29 @@
     height: 100% !important;
     width: 60% !important;
     text-align: center !important;
-    box-shadow: 0 -2px 5px rgba(50, 50, 93, 0.25),
+    box-shadow:
+      0 -2px 5px rgba(50, 50, 93, 0.25),
       0 1px 3px -1px rgba(0, 0, 0, 0.3);
     background: var(--topNavBgColor);
   }
+
+  .MobileNav {
+    margin-left: auto !important;
+  }
+
+
 
   #printResult {
     width: 297mm !important;
     /* A4 width */
     height: 210mm !important;
-    /* A4 height in landscape */
+    /* A4 height landscape */
     transform: scale(1);
-    /* Ensure no unwanted scaling */
     transform-origin: top left;
   }
 
   #printResult .HeaderCenter .custom-heading {
-    padding: 0 0 !important;
+    padding: 0 !important;
     margin: 0 !important;
     line-height: 3rem !important;
   }
@@ -179,10 +181,7 @@
     background: transparent;
   }
 
-  .stdStatus th {
-    font-size: 0.7rem !important;
-  }
-
+  .stdStatus th,
   .stdStatus td {
     font-size: 0.7rem !important;
   }
@@ -191,7 +190,11 @@
     width: 400px;
   }
 
-  /*Start  Cerificate  */
+  .greatLine {
+    font-size: 2.4rem;
+  }
+
+  /* Certificate specific adjustments */
   .headTitle {
     font-size: 0.9rem;
   }
@@ -225,8 +228,7 @@
     font-size: 0.9rem;
   }
 
-  /*Start  Cerificate  */
-
+  /* Hide/show tweaks */
   .TopWelcomeCenter {
     display: none !important;
     visibility: hidden !important;
@@ -245,10 +247,8 @@
     font-size: 0.9rem !important;
   }
 
-  .hideFont {
-    display: none;
-    visibility: hidden;
-  }
+
+
 
   #AdmForm p {
     font-size: 1.1rem !important;
@@ -283,7 +283,7 @@
 
   .diplomaTable th,
   #MainLanguageSection table th {
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 
   .diplomaTable .my-row-color th,
@@ -307,7 +307,7 @@
   }
 
   .admin-panel .offcanvas-start {
-    width: 50%;
+    width: 70%;
   }
 
   .admin-panel .offcanvas-body .nav-link {
@@ -351,6 +351,15 @@
   }
 }
 
+/* Extra small devices - mobile phones portrait (max-width 576px) */
+@media (max-width: 576px) {
+  .carousel-img-mobile {
+    height: 250px !important;
+    object-fit: cover !important;
+  }
+}
+
+/* Very small devices (max-width 410px) */
 @media screen and (max-width: 410px) {
   .headerImg {
     margin-top: 1.7rem;
@@ -378,6 +387,7 @@
   }
 }
 
+/* Large screens (min-width 1024px) */
 @media screen and (min-width: 1024px) {
   .FounderCircle {
     width: 400px;
@@ -394,10 +404,10 @@
   }
 }
 
+/* Print styles */
 @media print {
   body {
     -webkit-print-color-adjust: exact;
-    /* Ensures colors are printed correctly */
     print-color-adjust: exact;
   }
 
@@ -410,9 +420,10 @@
     transform-origin: top left;
   }
 
-
   @page {
     size: A4 landscape;
     margin: 0;
   }
 }
+
+/* Navbar shadow & background (outside media queries) */

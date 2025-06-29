@@ -4,21 +4,20 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 export default function CardSlider() {
-    const x = `images/thumbnails`
+    const x = `images/cardslider`
     const slides = [
-        `${x}/android.jpg`,
-        `${x}/ehack.jpg`,
+        `${x}/android.webp`,
+        `${x}/ehack.webp`,
         `${x}/cpp.webp`,
         `${x}/office.webp`,
-        `${x}/js.jpg`,
-        `${x}/coding.jpg`,
-        `${x}/ai.jpg`,
-        `${x}/tail.jpg`,
-        `${x}/ppt.jpg`,
-        `${x}/python.jpg`,
+        `${x}/js.webp`,
+        `${x}/coding.webp`,
+        `${x}/ai.webp`,
+        `${x}/tail.webp`,
+        `${x}/ppt.webp`,
+        `${x}/python.webp`,
         `${x}/ai1.webp`,
-        `${x}/tallyp.jpg`,
-        `${x}/ps1.png`,
+        `${x}/ps1.webp`,
     ];
 
     return (
@@ -39,7 +38,7 @@ export default function CardSlider() {
             >
                 {slides.map((src, index) => (
                     <SwiperSlide key={index} className="swiper-slide-custom">
-                        <img src={src} loading="lazy"  alt={`Slide ${index + 1}`} className="slide-image img-fluid" />
+                        <img src={src} loading="lazy" alt={`Slide ${index + 1}`} className="slide-image img-fluid" />
                     </SwiperSlide>
                 ))}
             </Swiper>

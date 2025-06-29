@@ -1,114 +1,148 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { getStudentList } from '../../api/adminApi/api';
 
-export default function StudentDataBs() {
+export default function StudentDataMobilePro() {
     const [students, setStudents] = useState([]);
-    const [originalStudents, setOriginalStudents] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [loading, setLoading] = useState(true);
 
-    const fetchStudentData = async () => {
+    const fetchStudentData = useCallback(async () => {
+        setLoading(true);
         try {
             const response = await getStudentList();
-            if (response.ackbool === 1) {
-                setStudents(response.message);
-                setOriginalStudents(response.message);
-            } else {
-                console.error('Failed to fetch student data');
-            }
-        } catch (error) {
-            console.error('Error fetching student data:', error);
+            if (response?.ackbool === 1) setStudents(response.message);
+            else setStudents([]);
+        } catch {
+            setStudents([]);
+        } finally {
+            setLoading(false);
         }
-    };
+    }, []);
 
-    const handleSearch = () => {
-        // Filter original list of students based on search query
-        const filteredStudents = originalStudents.filter(student =>
-            student.name.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-        setStudents(filteredStudents);
-    };
-
-    const handleReload = () => {
-        fetchStudentData(); // Refetch student data
-    };
-
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString();
-    };
     useEffect(() => {
         fetchStudentData();
-    }, []);
-    return (
-        <div className='mb-5 pb-3'>
-            <div className="mb-3 row bg-success-subtle p-4">
-                <span className="text-danger fw-medium">महत्वपूर्ण निर्देश:</span>
-                <div className="col-12 small py-2 text-danger d-flex align-items-center">
-                    <div className="marquee-container">
-                        <div className="marquee">
-                            किसी भी छात्र/छात्रा का पूरा रिकॉर्ड प्राप्त करने के लिए छात्र/छात्रा का पंजीकृत पूरा नाम सही-सही से भरें
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-10 my-1 d-flex justify-content-center align-items-center small">
-                    <div className="col">
-                        <input
-                            type="text"
-                            className='form-control'
-                            placeholder="Search by name..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                    </div>
-                </div>
-                <div className="col-md-2 my-1 d-flex justify-content-center align-items-center small">
-                    <button className="btn btn-primary btn-sm mx-2" onClick={handleSearch}>Search</button>
-                    <button className="btn btn-sm btn-warning mx-2" onClick={handleReload}>Reload</button>
-                </div>
-            </div>
-            <div className="table-responsive">
-                <table className="table mtable table-bordered diplomaTable stdStatus m-2" >
-                    <thead className='my-row-color small table-dark'>
-                        <tr>
-                            <th>Reg.</th>
-                            <th>Name</th>
-                            <th>Father's Name</th>
-                            <th>Mother's Name</th>
-                            <th>Gender</th>
-                            <th className='stdAddress'>Complete Address</th>
-                            <th>Mobile</th>
-                            <th>Email</th>
-                            <th>D.O.B</th>
-                            <th>Course</th>
-                            <th>Category</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {students.length > 0 ? (
-                            students.map((student, index) => (
-                                <tr key={student._id}>
-                                    <td className='text-center'>{index + 1}</td>
-                                    <td>{student.name}</td>
-                                    <td>{student.fatherName}</td>
-                                    <td>{student.motherName}</td>
-                                    <td>{student.gender}</td>
-                                    <td>{student.address}</td>
-                                    <td>{student.mobileNumber}</td>
-                                    <td>{student.email}</td>
-                                    <td>{formatDate(student.dob)}</td>
-                                    <td>{student.course}</td>
-                                    <td>{student.category}</td>
-                                </tr>
-                            ))
+    }, [fetchStudentData]);
 
-                        ) : (
-                            <tr>
-                                <td colSpan="10" className='text-center'>No students found</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+    const formatDate = (dateStr) => {
+        const date = new Date(dateStr);
+        return !isNaN(date) ? date.toLocaleDateString() : '';
+    };
+
+    const getInitials = (name) =>
+        name ? name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase() : '';
+
+    const filteredStudents = useMemo(() => {
+        const lower = searchQuery.toLowerCase();
+        return students.filter((s) => s.name.toLowerCase().includes(lower));
+    }, [students, searchQuery]);
+
+    const InfoRow = ({ icon, label, white }) => (
+        <div className={`me-3 mb-1 d-flex align-items-center ${white ? 'text-white' : 'text-muted'}`}>
+            <i className={`bi ${icon} me-2 ${white ? 'text-white' : 'text-primary'}`}></i>
+            <span className={`${white ? 'text-white' : ''}`}>{label}</span>
         </div>
     );
-};
+
+    return (
+        <div className="container-fluid small py-4">
+            {/* Search Bar */}
+            <div className="input-group mb-4 shadow-sm rounded-pill">
+                <span className="input-group-text bg-white border-0">
+                    <i className="bi bi-search text-muted"></i>
+                </span>
+                <input
+                    type="text"
+                    className="form-control border-0"
+                    placeholder="Search by name..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                {searchQuery && (
+                    <button className="btn border-0" onClick={() => setSearchQuery('')}>
+                        <i className="bi bi-x-lg"></i>
+                    </button>
+                )}
+                <button className="btn border-0" onClick={fetchStudentData}>
+                    <i className="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+
+            {/* Content */}
+            {loading ? (
+                <div className="text-center my-5">
+                    <div className="spinner-border text-primary" />
+                    <p className="mt-3 text-muted">Loading students...</p>
+                </div>
+            ) : filteredStudents.length === 0 ? (
+                <p className="text-center text-muted">No students found.</p>
+            ) : (
+                <div className="row">
+                    {filteredStudents.map((student, idx) => (
+                        <div key={student._id || idx} className="col-12 col-md-6 col-lg-4 mb-4">
+                            <div className="card shadow border-0 h-100 rounded-4 overflow-hidden">
+                                {/* Header */}
+                                <div className="p-3 text-white" style={{ background: 'linear-gradient(135deg, #6c63ff, #3f51b5)' }}>
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h5 className="mb-0">{student.name}</h5>
+                                            <small className="fw-light">
+                                                <i className="bi bi-bookmark-fill me-1"></i>
+                                                {student.course} • {student.category}
+                                            </small>
+                                        </div>
+                                        <div className="rounded-circle bg-white d-flex align-items-center justify-content-center shadow" style={{ width: 70, height: 70 }}>
+                                            {student.photo ? (
+                                                <img
+                                                    src={student.photo}
+                                                    alt={student.name}
+                                                    className="rounded-circle"
+                                                    style={{ width: 66, height: 66, objectFit: 'cover' }}
+                                                />
+                                            ) : (
+                                                <span className="fw-bold text-dark" style={{ fontSize: 24 }}>
+                                                    {getInitials(student.name)}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className="d-flex flex-wrap pt-2">
+                                        <InfoRow icon="bi-phone" label={student.mobileNumber} white />
+                                        <InfoRow icon="bi-envelope" label={student.email} white />
+                                    </div>
+                                </div>
+
+                                {/* Body */}
+                                <div className="p-3 small">
+                                    <div className="row g-2">
+                                        <div className="col-12 col-sm-6">
+                                            <InfoRow icon="bi-person-badge" label={`Reg No: ${student.regNum}`} />
+                                            <InfoRow icon="bi-calendar3" label={`DOB: ${formatDate(student.dob)}${student.gender ? ` • ${student.gender}` : ''}`} />
+                                            <InfoRow icon="bi-clock-history" label={`Date of Reg: ${formatDate(student.createdAt)}`} />
+                                            <InfoRow icon="bi-person" label={`Father: ${student.fatherName}`} />
+                                        </div>
+                                        <div className="col-12 col-sm-6">
+                                            <InfoRow icon="bi-person-heart" label={`Mother: ${student.motherName}`} />
+                                            <InfoRow icon="bi-geo-alt" label={`Address: ${student.address}`} />
+                                            <InfoRow icon="bi-fingerprint" label={`Aadhaar: ${student.aadhaar}`} />
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div className="d-flex justify-content-between">
+                                        <InfoRow
+                                            icon="bi-check-circle"
+                                            label={<><span className="me-1">Admitted:</span><span className={`badge ${student.admitted ? 'bg-success' : 'bg-danger'}`}>{student.admitted ? 'Yes' : 'No'}</span></>}
+                                        />
+                                        <InfoRow
+                                            icon="bi-award"
+                                            label={<><span className="me-1">Certificate:</span><span className={`badge ${student.gnCertificate ? 'bg-success' : 'bg-warning'}`}>{student.gnCertificate ? 'Generated' : 'Pending'}</span></>}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}

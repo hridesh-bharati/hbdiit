@@ -23,7 +23,7 @@ const NetworkStatus = () => {
 
   if (!visible) return null;
   return (
-    <div className="position-fixed bottom-0 start-50 translate-middle-x mb-4 small" style={{zIndex:"99990"}}>
+    <div className="position-fixed bottom-0 start-50 translate-middle-x mb-4 small" style={{ zIndex: "99990" }}>
       <div className={`d-flex align-items-center px-3 py-2 rounded-pill text-white shadow-sm ${online ? 'bg-success' : 'bg-danger'}`}>
         <i className={`bi ${online ? 'bi-wifi' : 'bi-wifi-off'} me-2`} />
         <span className="text-nowrap">{online ? "You're back online" : "You're offline"}</span>

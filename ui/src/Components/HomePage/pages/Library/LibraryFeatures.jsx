@@ -57,9 +57,9 @@ const LibraryFeatures = () => {
   ];
 
   return (
-    <div className="container-fluid py-5">
+    <div className="container-fluid bg-white py-3">
       {/* Facilities Section */}
-      <div className="container py-5">
+      <div className="container py-1">
         <div className="mb-5 text-center" data-aos="fade-down">
           <h1 className="display-4 mb-4 text-primary fw-bolder">Our Facility</h1>
           <p className="mb-0">
@@ -77,7 +77,7 @@ const LibraryFeatures = () => {
               data-aos="zoom-in"
               data-aos-delay={index * 100}
             >
-              <div className="card h-100 shadow-sm">
+              <div className="card h-100 shadow-sm border">
                 <img
                   src={facility.img}
                   className="card-img-top"

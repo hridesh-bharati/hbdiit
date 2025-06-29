@@ -3,6 +3,8 @@ import CounterCard from "./CounterCard";
 import Footer from "../../../Footer/Footer";
 import { Link } from "react-router-dom";
 import Certificate from "./Certificate";
+import ButtomToTop from "../../ButtomToTop";
+import Team from "../../Team";
 
 // --- DATA ---
 const EST_YEAR = "2004";
@@ -11,7 +13,7 @@ We work on the philosophy of “SHINING INDIA”, which can be achieved by devel
 We are committed to impart quality computer education among the students.`;
 
 const BASIC_INFO = [
-  { icon: "images/icon/homeTwo.png", label: "Address", value: "Paragpur Road near Ramharsh inter collage" },
+  { icon: "bi bi-house-fill text-success mx-1", label: "Address", value: "Paragpur Road near Ramharsh inter collage" },
   { icon: "bi bi-map-fill text-success mx-1", label: "City", value: "Nichlaul" },
   { icon: "bi bi-globe-central-south-asia text-success mx-1", label: "District", value: "Maharajganj" },
   { icon: "bi bi-pin-map-fill text-danger mx-1", label: "State", value: "Uttar Pradesh" },
@@ -160,26 +162,30 @@ function About() {
 
   // --- JSX ---
   return (
-    <div className="mt-4 pt-3">
+    <div className="mt-35 pt-4">
       <style>{darkCss}</style>
       <div style={{ borderRadius: "0 !important" }}>
-        <div className="row m-0 p-0 border-0 shadow-sm" id="aboutBg">
+        <div className="row m-0 p-0 border-0 pt-2 shadow-sm" id="aboutBg">
           <div className="col-12 py-2">
             <div className="row">
               <div className="col-md-6 pb-2" data-aos="zoom-in" data-aos-duration="700">
-                <img src="images/vender/homepic.png" className="w-100 p-0 m-0 border border-0" alt="DIIT" />
+                <img src="images/vender/homepic.webp" className="w-100 p-0 m-0 border border-0" alt="DIIT" />
               </div>
               <div className="col-md-6 px-4" data-aos="zoom-in" data-aos-duration="700">
                 <h3 className="pt-1 fw-bolder" id="dText">Drishtee Institute Information Of Technology</h3>
                 <small style={{ color: "green" }}>A Complete I.T. Institute.</small>
-                <p className="CeoText" data-aos="zoom-in" data-aos-duration="900">
-                  <span className="text-danger">Drishtee Institute Of Information Technology </span> In
-                  Nichlaul Is One Of The Leading Businesses In The Computer I.T Training Institutes. Also
-                  Known For Computer Training Institutes, Computer Training Institutes For
-                  CCC, PGDCA, C Programming, C++, Python, HTML, CSS,
-                  Bootstrap, JavaScript, W3-CSS, SASS, JQuery, PHP, VB.NET, Hardware Networking,
-                  Software Development, Web Development and Much More.
-                </p>
+                <div data-aos="zoom-in" data-aos-duration="900">
+                  <div className="CeoText">
+                    <p className="text-muted small">
+                      <span className="fw-bold text-danger">Drishtee Institute Of Information Technology</span> in Nichlaul is one of the leading institutions in the field of Computer and Information Technology education. It consistently delivers high-quality training through experienced instructors and modern infrastructure.
+                      <br /><br />
+                      Popular programs include  CCC, PGDCA, DCA, ADCA, Tally, C Programming, C++, Python, HTML, CSS, Bootstrap, JavaScript,
+                      W3-CSS, SASS, JQuery, PHP, VB.NET, and more. Students gain hands-on experience in Hardware & Networking, Software Development, Web Development,
+                      Android App Development, and project-based learning.
+                    </p>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
@@ -329,17 +335,21 @@ function About() {
               </div>
             ))}
           </div>
-          <div className="text-center bg-light p-5 rounded shadow-sm" data-aos="fade-up">
-            <h4 className="mb-3 text-dark">Ready to Build Your Career?</h4>
-            <p className="mb-4 text-muted">Join our next batch and transform your skills into a profession.</p>
-            <Link to="/Contact-us" className="btn btn-primary btn-lg">
+          <div className="text-center bg-primary-subtle p-4 mt-5 rounded-4 shadow-sm" data-aos="fade-up">
+            <h5 className="fw-bold text-dark mb-2">Ready to Build Your Career?</h5>
+            <p className="text-muted small mb-3">Join our next batch and transform your skills into a profession.</p>
+            <Link to="/Contact-us" className="btn btn-primary btn-lg w-100 rounded-pill">
               <i className="bi bi-rocket-takeoff me-2"></i>Join Now
             </Link>
           </div>
         </div>
+        <div className="container-fluid">
+          <Team />
 
+        </div>
         <CounterCard text={EST_YEAR} />
         <Footer />
+        <ButtomToTop />
       </div>
     </div>
   );

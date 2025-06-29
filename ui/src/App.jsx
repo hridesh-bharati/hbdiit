@@ -1,12 +1,15 @@
 import { Route, Routes } from "react-router-dom";
 import Header from "./Components/Header/Header";
-import ButtomToTop from "./Components/HomePage/ButtomToTop";
-import NetworkStatus from "./Components/HomePage/LockWeb/NetworkStatus";
+import InstallPrompt from "./InstallPrompt";
 import HelmetManager from "./Components/HomePage/pages/HelmetManager";
+
+// 🔒 Protected Route Wrapper
+import ProtectedRoute from "./Components/Auth/ProtectedRoute";
+import NetworkStatus from "./Components/HomePage/LockWeb/NetworkStatus";
 import Lock from "./Components/HomePage/LockWeb/Lock";
 import UserSelectNone from "./Components/HomePage/LockWeb/UserSelectNone";
 
-// Import all pages in one place for easier mapping
+// 🌐 Public Pages
 import Home from "./Components/HomePage/Home";
 import About from "./Components/HomePage/pages/About/About";
 import OurCourses from "./Components/HomePage/pages/Course/OurCourses";
@@ -25,57 +28,83 @@ import Nielet from "./Components/HomePage/pages/Course/Nielet";
 import Banking from "./Components/HomePage/pages/Course/Banking";
 import Discription from "./Components/HomePage/pages/Course/Discription";
 import Library from "./Components/HomePage/pages/Library/Library";
+
+// 👩‍🎓 Student Pages
 import StudentHomePage from "./Components/StudentComponent/StudentHomePage";
 import Greating from "./Components/StudentComponent/Greating";
 import Default from "./Components/StudentComponent/Default";
 import Exam from "./Components/StudentComponent/Exam";
-import AdminPannel from "./Components/Admin/MainAdminPage/AdminPannel";
-import PageNotFound from "./Components/HomePage/pages/PageNotFound";
 
-const routes = [
-    { path: "/", element: <Home /> },
-    { path: "/About", element: <About /> },
-    { path: "/OurCourses", element: <OurCourses /> },
-    { path: "/Branch", element: <Branch /> },
-    { path: "/Gallery", element: <Gallery /> },
-    { path: "/AdmissionForm", element: <AdmissionForm /> },
-    { path: "/Download-Certificate", element: <Verification /> },
-    { path: "/Contact-us", element: <QueryForm /> },
-    { path: "/Offers", element: <Offers /> },
-    { path: "/CRepairing", element: <CRepairing /> },
-    { path: "/Certificate", element: <Certificate /> },
-    { path: "/ComputerLanguage", element: <ComputerLanguage /> },
-    { path: "/Designing", element: <Designing /> },
-    { path: "/WebDev", element: <WebDev /> },
-    { path: "/Nielet", element: <Nielet /> },
-    { path: "/Banking", element: <Banking /> },
-    { path: "/Discription", element: <Discription /> },
-    { path: "/Library", element: <Library /> },
-    { path: "/Student-Portal/*", element: <StudentHomePage /> },
-    { path: "/Greating", element: <Greating /> },
-    { path: "/Exam", element: <Exam /> },
-    { path: "/Default", element: <Default /> },
-    { path: "/Admin-Pannel/*", element: <AdminPannel /> },
-    { path: "*", element: <PageNotFound /> },
-];
+// 👨‍💼 Admin Pages
+import AdminPannel from "./Components/Admin/MainAdminPage/AdminPannel";
+
+// 🧭 Fallback
+import PageNotFound from "./Components/HomePage/pages/PageNotFound";
+import AutoLaunchModal from "./Components/Header/AutoLaunchModal";
 
 export default function App() {
     return (
         <div>
-            <Lock />
-            <UserSelectNone />
-            <NetworkStatus />
+            {/* Optional global components */}
+            {/* <NetworkStatus /> */}
+            {/* <Lock /> */}
+            {/* <UserSelectNone /> */}
+            <AutoLaunchModal />
             <Header />
+            <InstallPrompt />
+
             <Routes>
-                {routes.map(({ path, element }) => (
-                    <Route
-                        key={path}
-                        path={path}
-                        element={<HelmetManager>{element}</HelmetManager>}
-                    />
-                ))}
+                {/* 🌐 Public Routes with Helmet */}
+                <Route path="/" element={<HelmetManager><Home /></HelmetManager>} />
+                <Route path="/About" element={<HelmetManager><About /></HelmetManager>} />
+                <Route path="/OurCourses" element={<HelmetManager><OurCourses /></HelmetManager>} />
+                <Route path="/Branch" element={<HelmetManager><Branch /></HelmetManager>} />
+                <Route path="/Gallery" element={<HelmetManager><Gallery /></HelmetManager>} />
+                <Route path="/AdmissionForm" element={<HelmetManager><AdmissionForm /></HelmetManager>} />
+                <Route path="/Download-Certificate" element={<HelmetManager><Verification /></HelmetManager>} />
+                <Route path="/Contact-us" element={<HelmetManager><QueryForm /></HelmetManager>} />
+                <Route path="/Offers" element={<HelmetManager><Offers /></HelmetManager>} />
+                <Route path="/CRepairing" element={<HelmetManager><CRepairing /></HelmetManager>} />
+                <Route path="/Certificate" element={<HelmetManager><Certificate /></HelmetManager>} />
+                <Route path="/ComputerLanguage" element={<HelmetManager><ComputerLanguage /></HelmetManager>} />
+                <Route path="/Designing" element={<HelmetManager><Designing /></HelmetManager>} />
+                <Route path="/WebDev" element={<HelmetManager><WebDev /></HelmetManager>} />
+                <Route path="/Nielet" element={<HelmetManager><Nielet /></HelmetManager>} />
+                <Route path="/Banking" element={<HelmetManager><Banking /></HelmetManager>} />
+                <Route path="/Discription" element={<HelmetManager><Discription /></HelmetManager>} />
+                <Route path="/Library" element={<HelmetManager><Library /></HelmetManager>} />
+                <Route path="/Greating" element={<HelmetManager><Greating /></HelmetManager>} />
+                <Route path="/Exam" element={<HelmetManager><Exam /></HelmetManager>} />
+                <Route path="/Default" element={<HelmetManager><Default /></HelmetManager>} />
+
+                {/* 🔐 Protected Admin Route */}
+                <Route
+                    path="/Admin-Pannel/*"
+                    element={
+                        <ProtectedRoute role="admin" fallback="/">
+                            <HelmetManager>
+                                <AdminPannel />
+                            </HelmetManager>
+                        </ProtectedRoute>
+                    }
+                />
+
+                {/* 🔐 Protected Student Route */}
+                <Route
+                    path="/Student-Portal/*"
+                    element={
+                        <ProtectedRoute role="student" fallback="/">
+                            <HelmetManager>
+                                <StudentHomePage />
+                            </HelmetManager>
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* ❌ 404 Page */}
+                <Route path="*" element={<HelmetManager><PageNotFound /></HelmetManager>} />
             </Routes>
-            <ButtomToTop />
         </div>
     );
 }

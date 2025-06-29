@@ -1,71 +1,86 @@
 import React, { useState, useEffect } from 'react';
 import { getAllNotice, deleteNotice, updateNotice } from '../../../../../api/adminApi/api';
 import { toast } from 'react-toastify';
-export default function AllNotice() {
-    const [showInput, setShowInput] = useState(false);
-    const [id, setId] = useState('');
-    const [notice, setNotice] = useState([]);
-    const [title, setTitle] = useState('');
-    const [nMessage, setNewMessage] = useState('');
-    const fetchNotice = async () => {
-        const rspns = await getAllNotice();
-        if (rspns.ackbool == 1) {
-            setNotice(rspns.message);
-        }
 
-    }
-    const deleteNoticeHandler = async (_id) => {
-        const rspns = await deleteNotice(_id);
-        if (rspns.ackbool == 1) {
-            toast.success(rspns.message);
-            fetchNotice();
-        }
-    }
-    const updateNoticeHandler = async (_id) => {
-        const rspns = await updateNotice({ _id: _id, title: title, nMessage: nMessage });
-        if (rspns.ackbool == 1) {
-            toast.success(rspns.message)
-            setShowInput(false)
-            fetchNotice();
-        }
-    }
-    useEffect(() => {
-        fetchNotice();
-    }, [])
-    return (
-        <div className='container m-auto '>
-            <table className='table table-sm table-borderd border-primary mx-0 px-0'>
-                <tbody>
-                    <tr className="table-dark">
-                        <th>Title</th>
-                        <th colSpan={2}>Description</th>
-                        <th>Action</th>
-                    </tr>
-                    {
-                        notice[0] && notice.map((notice, index) => {
-                            return (
-                                <tr key={index}>
-                                    <td className='fw-bold text-primary'>{notice.title}</td>
-                                    <td>{notice.nMessage}</td>
-                                    <td><button className="btn btn-primary btn-sm" onClick={() => {
-                                        setTitle(notice.title);
-                                        setNewMessage(notice.nMessage);
-                                        setId(notice._id);
-                                        setShowInput(true)
-                                    }}><i className="bi bi-pencil"></i>&nbsp; Edit</button></td>
-                                    <td><button className="btn btn-danger small btn btn-sm" onClick={() => { deleteNoticeHandler(notice._id) }}>
-                                        <i className="bi bi-trash-fill"></i>&nbsp; Delete</button></td>
-                                </tr>
-                            )
-                        })
-                    }
-                </tbody>
-            </table>
-            {showInput && <div className='py-2'>
-                <input type="text" className='form-control my-2' value={title} onChange={(e) => setTitle(e.target.value)} placeholder='New Title' />
-                <textarea className='form-control my-2' value={nMessage} onChange={(e) => setNewMessage(e.target.value)} placeholder='New Description' />
-                <button className="btn btn-primary" onClick={() => { updateNoticeHandler(id) }}>Update</button>
-            </div>}
-        </ div>
-    );
+export default function AllNotice() {
+  const [notices, setNotices] = useState([]);
+  const [edit, setEdit] = useState({ show: false, id: '', title: '', message: '' });
+
+  useEffect(() => {
+    getAllNotice().then(r => r.ackbool && setNotices(r.message));
+  }, []);
+
+  const refreshNotices = () => getAllNotice().then(r => r.ackbool && setNotices(r.message));
+
+  const handleDelete = async (_id) => {
+    const r = await deleteNotice(_id);
+    if (r.ackbool) toast.success(r.message), refreshNotices();
+  };
+
+const handleUpdate = async () => {
+  const r = await updateNotice(edit.id, edit.title, edit.message);
+  if (r.ackbool) {
+    toast.success(r.message);
+    setEdit({ show: false, id: '', title: '', message: '' });
+    refreshNotices();
+  }
+};
+
+
+  return (
+    <div className="container py-3 mt-3">
+      <h5 className="text-primary fw-bold mb-3 text-center">📢 All Notices</h5>
+      <div className="row g-3">
+        {notices.length ? notices.map(n => (
+          <div className="col-12" key={n._id}>
+            <div className="card shadow-sm rounded-3 border-0">
+              <div className="card-body">
+                <h6 className="fw-bold text-dark">
+                  <i className="bi bi-megaphone-fill text-warning me-2"></i>{n.title}
+                </h6>
+                <p className="text-muted small">{n.nMessage}</p>
+                <div className="text-end">
+                  <button className="btn btn-sm btn-outline-primary me-2"
+                    onClick={() => setEdit({ show: true, id: n._id, title: n.title, message: n.nMessage })}>
+                    <i className="bi bi-pencil"></i>
+                  </button>
+                  <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(n._id)}>
+                    <i className="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )) : (
+          <div className="text-center text-muted py-5">
+            <i className="bi bi-inbox fs-1 d-block mb-2"></i>
+            No notices found.
+          </div>
+        )}
+      </div>
+
+      {edit.show && (
+        <div className=" bg-light shadow mt-3 p-3">
+          <div className="fw-bold text-primary mb-2">✏️ Edit Notice</div>
+          <input
+            className="form-control mb-2"
+            value={edit.title}
+            onChange={e => setEdit({ ...edit, title: e.target.value })}
+            placeholder="Notice Title"
+          />
+          <textarea
+            className="form-control mb-2"
+            rows={3}
+            value={edit.message}
+            onChange={e => setEdit({ ...edit, message: e.target.value })}
+            placeholder="Notice Description"
+          />
+          <div className="text-end">
+            <button className="btn btn-sm btn-primary me-2" onClick={handleUpdate}>Save</button>
+            <button className="btn btn-sm btn-secondary" onClick={() => setEdit({ show: false, id: '', title: '', message: '' })}>Cancel</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }

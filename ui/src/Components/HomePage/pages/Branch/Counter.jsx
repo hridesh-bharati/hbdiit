@@ -19,7 +19,7 @@ const statsData = [
   { value: 10, suffix: "+", label: "Experienced Faculties", color: "text-primary", delay: 500 },
   { value: 4.9, suffix: "★", label: "Student Rating", color: "text-secondary", delay: 600, isFloat: true }
 ];
- 
+
 function useCountUp(target, isFloat, inView, duration = 1200) {
   const [count, setCount] = React.useState(0);
 

@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 import { getAllExams } from "../../api/adminApi/api";
 import { useEffect, useState } from "react";
 
-export default function EDuration({ onTimeUp }) {
+export default function EDuration({ onTimeUp, submitted, examId }) {
     const [exams, setExams] = useState([]);
     const [loading, setLoading] = useState(true);
     const [duration, setDuration] = useState(0);
@@ -11,9 +11,13 @@ export default function EDuration({ onTimeUp }) {
         try {
             const rspns = await getAllExams(false, false);
             setExams(rspns.message);
-            const totalDuration = rspns.message[0]?.duration * 3600 || 0; // Assuming duration is in hours
+            const totalDuration = rspns.message[0]?.duration * 3600 || 0;
             setDuration(totalDuration);
-            toast.success("Exams duration fetched successfully!");
+
+            // ✅ Suppress toast if already submitted
+            if (!submitted && !localStorage.getItem(`submitted-${examId}`)) {
+                toast.success("Exams duration fetched successfully!");
+            }
         } catch (error) {
             toast.error("Failed to fetch exams duration.");
         } finally {
@@ -31,8 +35,8 @@ export default function EDuration({ onTimeUp }) {
                 if (prevDuration > 0) {
                     return prevDuration - 1;
                 } else {
-                    onTimeUp(); // Call the function to auto-submit when time is up
-                    return 0; // Stop the countdown at 0
+                    onTimeUp();
+                    return 0;
                 }
             });
         }, 1000);

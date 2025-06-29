@@ -1,21 +1,34 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+
 const Greating = () => {
-    return (
-        <div>
-            <section className="row bg-white">
-                <div className="col-12 p-4 text-center">
-                    <span className="fw-700 mb-2 w-100 greatLine">Congratulations! <br /> <br /> 🎉🎉🎉🎉</span>
-                    <h2 className="fw-700 my-2">Your exam time has been completed!</h2>
-                    <p className="small fw-400 mb-sm-5">Start working with DRISHTEE that can provide everything you need for Education.</p>
-                    <div className="mx-auto btn btn-primary rounded-pill px-sm-5 px-4 py-sm-3 py-2 fs-18 fw-600">
-                        <Link to="/Default" title="Home" className='nav-link fs-4'>
-                            <i className="fa fa-home"></i> Back to Home
-                        </Link>
-                    </div>
-                </div>
-            </section>
+  return (
+    <div className="container my-5">
+      <section className="row justify-content-center align-items-center text-center bg-light shadow-lg rounded-4 p-4 p-md-5">
+        <div className="col-12">
+          <h1 className="text-success fw-bold display-5 mb-3">
+            🎉 Congratulations!
+          </h1>
+
+          <h2 className="fw-semibold text-dark mb-4">
+            Your exam has been submitted successfully!
+          </h2>
+
+          <p className="text-secondary mb-4 fs-6">
+            Thank you for attending the exam with <strong>Drishtee Institute</strong>. <br />
+            We wish you all the best for your results!
+          </p>
+
+          <Link
+            to="/Default"
+            className="btn btn-primary btn-lg rounded-pill px-5 shadow-sm"
+          >
+            <i className="fa fa-home me-2"></i> Back to Home
+          </Link>
         </div>
-    );
+      </section>
+    </div>
+  );
 };
+
 export default Greating;

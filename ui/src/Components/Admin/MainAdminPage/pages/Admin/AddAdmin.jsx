@@ -1,69 +1,235 @@
 import { useState } from "react";
 import { addAdmin } from "../../../../../api/adminApi/api";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./AddAdmin.css";
+const fields = [
+  { name: "name", type: "text", placeholder: "Full Name" },
+  { name: "nDob", type: "date", placeholder: "Date of Birth" },
+  { name: "aadhaar", type: "text", placeholder: "Aadhaar Number", maxLength: 12 },
+  { name: "mobile", type: "number", placeholder: "Mobile Number" },
+  { name: "email", type: "email", placeholder: "Email" },
+  { name: "address", type: "text", placeholder: "Address" },
+  { name: "profession", type: "text", placeholder: "Profession" },
+  { name: "about", type: "textarea", placeholder: "About" },
+  { name: "password", type: "password", placeholder: "Password" },
+  { name: "rPassword", type: "password", placeholder: "Repeat Password" },
+];
+const fieldsPerStep = 2;
+
 export default function AddAdmin() {
-  const [formData, setFormData] = useState({ image: "", name: "", nDob: new Date(), mobile: "", address: "", aadhaar: "", profession: "", email: "", password: "", rPassword: "", about: "" });
-  const [uploadStatus, setUploadStatus] = useState(false);
+  const [formData, setFormData] = useState(
+    fields.reduce((acc, f) => ({ ...acc, [f.name]: "" }), { image: null })
+  );
   const [photo, setPhoto] = useState("");
+  const [uploadStatus, setUploadStatus] = useState(false);
+  const [step, setStep] = useState(0);
+
+  const totalSteps = Math.ceil(fields.length / fieldsPerStep);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setFormData(prev => ({ ...prev, [name]: files ? files[0] : value }));
-    if (name === "image") setUploadStatus(false);
+    if (name === "image" && files?.[0]) {
+      setFormData((prev) => ({ ...prev, image: files[0] }));
+      setPhoto(URL.createObjectURL(files[0]));
+      setUploadStatus(false);
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
-  const uploadPhoto = () => {
-    if (formData.image) {
-      const data = new FormData();
-      data.append("file", formData.image);
-      data.append("upload_preset", "hridesh99!");
-      data.append("cloud_name", "draowpiml");
-      fetch('https://api.cloudinary.com/v1_1/draowpiml/image/upload', { method: 'post', body: data })
-        .then(res => res.json())
-        .then(data => { if (!data.error) { setPhoto(data.url); setUploadStatus(true); } })
-        .catch(() => { toast.error('Failed to upload image'); });
+  const uploadPhoto = async () => {
+    if (!formData.image) return toast.error("Select an image first");
+    const data = new FormData();
+    data.append("file", formData.image);
+    data.append("upload_preset", "hridesh99!");
+    data.append("cloud_name", "draowpiml");
+
+    try {
+      const res = await fetch("https://api.cloudinary.com/v1_1/draowpiml/image/upload", {
+        method: "POST",
+        body: data,
+      });
+      const result = await res.json();
+      if (result?.url) {
+        setPhoto(result.url);
+        setUploadStatus(true);
+        toast.success("Image uploaded!");
+      } else {
+        throw new Error("Upload failed");
+      }
+    } catch {
+      toast.error("Image upload failed.");
     }
   };
 
   const RegisterAccount = async () => {
-    const { name, nDob, mobile, address, aadhaar, profession, email, password, about } = formData;
-    const response = await addAdmin({ name, email, profilePic: photo, dob: nDob, mobileNumber: mobile, address, aadhaarNumber: aadhaar, profession, about, password });
-    if (response.ackbool === 1) toast.success(response.message);
+    if (!uploadStatus || !photo) return toast.error("Please upload a profile picture.");
+    if (formData.password !== formData.rPassword) return toast.error("Passwords do not match.");
+
+    const {
+      name,
+      nDob,
+      mobile,
+      address,
+      aadhaar,
+      profession,
+      email,
+      password,
+      about,
+    } = formData;
+
+    try {
+      const res = await addAdmin({
+        name,
+        email,
+        profilePic: photo,
+        dob: nDob,
+        mobileNumber: mobile,
+        address,
+        aadhaarNumber: aadhaar,
+        profession,
+        about,
+        password,
+      });
+
+      if (res?.ackbool === 1) {
+        toast.success(res.message);
+      } else {
+        toast.error(res?.message || "Failed to create account");
+      }
+    } catch {
+      toast.error("Failed to create account");
+    }
   };
 
+  const startIndex = step * fieldsPerStep;
+  const endIndex = startIndex + fieldsPerStep;
+  const fieldsToShow = fields.slice(startIndex, endIndex);
+
   return (
-    <div className="rounded" id="NewAccount">
-      <div className="row d-flex justify-content-center">
-        <div className="col-12 col-md-8 bg-white py-3 my-3 myshadow">
-          <div className="p-2">
-            <div className="text-center"><h1 className="h2 fw-bold text-gray-900 mb-4 text-primary">Create Account!</h1></div>
-            <div className="form-group row g-3">
-              <div className="col-md-6">
-                <div className="input-group">
-                  <i className="bi bi-image input-group-text"></i>
-                  <input className="form-control form-control-sm py-2" id="formFileSm" type="file" name="image" onChange={handleChange} />
-                  {uploadStatus ? <span>Uploaded</span> : <button className="btn btn-primary btn-small" onClick={uploadPhoto}>Upload</button>}
-                </div>
+    <div className="signup-bg">
+      <div className="signup-card">
+        <h2 className="signup-title">Create Account</h2>
+
+        <div className="signup-avatar-wrapper">
+          <label htmlFor="imgUpload" className="signup-avatar-label">
+            {photo ? (
+              <img src={photo} alt="Profile" className="signup-avatar-image" />
+            ) : (
+              <div className="signup-avatar-placeholder">
+                <i className="fa fa-camera"></i>
               </div>
-              <div className="col-md-6"><input type="text" className="form-control" name="name" onChange={handleChange} value={formData.name} placeholder="Enter Name" /></div>
-              <div className="col-md-6"><small>D.O.B.</small><input type="date" className="form-control" name="nDob" onChange={handleChange} value={formData.nDob} /></div>
-              <div className="col-md-6"><small>Mobile Number</small><input type="number" className="form-control" name="mobile" onChange={handleChange} value={formData.mobile} placeholder="Mobile Number" /></div>
-              <div className="col-md-6"><input type="text" className="form-control" name="address" onChange={handleChange} value={formData.address} placeholder="Address" /></div>
-              <div className="col-md-6"><input type="text" maxLength={12} className="form-control" name="aadhaar" onChange={handleChange} value={formData.aadhaar} placeholder="12 digit Aadhaar Number" /></div>
-              <div className="col-md-6"><input type="text" className="form-control" name="profession" onChange={handleChange} value={formData.profession} placeholder="Profession" /></div>
-              <div className="col-md-6"><input type="email" className="form-control" name="email" onChange={handleChange} value={formData.email} placeholder="Email" /></div>
-              <div className="form-group row g-4">
-                <div className="col-md-6"><input type="password" className="form-control" name="password" onChange={handleChange} value={formData.password} placeholder="Password....*" /></div>
-                <div className="col-md-6"><input type="password" className="form-control" name="rPassword" onChange={handleChange} value={formData.rPassword} placeholder="Repeat Password....*" /></div>
-                <div className="w-10"><textarea rows={4} className="form-control" name="about" onChange={handleChange} value={formData.about} placeholder="Write About"></textarea></div>
-              </div>
-              <button type="button" className="btn btn-primary w-100 my-2 py-2 rounded-pill" onClick={RegisterAccount}>Register Account</button>
+            )}
+            <input
+              id="imgUpload"
+              name="image"
+              type="file"
+              accept="image/*"
+              onChange={handleChange}
+              hidden
+            />
+            <div className="signup-avatar-overlay">
+              Tap to {photo ? "change" : "add"}
             </div>
-            <hr />
-            <div className="text-center"><Link className="small" to="#">Forgot Password?</Link></div>
-            <div className="text-center mb-3"><Link className="small" to="#">Already have an account? Login!</Link></div>
-          </div>
+          </label>
+          <button
+            onClick={uploadPhoto}
+            disabled={uploadStatus}
+            className={`mx-2 signup-upload-btn${uploadStatus ? " uploaded" : ""}`}
+          >
+            {uploadStatus ? "Uploaded ✓" : "Upload Photo"}
+          </button>
         </div>
+
+        {/* Progress indicator */}
+        <p style={{ textAlign: "center", marginBottom: "1rem", color: "#1976d2", fontWeight: "600" }}>
+          Step {step + 1} of {totalSteps}
+        </p>
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            RegisterAccount();
+          }}
+        >
+          <div
+            className="signup-fields-grid"
+            style={{ gridTemplateColumns: "1fr", gap: "1rem" }}
+          >
+            {fieldsToShow.map(({ name, type, ...rest }) => (
+              <div key={name} style={{ display: "flex", alignItems: "center" }}>
+                {type === "textarea" ? (
+                  <textarea
+                    name={name}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    required
+                    autoComplete="off"
+                    className="signup-textarea"
+                    placeholder={rest.placeholder}
+                  />
+                ) : (
+                  <input
+                    name={name}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    required
+                    autoComplete="off"
+                    className="signup-input"
+                    type={type}
+                    {...rest}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: step === 0 ? "flex-end" : "space-between",
+              marginTop: 20,
+              gap: "10px",
+            }}
+          >
+            {step > 0 && (
+              <button
+                type="button"
+                onClick={() => setStep((prev) => prev - 1)}
+                className="signup-submit-btn"
+                style={{ width: "48%", backgroundColor: "#bbb" }}
+              >
+                Previous
+              </button>
+            )}
+
+            {step < totalSteps - 1 && (
+              <button
+                type="button"
+                onClick={() => setStep((prev) => prev + 1)}
+                className="signup-submit-btn"
+                style={{ width: step > 0 ? "48%" : "100%" }}
+              >
+                Next
+              </button>
+            )}
+
+            {step === totalSteps - 1 && (
+              <button type="submit" className="signup-submit-btn" style={{ width: "48%" }}>
+                Register
+              </button>
+            )}
+          </div>
+
+          <div className="signup-footer-links">
+            <Link to="#" className="signup-link">
+              Already have an account? Login!
+            </Link>
+          </div>
+        </form>
+
       </div>
     </div>
   );

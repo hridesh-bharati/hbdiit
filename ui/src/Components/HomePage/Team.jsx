@@ -1,54 +1,86 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
-// Add 'team' as id to main section for DarkMode targeting
-const ExpertTeam = () => {
+const Team = () => {
   const tpath = "images/team/team";
+
+  const [hrideshData, setHrideshData] = useState({
+    name: "Hridesh Rao",
+    bio: "Frontend & MERN Stack Developer",
+    image: "",
+    repos: 0,
+  });
+
+  useEffect(() => {
+    fetch("https://api.github.com/users/hridesh-bharati")
+      .then((res) => res.json())
+      .then((data) => {
+        setHrideshData({
+          name: data.name || "Hridesh Rao",
+          bio: data.bio || "Frontend & MERN Stack Developer",
+          image: data.avatar_url || "",
+          repos: data.public_repos || 0,
+        });
+      })
+      .catch((err) => console.error("GitHub fetch error:", err));
+  }, []);
+
   const expertData = [
     {
       name: "Mr. Ajay Tiwari",
-      role: "Owner of DIIT",
-      bio: "Founder of DIIT, with 20+ years of experience in education and IT training.",
+      role: "Director",
+      bio: "Founder of DIIT with 20+ years of experience in IT and education. Leading with vision and passion.",
       image: `${tpath}1.png`,
+      badges: ["🎓 Education Expert", "🥇 Top Mentor"],
       socialLinks: {
         linkedin: "https://linkedin.com/in/ajaytiwari",
-        twitter: "https://twitter.com/ajaytiwari",
         github: "https://github.com/ajaytiwari",
         phone: "tel:+919876543210",
       },
     },
     {
       name: "Santosh Chauhan",
-      role: "Manager",
-      bio: "Oversees operations and management at DIIT, ensuring a smooth learning experience.",
+      role: "Center Head",
+      bio: "Handles administrative operations, student support, and strategic decisions with utmost dedication.",
       image: `${tpath}2.png`,
+      badges: ["🎯 Management Pro"],
       socialLinks: {
         linkedin: "https://linkedin.com/in/santoshchauhan",
-        twitter: "https://twitter.com/santoshchauhan",
-        github: "https://github.com/ajaytiwari",
+        github: "https://github.com/santoshchauhan",
         phone: "tel:+919812345678",
       },
     },
     {
       name: "Manjesh Vishwakarma",
-      role: "Teacher",
-      bio: "Expert in JavaScript and full-stack development, passionate about teaching.",
+      role: "Senior Accounts Executive",
+      bio: "Specialist in digital finance, business accounting, and official documentation with a strong focus on accuracy and compliance.",
       image: `${tpath}3.png`,
+      badges: ["📈 Financial Compliance"],
       socialLinks: {
-        linkedin: "https://linkedin.com/in/ajaytiwari",
-        twitter: "https://twitter.com/ajaytiwari",
-        github: "https://github.com/ajaytiwari",
-        phone: "tel:+919876543210",
+        linkedin: "https://linkedin.com/in/manjeshvishwakarma",
+        github: "https://github.com/manjeshvishwakarma",
+        phone: "tel:+918123456789",
       },
     },
     {
-      name: "Hridesh Bharati",
-      role: "Teacher (Web Developer)",
-      bio: "Frontend & MERN Stack developer with a passion for building interactive web apps.",
-      image: `${tpath}4.jpg`,
+      name: hrideshData.name,
+      role: "Technical Instructor & Lab Coordinator",
+      bio: hrideshData.bio,
+      image: hrideshData.image,
+      repoCount: hrideshData.repos,
+      badges: [
+        "🚀 MERN Specialist",
+        ...(hrideshData.repos >= 100
+          ? ["🏆 GitHub Legend"]
+          : hrideshData.repos >= 50
+            ? ["🌟 GitHub Master"]
+            : hrideshData.repos >= 20
+              ? ["⭐ Star Developer"]
+              : []),
+      ],
       socialLinks: {
-        linkedin: "https://linkedin.com/in/ajaytiwari",
-        twitter: "https://twitter.com/ajaytiwari",
+        linkedin: "https://www.linkedin.com/in/hridesh-bharati-95867425b/",
         github: "https://github.com/hridesh-bharati",
         phone: "tel:+917267995307",
       },
@@ -62,246 +94,184 @@ const ExpertTeam = () => {
     github: "bi-github",
   };
 
-  const socialColors = {
-    phone: "#0d6efd",
-    linkedin: "#0077b5",
-    twitter: "#1da1f2",
-    github: "#333",
-  };
-
   return (
     <>
       <style>{`
-        .alu-bg {
-          background: linear-gradient(135deg, #f5f6fa 0%, #e3e6ec 100%);
+        #team.dark-mode {
+          background: linear-gradient(135deg, #181c22 0%, #23293a 100%) !important;
         }
-        .alu-title {
-          font-size: 1.8rem;
-          font-weight: 800;
-          letter-spacing: 2px;
-          color:rgb(39, 39, 39);
-          margin-bottom: 1.5rem;
+        .dark-mode .expert-card {
+          background: #23293a;
+          color: #fff;
+          box-shadow: 0 8px 30px rgba(255, 255, 255, 0.06);
         }
-        .alu-highlight {
-          color: #6741d9;
-          background: linear-gradient(90deg, #ffe66d 0%, #b1b2ff 100%);
-          padding: 0.1em 0.5em;
-          border-radius: 0.5em;
-          margin-left: 0.4em;
+        .dark-mode .expert-name { color: #fff; }
+        .dark-mode .expert-role { color: #b1b2ff; }
+        .dark-mode .expert-bio { color: #ccc; }
+        .dark-mode .badge-tag {
+          background: linear-gradient(135deg, #2a2a2a, #333);
+          color: #eee;
         }
-        .alu-card {
-          background: #fff;
-          border-radius: 2.2rem;
-          box-shadow: 0 12px 48px 0 rgba(44, 62, 80, 0.14);
-          overflow: hidden;
-          transition: transform 0.25s, box-shadow 0.25s;
-          border: none;
+        .dark-mode .expert-repos .badge {
+          background-color: #1e1e1e !important;
+        }
+        .dark-mode .expert-social a {
+          color: #bdbdbd;
+        }
+
+        .expert-card {
           position: relative;
-          padding: 3rem 2rem 2rem 2rem;
-          min-height: 500px;
+          background: linear-gradient(135deg, #ffffffee, #f9f9f9);
+          border-radius: 1rem;
+          backdrop-filter: blur(14px);
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+          transition: all 0.4s ease;
+          padding: 12px 1.5rem;
+          text-align: center;
+          min-height: 350px;
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;
+          overflow: visible;
+          border: 1px solid rgba(0, 0, 0, 0.08);
         }
-        .alu-card::before {
+        .expert-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+        }
+        .expert-card::before {
           content: "";
           position: absolute;
           top: 0;
-          left: 50%;
-          transform: translateX(-50%);
+          left: 0;
+          height: 10px;
           width: 100%;
-          height: 9px;
-          background: linear-gradient(90deg, #30cfd0 0%, #330867 100%);
+          background: linear-gradient(90deg, #0d6efd, #6f42c1);
+          border-top-left-radius: 1rem;
+          border-top-right-radius: 1rem;
         }
-        .alu-card:hover {
-          transform: translateY(-8px) scale(1.045);
-          box-shadow: 0 16px 48px 0 rgba(44, 62, 80, 0.18);
-          z-index: 2;
-        }
-        .alu-avatar-wrapper {
-          width: 128px;
-          height: 128px;
+        .expert-avatar-wrapper {
+          position: absolute;
+          top: -60px;
+          width: 118px;
+          height: 118px;
           border-radius: 50%;
-          overflow: hidden;
-          background: #e3e6ec;
-          margin: -84px auto 0 auto;
-          border: 5px solid #fff;
-          box-shadow: 0 4px 16px rgba(44,62,80,0.09);
+          padding: 4px;
+           background: linear-gradient(90deg, #30cfd0 0%, #330867 100%);
           display: flex;
           align-items: center;
           justify-content: center;
         }
-        .alu-avatar {
+        .expert-avatar {
           width: 100%;
-          height: auto;
-          object-fit: contain;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 50%;
+          background: #f4f4f4;
+          border: 4px solid #fff;
         }
-        .alu-name {
-          font-size: 1.45rem;
+        .expert-name {
+          font-size: 1.3rem;
           font-weight: 700;
-          color: #2e3168;
-          margin-bottom: 0.25rem;
-          margin-top: 1.4rem;
+          margin-top: 65px;
+          color: #222;
         }
-        .alu-role {
-          color: #6741d9;
-          font-size: 1.13rem;
+        .expert-role {
+          color: #6f42c1;
           font-weight: 600;
-          margin-bottom: 0.75rem;
+          margin-bottom: 0.3rem;
         }
-        .alu-bio {
-          color: #6c757d;
-          font-size: 1.04rem;
-          min-height: 66px;
-          margin-bottom: 1.3rem;
+        .expert-bio {
+          font-size: 0.9rem;
+          color: #444;
+          margin: 0.5rem 0 0.8rem;
+          padding: 0 0.6rem;
+          line-height: 1.4;
         }
-        .alu-social {
-          margin-top: 0.7rem;
-          display: flex;
-          justify-content: center;
-          gap: 1.6rem;
+        .badge-tag {
+          background: linear-gradient(135deg, #f0f0f0, #ffffff);
+          color: #333;
+          font-size: 0.75rem;
+          font-weight: 500;
+          padding: 0.35em 0.7em;
+          border-radius: 999px;
+          margin: 3px;
+          display: inline-block;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-        .alu-social-link {
-          font-size: 1.5rem;
-          color: #adb5bd;
-          transition: color 0.22s;
+        .expert-repos .badge {
+          background-color: #343a40 !important;
+          font-size: 0.75rem;
         }
-        .alu-social-link:hover {
-          color: #ff4081 !important;
-        }
-        @media (max-width: 991px) {
-          .alu-card { min-height: 490px; }
-        }
-        @media (max-width: 767px) {
-          .alu-title { font-size: 1.3rem; }
-          .alu-card {
-            padding: 2rem 1rem 1.5rem 1rem;
-            min-height: 420px;
-          }
-          .alu-avatar-wrapper {
-            width: 100px;
-            height: 100px;
-            margin-top: -62px;
-          }
-        }
-        /* Dark mode styles */
-        .dark-mode .alu-bg,
-        #team.dark-mode,
-        .dark-mode #team {
-          background: linear-gradient(135deg, #181c22 0%, #23293a 100%) !important;
-        }
-        .dark-mode .alu-title,
-        #team.dark-mode .alu-title,
-        .dark-mode #team .alu-title {
-          color: #fff;
-        }
-        .dark-mode .alu-highlight,
-        #team.dark-mode .alu-highlight,
-        .dark-mode #team .alu-highlight {
-          color: #ffd700;
-          background: linear-gradient(90deg, #3a3d4d 0%, #181c22 100%);
-        }
-        .dark-mode .alu-card,
-        #team.dark-mode .alu-card,
-        .dark-mode #team .alu-card {
-          background: #23293a;
-          box-shadow: 0 12px 48px 0 rgba(13, 17, 23, 0.24);
-        }
-        .dark-mode .alu-card::before,
-        #team.dark-mode .alu-card::before,
-        .dark-mode #team .alu-card::before {
-          background: linear-gradient(90deg, #2a5298 0%, #1e3c72 100%);
-        }
-        .dark-mode .alu-avatar-wrapper,
-        #team.dark-mode .alu-avatar-wrapper,
-        .dark-mode #team .alu-avatar-wrapper {
-          background: #31394b;
-          border: 5px solid #23293a;
-        }
-        .dark-mode .alu-name,
-        #team.dark-mode .alu-name,
-        .dark-mode #team .alu-name {
-          color: #fff;
-        }
-        .dark-mode .alu-role,
-        #team.dark-mode .alu-role,
-        .dark-mode #team .alu-role {
-          color: #b1b2ff;
-        }
-        .dark-mode .alu-bio,
-        #team.dark-mode .alu-bio,
-        .dark-mode #team .alu-bio {
-          color: #bdbdbd;
-        }
-        .dark-mode .alu-social-link,
-        #team.dark-mode .alu-social-link,
-        .dark-mode #team .alu-social-link {
-          color: #adb5bd;
-        }
-        .dark-mode .alu-social-link:hover,
-        #team.dark-mode .alu-social-link:hover,
-        .dark-mode #team .alu-social-link:hover {
-          color: #ffd700 !important;
-        }
-        /* Optional: container dark bg */
-        .dark-mode .team-container,
-        #team.dark-mode .team-container,
-        .dark-mode #team .team-container {
-          background: #23293a;
-          border-radius: 1rem;
-          transition: background 0.3s;
+        .expert-social a[title="Linkedin"] { color: #0077b5; }
+        .expert-social a[title="Twitter"] { color: #1da1f2; }
+        .expert-social a[title="Github"] { color: #24292e; }
+        .expert-social a[title="Phone"] { color: #0d6efd; }
+        .text-gradient {
+          background: linear-gradient(45deg, #0d6efd, #6f42c1);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
         }
       `}</style>
-      {/* Add id="team" for DarkMode util and dark-mode class support */}
-      <section className="alu-bg py-1 " id="team">
-        <div className="container-fluid my-5 team-container">
-          <div className="text-center py-4 mb-3">
-            <span className="alu-title">
-              Meet Our <span className="alu-highlight">Expert Team</span>
-            </span>
-            <p className="text-primary mt-4 mb-0" style={{ maxWidth: 540, margin: "0 auto" }}>
-              Dedicated instructors with years of experience in teaching and technology, committed to your growth.
+
+      <section className="py-4" id="team">
+        <div className="container-fluid">
+          <div className="text-center mb-5">
+            <h2 className="fw-bold">
+              Meet Our <span className="text-gradient">Expert Team</span>
+            </h2>
+            <p className="text-muted" style={{ maxWidth: 600, margin: "auto" }}>
+              Passionate educators and professionals shaping the future of tech and business education.
             </p>
           </div>
-          <div className="row gy-5 gx-4 justify-content-center">
-            {expertData.map(({ name, role, bio, image, socialLinks }) => (
-              <div className="col-12 col-sm-6 col-lg-3 d-flex" key={name}>
-                <div className="alu-card w-100 text-center shadow-lg">
-                  <div className="card-body d-flex flex-column align-items-center justify-content-center h-100 w-100 p-0 mt-1">
-                    <div className="alu-avatar-wrapper">
-                      <img
-                        src={image}
-                        alt={`Portrait of ${name}`}
-                        className="alu-avatar"
-                        loading="lazy"
-                      />
+
+          <div className="row g-4">
+            {expertData.map(({ name, role, bio, image, socialLinks, repoCount, badges }) => (
+              <div className="col-12 col-sm-6 col-lg-3 my-5" key={name}>
+                <div className="expert-card">
+                  <div className="expert-avatar-wrapper">
+                    <img src={image} alt={name} className="expert-avatar" loading="lazy" />
+                  </div>
+
+                  <div className="expert-name">{name}</div>
+                  <div className="expert-role">{role}</div>
+
+                  {badges?.length > 0 && (
+                    <div className="d-flex flex-wrap justify-content-center mb-2">
+                      {badges.map((badge, idx) => (
+                        <span key={idx} className="badge-tag">{badge}</span>
+                      ))}
                     </div>
-                    <div className="alu-name">{name}</div>
-                    <div className="alu-role">{role}</div>
-                    <div className="alu-bio">{bio}</div>
-                    <div className="alu-social">
-                      {Object.entries(socialLinks).map(([key, url]) => {
-                        if (!url || url === "#") return null;
-                        const isPhone = key === "phone";
-                        return (
-                          <a
-                            key={key}
-                            href={url}
-                            target={isPhone ? undefined : "_blank"}
-                            rel={isPhone ? undefined : "noopener noreferrer"}
-                            aria-label={key}
-                            title={key.charAt(0).toUpperCase() + key.slice(1)}
-                            className="alu-social-link"
-                            style={{
-                              color: socialColors[key] || "#adb5bd",
-                            }}
-                          >
-                            <i className={`bi ${socialIcons[key]}`}></i>
-                          </a>
-                        );
-                      })}
+                  )}
+
+                  <div className="expert-bio">{bio}</div>
+
+                  {typeof repoCount === "number" && (
+                    <div className="expert-repos">
+                      <span className="badge bg-dark">
+                        <i className="bi bi-journal-code me-1" />
+                        {repoCount} Public GitHub Repos
+                      </span>
                     </div>
+                  )}
+
+                  <div className="expert-social mt-3">
+                    {Object.entries(socialLinks).map(([key, url]) => {
+                      if (!url) return null;
+                      const isPhone = key === "phone";
+                      return (
+                        <a
+                          key={key}
+                          href={url}
+                          target={isPhone ? undefined : "_blank"}
+                          rel={isPhone ? undefined : "noopener noreferrer"}
+                          className="m-2 fs-4"
+                          title={key.charAt(0).toUpperCase() + key.slice(1)}
+                        >
+                          <i className={`bi ${socialIcons[key]}`}></i>
+                        </a>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -313,4 +283,4 @@ const ExpertTeam = () => {
   );
 };
 
-export default ExpertTeam;
+export default Team;

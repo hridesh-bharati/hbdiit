@@ -36,7 +36,7 @@ const cardData = [
 
 export default function UseFullCard() {
     return (
-        <div className="col-md-4 col-sm-12 mt-4 cardEffectsBorder cardEffects">
+        <div className="col-md-4 col-sm-12 mt-4 mt-35  cardEffectsBorder cardEffects">
             <div className="row">
                 <div className="container text-center m-0 py-2 h4 fw-bold text-uppercase"
                     style={{ color: 'rgb(255, 255, 255)', background: 'var(--card-bg)' }}>

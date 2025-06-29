@@ -1,47 +1,54 @@
 import React, { useEffect } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 const Lock = () => {
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (
-        (event.ctrlKey && event.key === 'u') ||
-        (event.ctrlKey && event.key === 'i') ||
-        (event.ctrlKey && event.key === 's') ||
-        (event.ctrlKey && event.shiftKey && event.key === 'i') ||
-        (event.ctrlKey && event.shiftKey && event.key === 'I') ||
-        (event.ctrlKey && event.shiftKey && event.key === 'J') ||
-        (event.ctrlKey && event.key === 'U') ||
-        (event.ctrlKey && event.key === 'F12') ||
+        (event.ctrlKey && ['u', 'i', 's'].includes(event.key.toLowerCase())) ||
+        (event.ctrlKey && event.shiftKey && ['i', 'j'].includes(event.key.toLowerCase())) ||
         event.key === 'F12'
       ) {
         event.preventDefault();
-        showToast('LOL');
       }
     };
-    const handleContextMenu = (event) => {
-      event.preventDefault();
-      showToast(' LOL');
+
+    const disableRightClick = (event) => event.preventDefault();
+    const disableSelect = (event) => event.preventDefault();
+    const disableDrag = (event) => event.preventDefault();
+
+    const detectDevTools = () => {
+      const threshold = 160;
+      const start = new Date();
+      debugger;
+      const end = new Date();
+      if (end - start > threshold) {
+        window.location.href = 'about:blank';
+      }
     };
-    const showToast = (message) => {
-      toast.info(message, {
-        position: 'top-right',
-        autoClose: 500,
-        style: { fontSize: '20px', fontWeight: 'bold', color: 'black' },
-      });
-    };
+    const interval = setInterval(detectDevTools, 1000);
+
+    // Event listeners
     document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('contextmenu', handleContextMenu);
+    document.addEventListener('contextmenu', disableRightClick);
+    document.addEventListener('selectstart', disableSelect);
+    document.addEventListener('copy', disableSelect);
+    document.addEventListener('cut', disableSelect);
+    document.addEventListener('paste', disableSelect);
+    document.addEventListener('dragstart', disableDrag);
+
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('contextmenu', handleContextMenu);
+      document.removeEventListener('contextmenu', disableRightClick);
+      document.removeEventListener('selectstart', disableSelect);
+      document.removeEventListener('copy', disableSelect);
+      document.removeEventListener('cut', disableSelect);
+      document.removeEventListener('paste', disableSelect);
+      document.removeEventListener('dragstart', disableDrag);
+      clearInterval(interval);
     };
   }, []);
-  return (
-    <div>
-      <ToastContainer />
-    </div>
-  );
+
+  return null;
 };
 
 export default Lock;

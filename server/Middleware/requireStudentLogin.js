@@ -19,7 +19,7 @@ module.exports = (req, res, next) => {
                     next();
                 }
                 else{
-                    return res.status(401).json({ error: "You must have  logged in" });
+                    return res.status(401).json({ error: "You must have logged in" });
                 }
             })
         }

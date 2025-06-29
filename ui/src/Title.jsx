@@ -10,9 +10,8 @@ function Title() {
         return () => clearInterval(timer);
     }, []);
     useEffect(() => {
-        // Update the title of the webpage whenever it changes
         document.title = title;
     }, [title]);
-    return null; // We don't need to render anything for this component
+    return null;
 }
 export default Title;

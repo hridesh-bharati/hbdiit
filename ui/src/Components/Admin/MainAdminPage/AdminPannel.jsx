@@ -1,5 +1,6 @@
-import { Link, useNavigate, Routes, Route } from 'react-router-dom';
-import React from 'react';
+import React, { useMemo } from 'react';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import './AdminPannel.css';
 
 import Analysis from './pages/Analysis';
 import AdmissionStatus from './pages/students/AdmissionStatus';
@@ -17,121 +18,221 @@ import IssuedExamsForms from './pages/Exam/IssuedExamsForms';
 import IssueExamForm from './pages/Exam/IssueExamForm';
 import ProgramPictures from './pages/Gallery/ProgramPictures';
 import SendProgramPicture from './pages/Gallery/SendProgramPicture';
+import StudentQuery from '../Charts/StdQuery';
+import QueryNotify from '../Charts/QueryNotify';
+import AdmNotify from './pages/students/AdmNotify';
+import AdminPic from './pages/Admin/AdminPic';
+import PageNotFound from '../../HomePage/pages/PageNotFound';
 
-export default function AdminPanel() {
+const routes = [
+  { path: '', element: <Analysis /> },
+  { path: 'Admission-Form', element: <AdmissionForm /> },
+  { path: 'Admission-Status', element: <AdmissionStatus /> },
+  { path: 'Student-Data-Bs', element: <StudentDataBs /> },
+  { path: 'Profile', element: <Profile /> },
+  { path: 'Add-Admin', element: <AddAdmin /> },
+  { path: 'Admin-List', element: <AdminList /> },
+  { path: 'Create-Course', element: <CreateNewCourse /> },
+  { path: 'Course-List', element: <CourseList /> },
+  { path: 'Notice-Form', element: <NoticeForm /> },
+  { path: 'All-Notice', element: <AllNotice /> },
+  { path: 'Applied-Exam-Forms', element: <AppliedExamForms /> },
+  { path: 'Issued-Exam-Forms', element: <IssuedExamsForms /> },
+  { path: 'Issue-Exam-Form', element: <IssueExamForm /> },
+  { path: 'Program-Pictures', element: <ProgramPictures /> },
+  { path: 'Upload-New-Picture', element: <SendProgramPicture /> },
+  { path: 'StudentQuery', element: <StudentQuery /> },
+];
+
+const menuGroups = [
+  {
+    title: 'Students',
+    links: [
+      { to: 'Admission-Form', icon: 'file-earmark-person', label: 'New Admission' },
+      { to: 'Admission-Status', icon: 'search', label: 'Admission Status' },
+      { to: 'Student-Data-Bs', icon: 'people', label: 'All Students' },
+    ],
+  },
+  {
+    title: 'Admins',
+    links: [
+      { to: 'Add-Admin', icon: 'person-plus', label: 'Add Admin' },
+      { to: 'Admin-List', icon: 'people-fill', label: 'Admin List' },
+    ],
+  },
+  {
+    title: 'Courses',
+    links: [
+      { to: 'Create-Course', icon: 'file-earmark-plus', label: 'Create Course' },
+      { to: 'Course-List', icon: 'card-list', label: 'Course List' },
+    ],
+  },
+  {
+    title: 'Notices',
+    links: [
+      { to: 'Notice-Form', icon: 'file-text', label: 'Add Notice' },
+      { to: 'All-Notice', icon: 'bell', label: 'All Notices' },
+    ],
+  },
+  {
+    title: 'Exams',
+    links: [
+      { to: 'Applied-Exam-Forms', icon: 'file-earmark-check', label: 'Applied Forms' },
+      { to: 'Issued-Exam-Forms', icon: 'check2-square', label: 'Issued Forms' },
+      { to: 'Issue-Exam-Form', icon: 'check2-circle', label: 'Issue Form' },
+    ],
+  },
+  {
+    title: 'Gallery',
+    links: [
+      { to: 'Program-Pictures', icon: 'image', label: 'Gallery' },
+      { to: 'Upload-New-Picture', icon: 'cloud-upload', label: 'Upload Photo' },
+    ],
+  },
+];
+
+const MenuLink = ({ to, label, icon }) => {
   const navigate = useNavigate();
-  const deign = {
-    position: 'fixed',
-    left: "10px",
-    zIndex: 9,
-
-  }
+  const closeOffcanvas = () => {
+    const el = document.getElementById('moreMenu');
+    if (el) bootstrap.Offcanvas.getInstance(el)?.hide();
+  };
   return (
-    <div className="admin-panel mt-4 pt-3" style={{ background: '#fff', overflowX: 'hidden' }}>
-      <div className="row mx-0 px-0">
-        <div style={{ width: '10%' }}>
-          <button className="btn border bgBlur btn-sm text-white shadow" style={deign} data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-            <i className="bi bi-list text-primary"></i>
+    <button
+      className="btn text-start w-100 d-flex align-items-center px-0 mb-2"
+      onClick={() => {
+        navigate(`/Admin-Pannel/${to}`);
+        closeOffcanvas();
+      }}
+    >
+      <i className={`bi bi-${icon} me-3 fs-5 text-secondary`}></i>
+      <span className="fw-normal">{label}</span>
+    </button>
+  );
+};
+
+const AdminPanel = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const renderedRoutes = useMemo(
+    () => routes.map(({ path, element }) => <Route key={path} path={path} element={element} />),
+    []
+  );
+
+  return (
+    <div className="admin-panel bg-light min-vh-100 pb-5 ChartAdmin1">
+      <main className="container-fluid mx-0 px-0 pt-3">
+        <Routes>
+          {renderedRoutes}
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </main>
+
+      <nav className="navbar fixed-bottom justify-content-center px-3 py-2 glass-taskbar" style={{ zIndex: 1030 }}>
+        <div className="d-flex rounded-4 px-3 py-2 gap-3 glass-card shadow-lg">
+          <NavButton icon="house-door" label="Home" path="/Admin-Pannel" active={location.pathname === '/Admin-Pannel'} onClick={() => navigate('/Admin-Pannel')} />
+          <div className="position-relative">
+            <NavButton icon="chat-dots" label="Messages" path="/Admin-Pannel/StudentQuery" active={location.pathname === '/Admin-Pannel/StudentQuery'} onClick={() => navigate('/Admin-Pannel/StudentQuery')} />
+            <QueryNotify />
+          </div>
+          <NavButton icon="camera" label="Notice" path="/Admin-Pannel/Upload-New-Picture" active={location.pathname === '/Admin-Pannel/Upload-New-Picture'} onClick={() => navigate('/Admin-Pannel/Upload-New-Picture')} />
+          <div className="position-relative">
+            <NavButton icon="people" label="Admission" path="/Admin-Pannel/Admission-Status" active={location.pathname === '/Admin-Pannel/Admission-Status'} onClick={() => navigate('/Admin-Pannel/Admission-Status')} />
+            <AdmNotify />
+          </div>
+          <div className="position-relative">
+            <button className={`btn btn-sm d-flex flex-column align-items-center px-2 ${location.pathname === '/Admin-Pannel/Profile' ? 'text-primary fw-bold' : 'text-dark'}`} onClick={() => navigate('/Admin-Pannel/Profile')} title="Profile">
+              <AdminPic />
+              <small className="d-none d-sm-block" style={{ fontSize: '0.7rem' }}>Profile</small>
+            </button>
+          </div>
+          <button className="btn btn-sm d-flex flex-column align-items-center px-2 text-dark" data-bs-toggle="offcanvas" data-bs-target="#moreMenu" title="More">
+            <i className="bi bi-list fs-5"></i>
+            <small className="d-none d-sm-block" style={{ fontSize: '0.7rem' }}>More</small>
           </button>
-          <div className="offcanvas offcanvas-start pt-4" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel"
-          >
-            <div className="offcanvas-header py-3 text-white text-center d-flex justify-content-between">
-              <p className="offcanvas-title pt-2 text-primary fw-bolder" id="offcanvasExampleLabel"> <i className="bi bi-person-circle"></i> ADMIN MENU</p>
-              <button type="button text-white" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+      </nav>
+
+      <div className="offcanvas offcanvas-end custom-offcanvas rounded-4 overflow-hidden border-light responsive-offcanvas" tabIndex="-1" id="moreMenu">
+        <div className="offcanvas-header justify-content-between border-bottom py-2 px-3">
+          <button type="button" className="btn p-1" data-bs-dismiss="offcanvas">
+            <i className="bi bi-arrow-left fs-5"></i>
+          </button>
+          <h5 className="offcanvas-title fw-semibold mb-0">More Menu</h5>
+        </div>
+        <div className="offcanvas-body pt-2 px-3">
+          {menuGroups.map(({ title, links }) => (
+            <div key={title} className="mb-0 glass-section p-3">
+              <p className="text-dark fw-semibold small mb-1 border-bottom pb-1">{title}</p>
+              {links.map(link => (
+                <MenuLink key={link.to} {...link} />
+              ))}
             </div>
-            <div className="offcanvas-body">
-              <nav className="nav flex-column nav-pills">
-                <div className="accordion" id="adminAccordion">
-                  {/* Students Section */}
-                  <AccordionItem title="Students" target="studentsSection" icon="fa-graduation-cap">
-                    <Link className="nav-link" to="">Students Board</Link>
-                    <Link className="nav-link" to="Admission-Form">Add Students</Link>
-                    <Link className="nav-link" to="Admission-Status">Admission Status</Link>
-                    <Link className="nav-link" to="Student-Data-Bs">Verified Students</Link>
-                  </AccordionItem>
-
-                  {/* Admin Section */}
-                  <AccordionItem title="Admin" target="adminSection" icon="fa-user-circle">
-                    <Link className="nav-link" to="Profile">Profile</Link>
-                    <Link className="nav-link" to="Add-Admin">Create an account</Link>
-                    <Link className="nav-link" to="Admin-List">Admin List</Link>
-                    <button className="nav-link text-start" onClick={() => {
-                      navigate('/');
-                      localStorage.removeItem('aToken');
-                    }}>Log Out</button>
-                  </AccordionItem>
-
-                  {/* Courses Section */}
-                  <AccordionItem title="Courses" target="coursesSection" icon="fa-book">
-                    <Link className="nav-link" to="Create-Course">Create New Course</Link>
-                    <Link className="nav-link" to="Course-List">Course List</Link>
-                  </AccordionItem>
-
-                  {/* Notice Section */}
-                  <AccordionItem title="Notice" target="noticeSection" icon="fa-bell">
-                    <Link className="nav-link" to="Notice-Form">Push New Notice</Link>
-                    <Link className="nav-link" to="All-Notice">All Notice</Link>
-                  </AccordionItem>
-
-                  {/* Exam Section */}
-                  <AccordionItem title="Exam" target="examSection" icon="fa-book">
-                    <Link className="nav-link" to="Applied-Exam-Forms">Applied Forms</Link>
-                    <Link className="nav-link" to="Issued-Exam-Forms">Issued Forms</Link>
-                    <Link className="nav-link" to="Issue-Exam-Form">Issue New Form</Link>
-                  </AccordionItem>
-
-                  {/* Gallery Section */}
-                  <AccordionItem title="Gallery" target="gallerySection" icon="fa-images">
-                    <Link className="nav-link" to="Program-Pictures">Program's Pictures</Link>
-                    <Link className="nav-link" to="Upload-New-Picture">New Image</Link>
-                  </AccordionItem>
-
-                </div>
-              </nav>
-            </div>
+          ))}
+          <div className="glass-section p-0">
+            <button className="btn text-danger text-start w-100 d-flex align-items-center" onClick={() => {
+              localStorage.removeItem('aToken');
+              setTimeout(() => navigate('/'), 100);
+            }}>
+              <i className="bi bi-box-arrow-right me-2 fs-5"></i>
+              <span className="fw-semibold">Logout</span>
+            </button>
           </div>
         </div>
-
-        {/* Main content area */}
-        <main className=" p-0">
-          <div className="tab-content mx-1 px-0 bg-light" id="adminTabContent">
-            <Routes>
-              <Route path="/" element={<Analysis />} />
-              <Route path="Admission-Form" element={<AdmissionForm />} />
-              <Route path="Admission-Status" element={<AdmissionStatus />} />
-              <Route path="Student-Data-Bs" element={<StudentDataBs />} />
-              <Route path="Profile" element={<Profile />} />
-              <Route path="Add-Admin" element={<AddAdmin />} />
-              <Route path="Admin-List" element={<AdminList />} />
-              <Route path="Create-Course" element={<CreateNewCourse />} />
-              <Route path="Course-List" element={<CourseList />} />
-              <Route path="Notice-Form" element={<NoticeForm />} />
-              <Route path="All-Notice" element={<AllNotice />} />
-              <Route path="Applied-Exam-Forms" element={<AppliedExamForms />} />
-              <Route path="Issued-Exam-Forms" element={<IssuedExamsForms />} />
-              <Route path="Issue-Exam-Form" element={<IssueExamForm />} />
-              <Route path="Program-Pictures" element={<ProgramPictures />} />
-              <Route path="Upload-New-Picture" element={<SendProgramPicture />} />
-            </Routes>
-          </div>
-        </main>
       </div>
+      <style>
+        {`
+  /* Offcanvas Base */
+  .responsive-offcanvas {
+    width: 75% !important;
+  }
+
+  .custom-offcanvas {
+    background: #f1f5f9;
+    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.08);
+    height: 100vh;
+    z-index: 999999;
+    margin-right: 10px;
+    outline: none;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .custom-offcanvas .offcanvas-header {
+    background-color: rgb(229, 240, 251);
+  }
+
+  .offcanvas-backdrop {
+    background: transparent !important;
+  }
+
+  .menu-section button:hover {
+    background-color: #e9eff5;
+  }
+
+  /* Media Queries */
+  @media (min-width: 768px) {
+    .responsive-offcanvas {
+      width: 30% !important;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .custom-offcanvas {
+      height: 83vh;
+    }
+  }
+  `}
+      </style>
     </div>
   );
-}
+};
 
-// AccordionItem component for better code reuse
-const AccordionItem = ({ title, target, icon, children }) => (
-  <div className="accordion-item">
-    <h2 className="accordion-header">
-      <button className="accordion-button bg-primary text-light" type="button" data-bs-toggle="collapse" data-bs-target={`#${target}`}>
-        <i className={`fa ${icon} me-2`}></i> {title}
-      </button>
-    </h2>
-    <div id={target} className="accordion-collapse collapse">
-      <div className="accordion-body m-0 p-2">
-        {children}
-      </div>
-    </div>
-  </div>
+const NavButton = ({ icon, label, path, active, onClick }) => (
+  <button className={`btn btn-sm d-flex flex-column align-items-center px-2 ${active ? 'text-primary fw-bold' : 'text-dark'}`} onClick={onClick} title={label}>
+    <i className={`bi bi-${icon} fs-5`}></i>
+    <small className="d-none d-sm-block" style={{ fontSize: '0.7rem' }}>{label}</small>
+  </button>
 );
+
+export default AdminPanel;

@@ -1,184 +1,177 @@
-import { useState, useRef, useEffect } from "react";
-import { getQuestions, pushQuestions } from '../../../../../../api/adminApi/api'
+import { useState, useEffect } from "react";
+import { getQuestions, pushQuestions } from '../../../../../../api/adminApi/api';
 import { toast } from "react-toastify";
 
 export default function SendQuestions({ paperId }) {
-  const questionRef = useRef(null);
-  const saveBtnRef = useRef(null);
-  const oldQuestionsBtnRef = useRef(null);
-  let saveBtn;
-  let options;
-  let oldQuestionsBtn;
   const [questions, setQuestions] = useState([]);
   const [oldQuestions, setOldQuestions] = useState([]);
   const [question, setQuestion] = useState({
     question: "",
-    options: {
-      a: "",
-      b: "",
-      c: "",
-      d: "",
-    },
-    answer: ""
+    options: { a: "", b: "", c: "", d: "" },
+    answer: "",
   });
 
-  const setQuestionHandler = (e) => {
+  // Controlled input handler
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    setQuestion((prevQuestion) => {
-      const updatedQuestion = { ...prevQuestion };
-
-      if (name === 'question' || name === 'answer') {
-        updatedQuestion[name] = value;
-      } else {
-        updatedQuestion.options = {
-          ...prevQuestion.options,
-          [name]: value,
-        };
-      }
-
-      return updatedQuestion;
-    });
+    if (["a", "b", "c", "d"].includes(name)) {
+      setQuestion((prev) => ({
+        ...prev,
+        options: { ...prev.options, [name]: value },
+      }));
+    } else {
+      setQuestion((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
-
-  const cleanUpForm = () => {
-    setQuestion({
-      question: "",
-      options: {
-        a: "",
-        b: "",
-        c: "",
-        d: "",
-      },
-      answer: ""
-    });
-    options.forEach((input) => {
-      input.value = '';
-    });
-  };
-
-  const setQuestionsHandler = () => {
-    const { answer, options } = question
-    if (!answer || !options) {
-      toast.error("fill all details");
+  const addQuestion = () => {
+    const { question: qText, options, answer } = question;
+    if (!qText.trim() || !answer.trim() || Object.values(options).some(opt => !opt.trim())) {
+      toast.error("Please fill all question details");
       return;
     }
-    setQuestions((prevQuestions) => [
-      ...prevQuestions,
-      question
-    ]);
-    cleanUpForm();
+    setQuestions((prev) => [...prev, question]);
+    // Reset form
+    setQuestion({ question: "", options: { a: "", b: "", c: "", d: "" }, answer: "" });
   };
 
-  const pushQuestionsHandler = async () => {
+  const saveQuestions = async () => {
+    if (questions.length === 0) {
+      toast.info("No new questions to save");
+      return;
+    }
     try {
-      const data = {
-        qPId: paperId,
-        questions: questions
-      };
-      const rspns = await pushQuestions(data);
-      if (rspns.ackbool === 1) {
-        toast.success(rspns.message);
-        setQuestions([]); // Clear questions state
-        fetchQuestionsHandler(); // Fetch updated questions
+      const response = await pushQuestions({ qPId: paperId, questions });
+      if (response.ackbool === 1) {
+        toast.success(response.message);
+        setQuestions([]);
+        fetchOldQuestions();
+      } else {
+        toast.error("Failed to save questions");
       }
     } catch (error) {
-      console.log(error);
+      toast.error("Error saving questions");
+      console.error(error);
     }
   };
 
-  const fetchQuestionsHandler = async () => {
+  const fetchOldQuestions = async () => {
     try {
-      const rspns = await getQuestions(paperId);
-      if (rspns.ackbool === 1) {
-        setOldQuestions(rspns.message);
+      const response = await getQuestions(paperId);
+      if (response.ackbool === 1) {
+        setOldQuestions(response.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   useEffect(() => {
-    oldQuestionsBtn = oldQuestionsBtnRef.current;
-    options = (questionRef.current).querySelectorAll('input');
-    saveBtn = saveBtnRef.current;
-
-    options.forEach(input => {
-      input.addEventListener('change', setQuestionHandler);
-    });
-    saveBtn.addEventListener('click', pushQuestionsHandler);
-    oldQuestionsBtn.addEventListener('click', fetchQuestionsHandler);
-
-    // Clean-up function to avoid memory leaks
-    return () => {
-      options.forEach((input) => {
-        input.removeEventListener('change', setQuestionHandler);
-      });
-      saveBtn.removeEventListener('click', pushQuestionsHandler);
-      oldQuestionsBtn.removeEventListener('click', fetchQuestionsHandler);
-    };
-  }, [paperId, questions]);
+    fetchOldQuestions();
+  }, [paperId]);
 
   return (
-    <div className="modal-dialog" role="document">
-      <div className="modal-content">
-        <div className="modal-header bg-dark text-light">
-          <h5 className="modal-title" id="exampleModalLongTitle">Question Paper</h5>
-          <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
+    <div className="modal-dialog m-0 p-0 pb-5" role="document">
+      <div className="modal-content p-0 m-0">
         <div className="modal-body bg-primary-subtle">
-          <div>
-            <h3 ref={oldQuestionsBtnRef}>
-              <button className="btn btn-primary btn-sm small">
-                <b className="bi bi-eye fs-5"></b> View
-              </button> {oldQuestions && oldQuestions.length} Old Questions
-            </h3>
-            {
-              oldQuestions && oldQuestions.map((q, index) => (
-                <div className="questionDtls border-bottom" key={q._id}>
-                  <b className="question"><i>Que.{(index + 1)}</i> {(q.question).toUpperCase()}</b> &nbsp;
-                  <span><u><b>Answer</b></u> {q.answer}</span> <br />
-                  <ol style={{ listStyle: 'lower-alpha' }}>
-                    <li>{q.options.a}</li>
-                    <li>{q.options.b}</li>
-                    <li>{q.options.c}</li>
-                    <li>{q.options.d}</li>
-                  </ol>
-                </div>
-              ))
-            }
+          <div className="mb-4">
+
+            <div className="d-flex justify-content-between align-items-center">
+              <button
+                className="btn btn-outline-primary btn-sm mb-2"
+                onClick={fetchOldQuestions}
+                title="View old questions"
+              >
+                <i className="bi bi-eye fs-5"></i> View Old Questions ({oldQuestions.length})
+              </button>
+              <button type="button" className="btn-close bg-white" data-bs-dismiss="modal" />
+
+            </div>
+            {oldQuestions.length > 0 && (
+              <div className="border rounded p-3 bg-white" style={{ maxHeight: '250px', overflowY: 'auto' }}>
+                {oldQuestions.map((q, idx) => (
+                  <div key={q._id} className="mb-3 pb-2 border-bottom">
+                    <strong>Q{idx + 1}:</strong> {q.question.toUpperCase()} <br />
+                    <em>Answer:</em> <u>{q.answer}</u>
+                    <ol type="a" className="mb-0 ms-3">
+                      <li>{q.options.a}</li>
+                      <li>{q.options.b}</li>
+                      <li>{q.options.c}</li>
+                      <li>{q.options.d}</li>
+                    </ol>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-          <div className="showQuestions border-top border-light">
-            <h3>New Questions</h3>
-            {
-              questions && questions.map((q, index) => (
-                <div className="QuestionDls" key={index}>
-                  <b className="question"><i>Que. {oldQuestions.length + (index + 1)}</i> {(q.question).toUpperCase()}</b> &nbsp;
-                  <span><u><b>Answer</b></u> {q.answer}</span> <br />
-                  <ol style={{ listStyle: 'lower-alpha' }}>
-                    <li>{q.options.a}</li>
-                    <li>{q.options.b}</li>
-                    <li>{q.options.c}</li>
-                    <li>{q.options.d}</li>
-                  </ol>
-                </div>
-              ))
-            }
+
+          <div className="mb-3">
+            <h5>New Questions</h5>
+            {questions.length === 0 && <p className="text-muted">No new questions added yet.</p>}
+            {questions.map((q, idx) => (
+              <div key={idx} className="mb-2 p-2 bg-light border rounded">
+                <strong>Q{oldQuestions.length + idx + 1}:</strong> {q.question.toUpperCase()} <br />
+                <em>Answer:</em> <u>{q.answer}</u>
+                <ol type="a" className="mb-0 ms-3">
+                  <li>{q.options.a}</li>
+                  <li>{q.options.b}</li>
+                  <li>{q.options.c}</li>
+                  <li>{q.options.d}</li>
+                </ol>
+              </div>
+            ))}
           </div>
-          <div ref={questionRef} className="p-3">
-            <input className="form-control my-2" type="text" name="question" placeholder="Enter Question" />
-            <input className="form-control my-2" type="text" name="a" placeholder="Option a" />
-            <input className="form-control my-2" type="text" name="b" placeholder="Option b" />
-            <input className="form-control my-2" type="text" name="c" placeholder="Option c" />
-            <input className="form-control my-2" type="text" name="d" placeholder="Option d" />
-            <input className="form-control my-2" type="text" name="answer" placeholder="Enter Which is answer option" />
+
+          <div className="mb-3 p-2 border rounded bg-white">
+            <h5>Add New Question</h5>
+            <input
+              type="text"
+              className="form-control mb-2"
+              placeholder="Enter Question"
+              name="question"
+              value={question.question}
+              onChange={handleInputChange}
+              autoComplete="off"
+            />
+            {["a", "b", "c", "d"].map((opt) => (
+              <input
+                key={opt}
+                type="text"
+                className="form-control mb-2"
+                placeholder={`Option ${opt}`}
+                name={opt}
+                value={question.options[opt]}
+                onChange={handleInputChange}
+                autoComplete="off"
+              />
+            ))}
+            <input
+              type="text"
+              className="form-control mb-3"
+              placeholder="Correct answer option (e.g. a, b, c, or d)"
+              name="answer"
+              value={question.answer}
+              onChange={handleInputChange}
+              autoComplete="off"
+            />
+            <button className="btn btn-primary btn-sm w-100" onClick={addQuestion}>
+              Add Question
+            </button>
           </div>
-          <button type="button" className="btn btn-sm btn-primary" onClick={setQuestionsHandler}>Next</button>
         </div>
+
         <div className="modal-footer">
-          <button type="button" className="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" className="btn btn-sm btn-primary" ref={saveBtnRef}>Save</button>
+          <button type="button" className="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+            Close
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary btn-sm"
+            onClick={saveQuestions}
+            disabled={questions.length === 0}
+          >
+            Save All Questions
+          </button>
         </div>
       </div>
     </div>

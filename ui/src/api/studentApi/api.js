@@ -1,4 +1,5 @@
-const baseUrl = "http://localhost:3000";
+// const baseUrl = "http://localhost:3000";
+const baseUrl = "http://192.168.28.196:3000";
 import { getData, postData, putData } from "../tools/apiTools";
 
 const sendQuery = async (data) => {
